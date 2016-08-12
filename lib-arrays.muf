@@ -95,7 +95,7 @@
         ", and " strcat
         swap strcat
     else
-        ", and " array_join
+        " and " array_join
     then
 ;
  
