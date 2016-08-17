@@ -284,7 +284,5 @@ c
 q
 @register #me cmd-@check=tmp/prog1
 @set $tmp/prog1=W
-#ifdef NEW
 @action @check=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-#endif

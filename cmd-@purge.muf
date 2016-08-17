@@ -35,7 +35,5 @@ $include $lib/match
 c
 q
 @set cmd-@purge=W
-#ifdef NEW
 @action @purge=#0=tmp/exit1
 @link $tmp/exit1=cmd-@purge
-#endif

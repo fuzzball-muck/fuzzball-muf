@@ -22,7 +22,5 @@
 .
 c
 q
-#ifdef NEW
 @action bootall=me=tmp/bootall
 @link $tmp/bootall=cmd-bootall
-#endif

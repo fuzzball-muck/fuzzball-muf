@@ -103,7 +103,5 @@ lvar col
 c
 q
 @set cmd-3who=w
-#ifdef NEW
 @action 3who;3w=#0=tmp/exit1
 @link $tmp/exit1=cmd-3who
-#endif

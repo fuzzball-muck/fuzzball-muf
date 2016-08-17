@@ -580,15 +580,9 @@ $endif
   repeat swap strcut pop
 ;
  
-$ifdef __version<Muck2.2fb5.46 $undef ENCRYPTION $endif
- 
 : writeprop ( d1 d2 p s --  Writes a line s from d1 to d2 to prop p )
 $ifdef ENCRYPTION
-$ifdef __version<Muck2.2fb5.48
-  4 rotate 4 pick 3 pick strlen getkey1 strencrypt "A" swap strcat
-$else
   4 rotate 4 pick getkey2 strencrypt "B" swap strcat
-$endif
 $else
   4 rotate pop " " swap strcat
 $endif

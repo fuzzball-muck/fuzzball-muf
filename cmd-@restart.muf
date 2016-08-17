@@ -26,7 +26,5 @@
 c
 q
 @set cmd-@restart=w
-#ifdef NEW
 @action @restart=#0=tmp/exit1
 @link $tmp/exit1=cmd-@restart
-#endif

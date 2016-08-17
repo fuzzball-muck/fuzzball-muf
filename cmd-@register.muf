@@ -21,32 +21,17 @@ lvar regprop
 ;
     
   
-: set_propref (d s d -- )
-    $ifdef __VERSION<Muck2.2fb5.0
-        intostr 0 addprop
-    $else
-        setprop
-    $endif
-;
-  
-  
 ( returns #-1 if prop not found.  #-2 if has bad value. )
 : get_propref (d s -- d)
     over over
-  
-    $ifdef __VERSION<Muck2.2fb5.0
-        getpropstr
-    $else
-        getprop
-    $endif
-  
+    getprop
     dup if
         dup string? if
             dup "#" 1 strncmp not if 1 strcut swap pop then
             dup number? if
                 atoi dbref
                 dup ok? if
-                    3 pick 3 pick 3 pick set_propref
+                    3 pick 3 pick 3 pick setprop
                 else
                     pop #-2
                 then
@@ -57,7 +42,7 @@ lvar regprop
             dup int? if
                 dbref
                 dup ok? if
-                    3 pick 3 pick 3 pick set_propref
+                    3 pick 3 pick 3 pick setprop
                 else
                     pop #-2
                 then
@@ -255,7 +240,7 @@ lvar regprop
         then
       
         regobj @ regprop @ 3 pick strcat
-        4 pick set_propref
+        4 pick setprop
       
         regobj @ regprop @ 3 pick strcat
         pretty_propref "Now registered as "

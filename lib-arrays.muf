@@ -57,7 +57,7 @@
      - Sorts the array in order.  i = 1 for forward, i = 0 for reverse
     ArrMPIparse [ d a @1 @2 s i -- a ]
      - Parse the given lines in an array and returns the parsed lines.
-      d = Object to apply permission checking to [or use for parseprop under FuzzballMUCKs since they do not have PARSEMPI]
+      d = Object to apply permission checking to
       a = The starting array
      @1 = The first index marker to parse
      @2 = The last index marker to parse
@@ -274,14 +274,10 @@
    var newarray 0 array_make newarray !
    FOREACH
       swap dup firstpos @ >= swap endpos @ <= and if
-$ifdef __proto
-         dbobj @ swap stype @ imesg @ parsempi
-$else
          "@/mpi/" systime intostr strcat dup rot
          dbobj @ rot rot setprop
          dbobj @ over stype @ imesg @ parseprop
          dbobj @ swap remove_prop
-$endif
          newarray @ array_appenditem newarray !
       swap
          pop

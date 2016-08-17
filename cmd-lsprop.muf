@@ -69,7 +69,5 @@ lvar propcount
 c
 q
 @set cmd-lsprop=w
-#ifdef NEW
 @action lsprop;lsp=#0=tmp/exit1
 @link $tmp/exit1=cmd-lsprop
-#endif

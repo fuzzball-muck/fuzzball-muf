@@ -140,7 +140,5 @@ lvar totalbytes
 .
 c
 q
-#ifdef NEW
 @action @sizer;@sizeall;@sizeallq;@size;@siz;@si=#0=tmp/exit1
 @link $tmp/exit1=cmd-@sizer
-#endif

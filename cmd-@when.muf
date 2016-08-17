@@ -131,7 +131,5 @@ q
 @register #me cmd-@when=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=2
-#ifdef NEW
 @action @when;@whe;@wh=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-#endif

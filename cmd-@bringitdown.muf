@@ -29,9 +29,6 @@ $def WARNTIMES 15 10 5 1
 : main[ str:args -- ]
 
     me @ "wizard" flag?
-$ifdef __muckname=FurryMUCK
-    me @ #1026 dbcmp or
-$endif
     not if
         "Permission denied." .tell
         pop exit

@@ -23,9 +23,7 @@
  Trebuchet. )
   
 $def VERSION "MessageBoard v3.0"
-$ifdef __version>Muck2.2fb5.00
 $def GUI 1
-$endif
 $include $lib/strings
 $include $lib/props
 $include $lib/match
