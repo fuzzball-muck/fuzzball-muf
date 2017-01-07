@@ -143,9 +143,10 @@ $def }tell }list { me @ }list array_notify
         newurl @ "://" split strip swap strip
         dup "file" stringcmp
         over "http" stringcmp and
-        over "ftp" stringcmp and if
+        over "ftp" stringcmp and
+        over "https" stringcmp and if
             pop pop
-            "Unknown URL service type.  The acceptable types are ftp, http, and file." .tell
+            "Unknown URL service type.  The acceptable types are ftp, http, https, and file." .tell
             "Example:  http://www.furry.com/pics/revar-cw3.jpg" .tell
             exit
         then
