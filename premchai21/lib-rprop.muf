@@ -1,9 +1,7 @@
 @prog lib-rprop.muf
 1 9999 d
 i
-$ifdef __fuzzball__
-  $pragma comment_recurse
-$endif
+$pragma comment_recurse
 
 ( lib-rprop.muf
   Copyright (C) 2003, 2004 Drake Wilson
