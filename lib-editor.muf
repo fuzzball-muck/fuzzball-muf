@@ -43,12 +43,12 @@ EDITORheader takes and returns no arguments, but prints out a standard
 $version 6.002
 $lib-version 6.001
 $author foxen@belfry.com
-
+ 
 $include $lib/strings
 $include $lib/gui
 $include $lib/stackrng
  
-
+ 
 $define SRNGcat     sr-catrng     $enddef
 $define SRNGpop     sr-poprng     $enddef
 $define SRNGextract sr-extractrng $enddef
@@ -629,10 +629,10 @@ lvar guisaved
     then
 ;
  
-PUBLIC EDITOR
-PUBLIC EDITORloop
-PUBLIC EDITORparse
-PUBLIC EDITORheader
+PUBLIC EDITOR $libdef EDITOR
+PUBLIC EDITORloop $libdef EDITORloop
+PUBLIC EDITORparse $libdef EDITORparse
+PUBLIC EDITORheader $libdef EDITORheader
 .
 c
 q
@@ -641,11 +641,6 @@ q
 @set $tmp/prog1=L
 @set $tmp/prog1=V
 @set $tmp/prog1=3
-@propset $tmp/prog1=str:/_defs/editor:"$lib/editor" match "EDITOR" call
-@propset $tmp/prog1=str:/_defs/editorheader:"$lib/editor" match "EDITORheader" call
-@propset $tmp/prog1=str:/_defs/editorloop:"$lib/editor" match "EDITORloop" call
-@propset $tmp/prog1=str:/_defs/editorparse:"$lib/editor" match "EDITORparse" call
-@propset $tmp/prog1=str:/_defs/EDITORprop:"$lib/editor" match "EDITORprop" call
 @propset $tmp/prog1=str:/_docs:@list $lib/editor=2-57
 @propset $tmp/prog1=str:/_lib-version:2.0.1
 

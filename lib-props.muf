@@ -74,10 +74,15 @@
     pop envsearch
 ;
   
-PUBLIC setpropstr
-PUBLIC envprop
-PUBLIC envsearch
-PUBLIC locate-prop
+PUBLIC setpropstr $libdef setpropstr
+PUBLIC envprop $libdef envprop
+PUBLIC envsearch $libdef envsearch
+PUBLIC locate-prop $libdef locate-prop
+
+$pubdef .envprop "$lib/props" match "envprop" call
+$pubdef .envsearch "$lib/props" match "envsearch" call
+$pubdef .locate-prop "$lib/props" match "locate-prop" call
+$pubdef .setpropstr "$lib/props" match "setpropstr" call
 .
 c
 q
@@ -89,12 +94,4 @@ q
 @set $tmp/prog1=B
 @set $tmp/prog1=V
 @set $tmp/prog1=2
-@set $tmp/prog1=/_defs/.envprop:"$lib/props" match "envprop" call
-@set $tmp/prog1=/_defs/.envsearch:"$lib/props" match "envsearch" call
-@set $tmp/prog1=/_defs/.locate-prop:"$lib/props" match "locate-prop" call
-@set $tmp/prog1=/_defs/.setpropstr:"$lib/props" match "setpropstr" call
-@set $tmp/prog1=/_defs/envprop:"$lib/props" match "envprop" call
-@set $tmp/prog1=/_defs/envsearch:"$lib/props" match "envsearch" call
-@set $tmp/prog1=/_defs/locate-prop:"$lib/props" match "locate-prop" call
-@set $tmp/prog1=/_defs/setpropstr:"$lib/props" match "setpropstr" call
 @set $tmp/prog1=/_docs:@list $lib/props=1-20

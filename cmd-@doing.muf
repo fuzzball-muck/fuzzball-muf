@@ -80,7 +80,6 @@ q
 @set $tmp/prog1=W
 @set $tmp/prog1=L
 @set $tmp/prog1=3
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-@doing
 @set $tmp/prog1=_version:1.2
 @action @doing;@doin;@doi;@do=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

@@ -171,6 +171,9 @@ public mv-prop
     then .tell
   then
 ;
+
+$pubdef copy-prop "$global/mv-cp" match "cp-prop" call
+$pubdef move-prop "$global/mv-cp" match "mv-prop" call
 .
 c
 q
@@ -178,8 +181,5 @@ q
 @register #me cmd-mv-cp=tmp/prog1
 @set $tmp/prog1=W
 @set $tmp/prog1=L
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-mv-cp
-@set $tmp/prog1=/_defs/copy-prop:"$global/mv-cp" match "cp-prop" call
-@set $tmp/prog1=/_defs/move-prop:"$global/mv-cp" match "mv-prop" call
 @action cp;mv;propcp;propmv=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

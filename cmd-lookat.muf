@@ -1,4 +1,3 @@
-/sub off
 @prog cmd-lookat
 1 9999 d
 1 i
@@ -136,4 +135,3 @@ VERSION "   " strcat UPDATED strcat "   Page1" strcat
 .
 c
 q
-/sub on

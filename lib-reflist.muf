@@ -58,7 +58,7 @@ $include $lib/strings
 $include $lib/props
 $include $lib/look
 $include $lib/match
-
+ 
 : REF-next (obj reflist currref -- nextref)
   rot rot array_get_reflist
   dup rot array_findval
@@ -148,10 +148,18 @@ $include $lib/match
 ;
   
   
-PUBLIC REF-next
-PUBLIC REF-list
-PUBLIC REF-filter (address objref reflistname -- refx...ref1 refcount)
-PUBLIC REF-editlist  (players? objref reflistname -- )
+PUBLIC REF-next $libdef REF-next
+PUBLIC REF-list $libdef REF-list
+PUBLIC REF-filter $libdef REF-filter
+PUBLIC REF-editlist $libdef REF-editlist
+
+$pubdef REF-add reflist_add
+$pubdef REF-allrefs array_get_reflist array_vals
+$pubdef REF-array array_get_reflist
+$pubdef REF-array-set array_put_reflist
+$pubdef REF-delete reflist_del
+$pubdef REF-first array_get_reflist dup if 0 [] else pop #-1 then
+$pubdef REF-inlist? reflist_find
 .
 c
 q
@@ -163,15 +171,4 @@ q
 @set $tmp/prog1=B
 @set $tmp/prog1=2
 @set $tmp/prog1=V
-@set $tmp/prog1=/_defs/REF-add:reflist_add
-@set $tmp/prog1=/_defs/REF-delete:reflist_del
-@set $tmp/prog1=/_defs/REF-first:array_get_reflist dup if 0 [] else pop #-1 then
-@set $tmp/prog1=/_defs/REF-next:"$lib/reflist" match "REF-next" call
-@set $tmp/prog1=/_defs/REF-inlist?:reflist_find
-@set $tmp/prog1=/_defs/REF-list:"$lib/reflist" match "REF-list" call
-@set $tmp/prog1=/_defs/REF-allrefs:array_get_reflist array_vals
-@set $tmp/prog1=/_defs/REF-array:array_get_reflist
-@set $tmp/prog1=/_defs/REF-array-set:array_put_reflist
-@set $tmp/prog1=/_defs/REF-filter:"$lib/reflist" match "REF-filter" call
-@set $tmp/prog1=/_defs/REF-editlist:"$lib/reflist" match "REF-editlist" call
 @set $tmp/prog1=/_docs:@list $lib/reflist=1-46

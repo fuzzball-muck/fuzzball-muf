@@ -307,18 +307,12 @@ $endif
         end
     endcase strcat caller owner swap notify
 ;
-public showstack
-public comment
-public debugon
-public debugoff
-public showvar
-public pause_prog
+public showstack $libdef showstack
+public comment $libdef comment
+public debugon $libdef debugon
+public debugoff $libdef debugoff
+public showvar $libdef showvar
+public pause_prog $Libdef pause_prog
 .
 c
 q
-@set Lib-Debug=/_defs/comment:"$lib/Debug" match "comment" call
-@set Lib-Debug=/_defs/debugoff:"$lib/Debug" match "debugoff" call
-@set Lib-Debug=/_defs/debugon:"$lib/Debug" match "debugon" call
-@set Lib-Debug=/_defs/showstack:"$lib/Debug" match "showstack" call
-@set Lib-Debug=/_defs/showvar:"$lib/Debug" match "showvar" call
-@set Lib-Debug=/_defs/pause_prog:"$lib/Debug" match "pause_prog" call

@@ -550,6 +550,13 @@ public eval-loop
         then
 ;
 public gen-desc
+
+$pubdef .eval-loop "$desc" match "eval-loop" call
+$pubdef .format-print "$desc" match "format-print" call
+$pubdef .gen-desc "$desc" match "gen-desc" call
+$pubdef .get-legal-prop "$desc" match "get-legal-prop" call
+$pubdef .split-args "$desc" match "split-args" call
+$pubdef .wipe-list "$desc" match "wipe-list" call
 .
 c
 q
@@ -557,12 +564,6 @@ q
 @set $desc=W
 @set $desc=L
 @set $desc=/_/de:@$desc %list[doc]
-@set $desc=/_defs/.eval-loop:"$desc" match "eval-loop" call
-@set $desc=/_defs/.format-print:"$desc" match "format-print" call
-@set $desc=/_defs/.gen-desc:"$desc" match "gen-desc" call
-@set $desc=/_defs/.get-legal-prop:"$desc" match "get-legal-prop" call
-@set $desc=/_defs/.split-args:"$desc" match "split-args" call
-@set $desc=/_defs/.wipe-list:"$desc" match "wipe-list" call
 @set $desc=/_docs:@list $desc-docs
 @prog gen-desc-lib
 1 99999 d

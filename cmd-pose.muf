@@ -23,5 +23,3 @@
 .
 c
 q
-@register #me cmd-pose=tmp/prog1
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-pose

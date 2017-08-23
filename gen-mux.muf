@@ -82,4 +82,3 @@ q
 @register multiplexer=mux
 @register #me multiplexer=tmp/prog1
 @set $tmp/prog1=L
-@set $tmp/prog1=/_/de:A scroll containing a spell called multiplexer

@@ -64,7 +64,38 @@ This routine is useful for parsing command line input:
   
 public sms
 public fillfield
-public STRparse
+public STRparse $libdef STRparse
+
+$pubdef .asc ctoi
+$pubdef .blank? striplead not
+$pubdef .center "%|*s" fmtstring
+$pubdef .chr itoc dup not if pop "." then
+$pubdef .command_parse "$lib/strings" match "STRparse" call
+$pubdef .fillfield "$lib/strings" match "fillfield" call
+$pubdef .left "%-*s" fmtstring
+$pubdef .right "%*s" fmtstring
+$pubdef .rsplit rsplit
+$pubdef .singlespace "$lib/strings" match "sms" call
+$pubdef .sls striplead
+$pubdef .sms "$lib/strings" match "sms" call
+$pubdef .split split
+$pubdef .strip strip
+$pubdef .stripspaces strip
+$pubdef .sts striptail
+$pubdef STRasc ctoi
+$pubdef STRblank? striplead not
+$pubdef STRcenter "%|*s" fmtstring
+$pubdef STRchr itoc dup not if pop "." then
+$pubdef STRfillfield "$lib/strings" match "fillfield" call
+$pubdef STRleft "%-*s" fmtstring
+$pubdef STRright "%*s" fmtstring
+$pubdef STRrsplit rsplit
+$pubdef STRsinglespace "$lib/strings" match "sms" call
+$pubdef STRsls striplead
+$pubdef STRsms "$lib/strings" match "sms" call
+$pubdef STRsplit split
+$pubdef STRstrip strip
+$pubdef STRsts striptail
 .
 c
 q
@@ -72,38 +103,6 @@ q
 @register #me lib-strings=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called stringslib
-@set $tmp/prog1=/_defs/.asc:ctoi
-@set $tmp/prog1=/_defs/.blank?:striplead not
-@set $tmp/prog1=/_defs/.center:"%|*s" fmtstring
-@set $tmp/prog1=/_defs/.chr:itoc dup not if pop "." then
-@set $tmp/prog1=/_defs/.command_parse:"$lib/strings" match "STRparse" call
-@set $tmp/prog1=/_defs/.fillfield:"$lib/strings" match "fillfield" call
-@set $tmp/prog1=/_defs/.left:"%-*s" fmtstring
-@set $tmp/prog1=/_defs/.right:"%*s" fmtstring
-@set $tmp/prog1=/_defs/.rsplit:rsplit
-@set $tmp/prog1=/_defs/.singlespace:"$lib/strings" match "sms" call
-@set $tmp/prog1=/_defs/.sls:striplead
-@set $tmp/prog1=/_defs/.sms:"$lib/strings" match "sms" call
-@set $tmp/prog1=/_defs/.split:split
-@set $tmp/prog1=/_defs/.strip:strip
-@set $tmp/prog1=/_defs/.stripspaces:strip
-@set $tmp/prog1=/_defs/.sts:striptail
-@set $tmp/prog1=/_defs/STRasc:ctoi
-@set $tmp/prog1=/_defs/STRblank?:striplead not
-@set $tmp/prog1=/_defs/STRcenter:"%|*s" fmtstring
-@set $tmp/prog1=/_defs/STRchr:itoc dup not if pop "." then
-@set $tmp/prog1=/_defs/STRfillfield:"$lib/strings" match "fillfield" call
-@set $tmp/prog1=/_defs/STRleft:"%-*s" fmtstring
-@set $tmp/prog1=/_defs/STRparse:"$lib/strings" match "STRparse" call
-@set $tmp/prog1=/_defs/STRright:"%*s" fmtstring
-@set $tmp/prog1=/_defs/STRrsplit:rsplit
-@set $tmp/prog1=/_defs/STRsinglespace:"$lib/strings" match "sms" call
-@set $tmp/prog1=/_defs/STRsls:striplead
-@set $tmp/prog1=/_defs/STRsms:"$lib/strings" match "sms" call
-@set $tmp/prog1=/_defs/STRsplit:split
-@set $tmp/prog1=/_defs/STRstrip:strip
-@set $tmp/prog1=/_defs/STRsts:striptail
 @set $tmp/prog1=/_docs:@list $lib/strings=1-29
 
 

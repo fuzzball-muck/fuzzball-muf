@@ -50,7 +50,6 @@ c
 q
 @register #me cmd-@view=tmp/prog1
 @set $tmp/prog1=W
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-@view
 @action @view=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 @set $tmp/exit1=/_/de:@$desc %list[desc]

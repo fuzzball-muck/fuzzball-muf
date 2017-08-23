@@ -52,15 +52,15 @@ Enjoy!
         - Foxen
 )
 : main "" pop ;
+
+$pubdef case begin dup
+$pubdef default pop 1 if
+$pubdef end break then dup
+$pubdef endcase pop pop 1 until
+$pubdef when if pop
 .
 c
 q
 @register lib-cases=lib/case
 @register #me lib-cases=tmp/prog1
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-cases
-@set $tmp/prog1=/_defs/case:begin dup
-@set $tmp/prog1=/_defs/default:pop 1 if
-@set $tmp/prog1=/_defs/end:break then dup
-@set $tmp/prog1=/_defs/endcase:pop pop 1 until
-@set $tmp/prog1=/_defs/when:if pop

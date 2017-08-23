@@ -75,6 +75,5 @@ c
 q
 @register #me cmd-fetch=tmp/prog1
 @set $tmp/prog1=W
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-fetch
 @action fetch;retrieve;grab=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

@@ -96,5 +96,4 @@ q
 @register cmd-lsedit=global/lsedit
 @register #me cmd-lsedit=tmp/prog1
 @set $tmp/prog1=L
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-lsedit
 @set $tmp/prog1=_version:1.4

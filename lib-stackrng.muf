@@ -88,7 +88,7 @@
     else 
         pop
     then
-
+ 
     (avoid rangecheck errors to duplicate pre FB6 behaviour.) 
     num @ 0 <= range @ array_count pos @ < or if
         { }list subrng !
@@ -159,6 +159,15 @@ public copyrange
 public deleterange
 public insertrange
 public filterrange
+
+$pubdef sr-catrng "$lib/stackrng" match "catranges" call
+$pubdef sr-copyrng "$lib/stackrng" match "copyrange" call
+$pubdef sr-deleterng "$lib/stackrng" match "deleterange" call
+$pubdef sr-extractrng "$lib/stackrng" match "extractrange" call
+$pubdef sr-filterrng "$lib/stackrng" match "filterrange" call
+$pubdef sr-insertrng "$lib/stackrng" match "insertrange" call
+$pubdef sr-poprng "$lib/stackrng" match "popoffn" call
+$pubdef sr-swaprng "$lib/stackrng" match "swapranges" call
 .
 c
 q
@@ -167,13 +176,4 @@ q
 @set $tmp/prog1=L
 @set $tmp/prog1=V
 @set $tmp/prog1=3
-@propset $tmp/prog1=str:/_defs/popn:
-@propset $tmp/prog1=str:/_defs/sr-catrng:"$lib/stackrng" match "catranges" call
-@propset $tmp/prog1=str:/_defs/sr-copyrng:"$lib/stackrng" match "copyrange" call
-@propset $tmp/prog1=str:/_defs/sr-deleterng:"$lib/stackrng" match "deleterange" call
-@propset $tmp/prog1=str:/_defs/sr-extractrng:"$lib/stackrng" match "extractrange" call
-@propset $tmp/prog1=str:/_defs/sr-filterrng:"$lib/stackrng" match "filterrange" call
-@propset $tmp/prog1=str:/_defs/sr-insertrng:"$lib/stackrng" match "insertrange" call
-@propset $tmp/prog1=str:/_defs/sr-poprng:"$lib/stackrng" match "popoffn" call
-@propset $tmp/prog1=str:/_defs/sr-swaprng:"$lib/stackrng" match "swapranges" call
 

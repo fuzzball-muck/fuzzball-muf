@@ -395,4 +395,3 @@ q
 @set $tmp/prog1=W
 @set $tmp/prog1=L
 @set $tmp/prog1=2
-@propset $tmp/prog1=str:/_/de:A scroll containing a spell called cmd-guitest

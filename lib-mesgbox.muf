@@ -13,7 +13,7 @@
       Returns the absolute message number of a message referred to by the
       given reference number.  See MBOX-num2ref for an explanation of those
       terms.
-
+ 
     MBOX-num2ref  [msgnum base dbref -- refnum]
       Returns the reference number of the message that has the given absolute
       message number.  The reference number is the position number of the
@@ -22,7 +22,7 @@
       number of a message will never change.  If the message with the given
       message number no longer exists, then the reference to the first message
       after the given message number is returned.
-
+ 
     MBOX-create   [base dbref -- ]
       Creates a new message box with no messages in it.
   
@@ -87,7 +87,7 @@ lvar n2r_cnt
     repeat
     pop pop pop 0
 ;
-
+ 
 : MBOX-ref2prop (refnum base dbref -- base' dbref)
     rot 3 pick 3 pick MBOX-ref2num intostr
     rot "/" strcat swap strcat swap
@@ -174,20 +174,20 @@ lvar n2r_cnt
     MBOX-count over < swap 1 < or
 ;
   
-PUBLIC MBOX-ref2prop
-PUBLIC MBOX-ref2num
-PUBLIC MBOX-num2ref
-PUBLIC MBOX-create
-PUBLIC MBOX-count
-PUBLIC MBOX-destroy
-PUBLIC MBOX-append
-PUBLIC MBOX-insmesg
-PUBLIC MBOX-delmesg
-PUBLIC MBOX-setmesg
-PUBLIC MBOX-msginfo
-PUBLIC MBOX-setinfo
-PUBLIC MBOX-message
-PUBLIC MBOX-badref?
+PUBLIC MBOX-ref2prop $libdef MBOX-ref2prop
+PUBLIC MBOX-ref2num $libdef MBOX-ref2num
+PUBLIC MBOX-num2ref $libdef MBOX-num2ref
+PUBLIC MBOX-create $libdef MBOX-create
+PUBLIC MBOX-count $libdef MBOX-count
+PUBLIC MBOX-destroy $libdef MBOX-destroy
+PUBLIC MBOX-append $libdef MBOX-append
+PUBLIC MBOX-insmesg $libdef MBOX-insmesg
+PUBLIC MBOX-delmesg $libdef MBOX-delmesg
+PUBLIC MBOX-setmesg $libdef MBOX-setmeg
+PUBLIC MBOX-msginfo $libdef MBOX-msginfo
+PUBLIC MBOX-setinfo $libdef MBOX-setinfo
+PUBLIC MBOX-message $libdef MBOX-message
+PUBLIC MBOX-badref? $libdef MBOX-badref?
 .
 c
 q
@@ -195,20 +195,5 @@ q
 @register #me lib-mesgbox=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-mesgbox
-@set $tmp/prog1=/_defs/MBOX-append:"$lib/mesgbox" match "MBOX-append" call
-@set $tmp/prog1=/_defs/MBOX-badref?:"$lib/mesgbox" match "MBOX-badref?" call
-@set $tmp/prog1=/_defs/MBOX-count:"$lib/mesgbox" match "MBOX-count" call
-@set $tmp/prog1=/_defs/MBOX-create:"$lib/mesgbox" match "MBOX-create" call
-@set $tmp/prog1=/_defs/MBOX-delmesg:"$lib/mesgbox" match "MBOX-delmesg" call
-@set $tmp/prog1=/_defs/MBOX-destroy:"$lib/mesgbox" match "MBOX-destroy" call
-@set $tmp/prog1=/_defs/MBOX-insmesg:"$lib/mesgbox" match "MBOX-insmesg" call
-@set $tmp/prog1=/_defs/MBOX-message:"$lib/mesgbox" match "MBOX-message" call
-@set $tmp/prog1=/_defs/MBOX-msginfo:"$lib/mesgbox" match "MBOX-msginfo" call
-@set $tmp/prog1=/_defs/MBOX-ref2prop:"$lib/mesgbox" match "MBOX-ref2prop" call
-@set $tmp/prog1=/_defs/MBOX-ref2num:"$lib/mesgbox" match "MBOX-ref2num" call
-@set $tmp/prog1=/_defs/MBOX-num2ref:"$lib/mesgbox" match "MBOX-num2ref" call
-@set $tmp/prog1=/_defs/MBOX-setinfo:"$lib/mesgbox" match "MBOX-setinfo" call
-@set $tmp/prog1=/_defs/MBOX-setmesg:"$lib/mesgbox" match "MBOX-setmesg" call
 @set $tmp/prog1=/_docs:@list $lib/mesgbox=1-58
 @set $tmp/prog1=/_version:1.2

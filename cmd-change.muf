@@ -183,4 +183,3 @@ c
 q
 @register #me cmd-change=tmp/prog1
 @set $tmp/prog1=W
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-change

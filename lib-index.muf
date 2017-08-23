@@ -720,6 +720,36 @@ public index-first                   public std-index-first
 public index-last                    public std-index-last
 public index-next                    public std-index-next
 public index-prev                    public std-index-prev
+
+$pubdef .index-add "$lib/index" match "index-add" call
+$pubdef .index-add-sort "$lib/index" match "index-add-sort" call
+$pubdef .index-delete "$lib/index" match "index-delete" call
+$pubdef .index-envmatch "$lib/index" match "index-envmatch" call
+$pubdef .index-first "$lib/index" match "index-first" call
+$pubdef .index-last "$lib/index" match "index-last" call
+$pubdef .index-match "$lib/index" match "index-match" call
+$pubdef .index-matchrange "$lib/index" match "index-matchrange" call
+$pubdef .index-next "$lib/index" match "index-next" call
+$pubdef .index-prev "$lib/index" match "index-prev" call
+$pubdef .index-remove "$lib/index" match "index-remove" call
+$pubdef .index-set "$lib/index" match "index-set" call
+$pubdef .index-value "$lib/index" match "index-value" call
+$pubdef .index-write "$lib/index" match "index-write" call
+
+$pubdef .std-index-add "$lib/index" match "index-add" call
+$pubdef .std-index-add-sort "$lib/index" match "index-add-sort" call
+$pubdef .std-index-delete "$lib/index" match "index-delete" call
+$pubdef .std-index-envmatch "$lib/index" match "index-envmatch" call
+$pubdef .std-index-first "$lib/index" match "index-first" call
+$pubdef .std-index-last "$lib/index" match "index-last" call
+$pubdef .std-index-match "$lib/index" match "index-match" call
+$pubdef .std-index-matchrange "$lib/index" match "index-matchrange" call
+$pubdef .std-index-next "$lib/index" match "index-next" call
+$pubdef .std-index-prev "$lib/index" match "index-prev" call
+$pubdef .std-index-remove "$lib/index" match "index-remove" call
+$pubdef .std-index-set "$lib/index" match "index-set" call
+$pubdef .std-index-value "$lib/index" match "index-value" call
+$pubdef .std-index-write "$lib/index" match "index-write" call
 .
 c
 q
@@ -728,33 +758,5 @@ q
 @set $tmp/prog1=L
 @set $tmp/prog1=3
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-index
-@set $tmp/prog1=/_defs/.index-add:"$lib/index" match "index-add" call
-@set $tmp/prog1=/_defs/.index-add-sort:"$lib/index" match "index-add-sort" call
-@set $tmp/prog1=/_defs/.index-delete:"$lib/index" match "index-delete" call
-@set $tmp/prog1=/_defs/.index-envmatch:"$lib/index" match "index-envmatch" call
-@set $tmp/prog1=/_defs/.index-first:"$lib/index" match "index-first" call
-@set $tmp/prog1=/_defs/.index-last:"$lib/index" match "index-last" call
-@set $tmp/prog1=/_defs/.index-match:"$lib/index" match "index-match" call
-@set $tmp/prog1=/_defs/.index-matchrange:"$lib/index" match "index-matchrange" call
-@set $tmp/prog1=/_defs/.index-next:"$lib/index" match "index-next" call
-@set $tmp/prog1=/_defs/.index-prev:"$lib/index" match "index-prev" call
-@set $tmp/prog1=/_defs/.index-remove:"$lib/index" match "index-remove" call
-@set $tmp/prog1=/_defs/.index-set:"$lib/index" match "index-set" call
-@set $tmp/prog1=/_defs/.index-value:"$lib/index" match "index-value" call
-@set $tmp/prog1=/_defs/.index-write:"$lib/index" match "index-write" call
-@set $tmp/prog1=/_defs/.std-index-add:"$lib/index" match "std-index-add" call
-@set $tmp/prog1=/_defs/.std-index-add-sort:"$lib/index" match "std-index-add-sort" call
-@set $tmp/prog1=/_defs/.std-index-delete:"$lib/index" match "std-index-delete" call
-@set $tmp/prog1=/_defs/.std-index-envmatch:"$lib/index" match "std-index-envmatch" call
-@set $tmp/prog1=/_defs/.std-index-first:"$lib/index" match "std-index-first" call
-@set $tmp/prog1=/_defs/.std-index-last:"$lib/index" match "std-index-last" call
-@set $tmp/prog1=/_defs/.std-index-match:"$lib/index" match "std-index-match" call
-@set $tmp/prog1=/_defs/.std-index-next:"$lib/index" match "std-index-next" call
-@set $tmp/prog1=/_defs/.std-index-prev:"$lib/index" match "std-index-prev" call
-@set $tmp/prog1=/_defs/.std-index-remove:"$lib/index" match "std-index-remove" call
-@set $tmp/prog1=/_defs/.std-index-set:"$lib/index" match "std-index-set" call
-@set $tmp/prog1=/_defs/.std-index-value:"$lib/index" match "std-index-value" call
-@set $tmp/prog1=/_defs/.std-index-write:"$lib/index" match "std-index-write" call
 @set $tmp/prog1=/_docs:@list $lib/index=1-109
 @set $tmp/prog1=/_lib-version:1.2

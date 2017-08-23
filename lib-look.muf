@@ -320,6 +320,19 @@ public str-desc
 public dbstr-desc
 public db-desc
 public cmd-look
+
+$pubdef .cmd-look "$lib/look" match "cmd-look" call
+$pubdef .contents-filter "$lib/look" match "contents-filter" call
+$pubdef .db-desc "$lib/look" match "db-desc" call
+$pubdef .dbstr-desc "$lib/look" match "dbstr-desc" call
+$pubdef .get-contents "$lib/look" match "get-contents" call
+$pubdef .list-contents "$lib/look" match "list-contents" call
+$pubdef .long-display "$lib/look" match "long-display" call
+$pubdef .safecall "$lib/look" match "safecall" call
+$pubdef .short-display "$lib/look" match "short-display" call
+$pubdef .short-list "$lib/look" match "short-list" call
+$pubdef .str-desc "$lib/look" match "str-desc" call
+$pubdef .unparse "$lib/look" match "unparse" call
 .
 c
 q
@@ -330,18 +343,5 @@ q
 @set $tmp/prog1=H
 @set $tmp/prog1=2
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-look.muf
-@set $tmp/prog1=/_defs/.cmd-look:"$lib/look" match "cmd-look" call
-@set $tmp/prog1=/_defs/.contents-filter:"$lib/look" match "contents-filter" call
-@set $tmp/prog1=/_defs/.db-desc:"$lib/look" match "db-desc" call
-@set $tmp/prog1=/_defs/.dbstr-desc:"$lib/look" match "dbstr-desc" call
-@set $tmp/prog1=/_defs/.get-contents:"$lib/look" match "get-contents" call
-@set $tmp/prog1=/_defs/.list-contents:"$lib/look" match "list-contents" call
-@set $tmp/prog1=/_defs/.long-display:"$lib/look" match "long-display" call
-@set $tmp/prog1=/_defs/.safecall:"$lib/look" match "safecall" call
-@set $tmp/prog1=/_defs/.short-display:"$lib/look" match "short-display" call
-@set $tmp/prog1=/_defs/.short-list:"$lib/look" match "short-list" call
-@set $tmp/prog1=/_defs/.str-desc:"$lib/look" match "str-desc" call
-@set $tmp/prog1=/_defs/.unparse:"$lib/look" match "unparse" call
 @set $tmp/prog1=/_docs:@list $lib/look=1-58
 @set $tmp/prog1=/_lib-version:1.31

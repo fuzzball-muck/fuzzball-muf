@@ -359,24 +359,25 @@ $define SRNGcopy    sr-copyrng    $enddef
     EDITjoin 1 4 rotate 4 rotate
     SRNGinsert
 ;
-PUBLIC EDITsearch
-PUBLIC EDITreplace
-PUBLIC EDITmove
-PUBLIC EDITcopy
-PUBLIC EDITlist
-PUBLIC EDITleft
-PUBLIC EDITcenter
-PUBLIC EDITright
-PUBLIC EDITindent
-PUBLIC EDITfmt_rng
-PUBLIC EDITjoin_rng
-  
-PUBLIC EDITshuffle
-PUBLIC EDITsort
-PUBLIC EDITjoin
-PUBLIC EDITdisplay
-PUBLIC EDITsplit
-PUBLIC EDITformat
+
+PUBLIC EDITsearch $libdef EDITsearch
+PUBLIC EDITreplace $libdef EDITreplace
+PUBLIC EDITmove $libdef EDITmove
+PUBLIC EDITcopy $libdef EDITcopy
+PUBLIC EDITlist $libdef EDITlist
+PUBLIC EDITleft $libdef EDITleft
+PUBLIC EDITcenter $libdef EDITcenter
+PUBLIC EDITright $libdef EDITright
+PUBLIC EDITindent $libdef EDITindent
+PUBLIC EDITfmt_rng $libdef EDITfmt_rng
+PUBLIC EDITjoin_rng $libdef EDITjoin_rng
+
+PUBLIC EDITshuffle $libdef EDITshuffle
+PUBLIC EDITsort $libdef EDITsort
+PUBLIC EDITjoin $libdef EDITjoin
+PUBLIC EDITdisplay $libdef EDITdisplay
+PUBLIC EDITsplit $libdef EDITsplit
+PUBLIC EDITformat $libdef EDITformat
 .
 c
 q
@@ -384,22 +385,4 @@ q
 @register #me lib-edit=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-edit
-@set $tmp/prog1=/_defs/EDITcenter:"$lib/edit" match "EDITcenter" call
-@set $tmp/prog1=/_defs/EDITcopy:"$lib/edit" match "EDITcopy" call
-@set $tmp/prog1=/_defs/EDITdisplay:"$lib/edit" match "EDITdisplay" call
-@set $tmp/prog1=/_defs/EDITfmt_rng:"$lib/edit" match "EDITfmt_rng" call
-@set $tmp/prog1=/_defs/EDITformat:"$lib/edit" match "EDITformat" call
-@set $tmp/prog1=/_defs/EDITindent:"$lib/edit" match "EDITindent" call
-@set $tmp/prog1=/_defs/EDITjoin:"$lib/edit" match "EDITjoin" call
-@set $tmp/prog1=/_defs/EDITjoin_rng:"$lib/edit" match "EDITjoin_rng" call
-@set $tmp/prog1=/_defs/EDITleft:"$lib/edit" match "EDITleft" call
-@set $tmp/prog1=/_defs/EDITlist:"$lib/edit" match "EDITlist" call
-@set $tmp/prog1=/_defs/EDITmove:"$lib/edit" match "EDITmove" call
-@set $tmp/prog1=/_defs/EDITreplace:"$lib/edit" match "EDITreplace" call
-@set $tmp/prog1=/_defs/EDITright:"$lib/edit" match "EDITright" call
-@set $tmp/prog1=/_defs/EDITsearch:"$lib/edit" match "EDITsearch" call
-@set $tmp/prog1=/_defs/EDITshuffle:"$lib/edit" match "EDITshuffle" call
-@set $tmp/prog1=/_defs/EDITsort:"$lib/edit" match "EDITsort" call
-@set $tmp/prog1=/_defs/EDITsplit:"$lib/edit" match "EDITsplit" call
 @set $tmp/prog1=/_docs:@list $lib/edit=1-80

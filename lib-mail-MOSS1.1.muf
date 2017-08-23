@@ -2265,6 +2265,15 @@ PUBLIC maintenence
 PUBLIC unreadcount
 PUBLIC savedcount
 PUBLIC qcall
+
+$pubdef MAILnew "$lib/mail" match "unreadcount" call
+$pubdef MAILsaved "$lib/mail" match "savedcount" call
+$pubdef QUICKsend 1 "$lib/mail" match "qcall" call
+$pubdef QUICKread 2 "$lib/mail" match "qcall" call
+$pubdef QUICKerase 3 "$lib/mail" match "qcall" call
+$pubdef QUICKforward 4 "$lib/mail" match "qcall" call
+$pubdef QUICKcheck 5 "$lib/mail" match "qcall" call
+$pubdef QUICKscan 6 "$lib/mail" match "qcall" call
 .
 c
 q
@@ -2273,14 +2282,6 @@ q
 @set $lib/mail=!z
 @set $lib/mail=!l
 @set $lib/mail=w
-@set $lib/mail=_defs/MAILnew:"$lib/mail" match "unreadcount" call
-@set $lib/mail=_defs/MAILsaved:"$lib/mail" match "savedcount" call
-@set $lib/mail=_defs/QUICKsend:1 "$lib/mail" match "qcall" call
-@set $lib/mail=_defs/QUICKread:2 "$lib/mail" match "qcall" call
-@set $lib/mail=_defs/QUICKerase:3 "$lib/mail" match "qcall" call
-@set $lib/mail=_defs/QUICKforward:4 "$lib/mail" match "qcall" call
-@set $lib/mail=_defs/QUICKcheck:5 "$lib/mail" match "qcall" call
-@set $lib/mail=_defs/QUICKscan:6 "$lib/mail" match "qcall" call
 @prog MOSS-mailwarn
 1 9999 d
 i

@@ -205,17 +205,17 @@ $endif
     1 -4 rotate LMGR-deleterange
 ;
   
-PUBLIC MSG-destroy
-PUBLIC MSG-create
-PUBLIC MSG-count
-PUBLIC MSG-info
-PUBLIC MSG-setinfo
-PUBLIC MSG-message
-PUBLIC MSG-item
-PUBLIC MSG-setitem
-PUBLIC MSG-insitem
-PUBLIC MSG-append
-PUBLIC MSG-delitem
+PUBLIC MSG-destroy $libdef MSG-destroy
+PUBLIC MSG-create $libdef MSG-create
+PUBLIC MSG-count $libdef MSG-count
+PUBLIC MSG-info $libdef MSG-info
+PUBLIC MSG-setinfo $libdef MSG-setinfo
+PUBLIC MSG-message $libdef MSG-message
+PUBLIC MSG-item $libdef MSG-item
+PUBLIC MSG-setitem $libdef MSG-setitem
+PUBLIC MSG-insitem $libdef MSG-insitem
+PUBLIC MSG-append $libdef MSG-append
+PUBLIC MSG-delitem $libdef MSG-delitem
 .
 c
 q
@@ -223,16 +223,4 @@ q
 @register #me lib-mesg=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=/_/de:A scroll containing a spell called lib-mesg
-@set $tmp/prog1=/_defs/MSG-append:"$lib/mesg" match "MSG-append" call
-@set $tmp/prog1=/_defs/MSG-count:"$lib/mesg" match "MSG-count" call
-@set $tmp/prog1=/_defs/MSG-create:"$lib/mesg" match "MSG-create" call
-@set $tmp/prog1=/_defs/MSG-delitem:"$lib/mesg" match "MSG-delitem" call
-@set $tmp/prog1=/_defs/MSG-destroy:"$lib/mesg" match "MSG-destroy" call
-@set $tmp/prog1=/_defs/MSG-info:"$lib/mesg" match "MSG-info" call
-@set $tmp/prog1=/_defs/MSG-insitem:"$lib/mesg" match "MSG-insitem" call
-@set $tmp/prog1=/_defs/MSG-item:"$lib/mesg" match "MSG-item" call
-@set $tmp/prog1=/_defs/MSG-message:"$lib/mesg" match "MSG-message" call
-@set $tmp/prog1=/_defs/MSG-setinfo:"$lib/mesg" match "MSG-setinfo" call
-@set $tmp/prog1=/_defs/MSG-setitem:"$lib/mesg" match "MSG-setitem" call
 @set $tmp/prog1=/_docs:@list $lib/mesg=1-50

@@ -54,7 +54,6 @@ c
 q
 @register #me cmd-put=tmp/prog1
 @set $tmp/prog1=W
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-put
 @action put;replace;stuff=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 

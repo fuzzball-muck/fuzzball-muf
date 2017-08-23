@@ -116,4 +116,3 @@ $def MIN_IDLE 3 (minutes)
 c
 q
 @register #me cmd-who=tmp/prog1
-@set $tmp/prog1=/_/de:A scroll containing a spell called cmd-who
