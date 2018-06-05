@@ -3,7 +3,6 @@
 " Maintainer:  Revar Desmera <revar@belfry.com>
 " Last Change: Wed 29 Jun 2005 17:15:27 PST
 " Filenames:   *.muf
-" URL:	       http://www.belfry.com/fuzzball/muf.vim
 
 " $Id: muf.vim,v 1.1 2007/08/28 09:46:45 revar Exp $
 
