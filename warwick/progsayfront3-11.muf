@@ -1178,7 +1178,7 @@ q
 @propset $tmp/prog1=str:/_help/99#/18:`
 @propset $tmp/prog1=str:/_help/99#/180:`
 @propset $tmp/prog1=str:/_help/99#/181:This was the other major introduction to speech.  A filter is a program,
-@propset $tmp/prog1=str:/_help/99#/182: seperate from the say program, which is called by say to modify text or
+@propset $tmp/prog1=str:/_help/99#/182: separate from the say program, which is called by say to modify text or
 @propset $tmp/prog1=str:/_help/99#/183: perform some other function.  If you are familiar with pipes in Unix, then
 @propset $tmp/prog1=str:/_help/99#/184: this is similar.
 @propset $tmp/prog1=str:/_help/99#/185:`
