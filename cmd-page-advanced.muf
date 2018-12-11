@@ -6,15 +6,22 @@
 (                                                                )
 ( This code is released under the GNU Public Licence.            )
 (                                                                )
+ 
+$version 3.02
+
+$include $lib/alias
+$include $lib/away
+$include $lib/ignore
+$include $lib/props
   
 ( CONFIGURATION )
   
 ( Restrict guests from paging anyone but a wizard )
-$def RESTRICTWIZ
+($def RESTRICTWIZ)
 ( Allow multi-player summons )
 ( $def MULTISUMMON )
 ( Restrict guests from multi-page )
-$def RESTRICTMULT
+($def RESTRICTMULT)
   
 ( Encrypt lastpage[d/dgroup/er/ers] props )
 ( $def ENCRYPTPROPS )
@@ -23,7 +30,7 @@ $def RESTRICTMULT
 $def KEY "encryption key"
   
 ( The action of #mail, PAGEMAIL or LIBMAIL or NONE )
-$define MAILTYPE LIBMAIL $enddef
+$define MAILTYPE PAGEMAIL $enddef
   
 ( END OF CONFIGURATION )
   
@@ -37,11 +44,9 @@ $def MAILTYPE NONE
 $endif
 $endif
 $endif
-  
-$def VERSION "MUFpage v3.00 by Revar"
-$def UPDATED "Updated 3/16/00"
-  
-$def descr_idle descrcon conidle
+ 
+$def VERSION "MUFpage v3.02 by Revar"
+$def UPDATED "Updated 6/22/03"
   
 : oproploc ( dbref -- dbref' )
     dup "_proploc" getpropstr
@@ -53,8 +58,8 @@ $def descr_idle descrcon conidle
         dup ok? if
             dup owner 3 pick
             dbcmp if swap then
-        then
-        pop
+        else swap
+        then pop
     else pop
     then
 ;
@@ -73,9 +78,6 @@ $def descr_idle descrcon conidle
     dup strcat ( 80 spaces now )
     swap strcut pop
 ;
-  
-$def strip-leadspaces striplead
-$def strip-trailspaces striptail
   
 ( mail encryption stuff )
   
@@ -260,16 +262,6 @@ Gazer's Sort routines
   
 ( *** routines to get and set properties *** )
   
-: setpropstr (dbref propname value -- )
-    dup not if
-        pop 0 setprop
-    else
-        0 addprop
-    then
-;
-  
-: envprop envpropstr swap pop ;
-  
 : search-prop (propname -- str)
     myproploc over getpropstr
     dup not if
@@ -444,6 +436,7 @@ Gazer's Sort routines
     oproploc "_page/prepf" getpropstr
     dup not if pop "%n pages: " "_page/prepf" trigger @ swap getpropstr dup if swap then pop then
     "<loc>" "%l" subst
+    "\[" "\\[" subst  ( Support ansi in prepend Natasha@HLM 21 December 2002 )
 ;
   
   
@@ -571,7 +564,7 @@ $endif
 ;
   
 : get-awaymsg (dbref -- string)
-    oproploc "_page/awaymsg" getpropstr
+    away-message (oproploc "_page/awaymsg" getpropstr}  Use $lib/away Natasha@HLM 27 December 2002)
 ;
   
 : set-awaymsg (string dbref -- )
@@ -607,8 +600,8 @@ $ifdef MAILTYPE=PAGEMAIL
 ;
 $endif
   
-: update-aliases (dbref -- )
-    dup dup "Aliases" getpropstr
+: update-aliases (dbref -- ) pop
+    (dup dup "Aliases" getpropstr
     begin
         dup while
         " " split swap
@@ -616,7 +609,7 @@ $endif
         "_page/alias/a-" 4 rotate strcat
         update-prop
     repeat pop pop
-    "Aliases" "_page/aliases" update-prop
+    "Aliases" "_page/aliases" update-prop)
 ;
   
 : do-update-props (versionint -- )
@@ -654,8 +647,8 @@ $endif
     pop
 ;
   
-: update-galiases ( -- )
-    trigger @ getlink dup dup "GlobalAliases" getpropstr
+: update-galiases ( -- ) 0 pop
+    (trigger @ getlink dup dup "GlobalAliases" getpropstr
     trigger @ getlink "_page/galiases" getpropstr " " strcat over strcat
     strip sort-stringwords trigger @ getlink "GlobalAliases" rot setprop
     begin
@@ -668,7 +661,7 @@ $endif
         "_page/galiasown/g-" 4 rotate strcat
         update-prop
     repeat pop pop
-    "GlobalAliases" "_page/galiases" update-prop
+    "GlobalAliases" "_page/galiases" update-prop)
 ;
   
   
@@ -747,9 +740,9 @@ $ifdef MAILTYPE=PAGEMAIL
     3 pick 3 pick rot move-mail
     over over "_page/mail#"  move-prop
 $endif
-    over "_page/aliases" getpropstr
+    (over "_page/aliases" getpropstr
     3 pick 3 pick rot move-aliases
-    over over "_page/aliases" move-prop
+    over over "_page/aliases" move-prop)
   
     "Properties now stored on \""
     swap name strcat "\"" strcat tell
@@ -764,15 +757,15 @@ $endif
 ;
   
   
-: set-g-aliases (aliasesstr -- )
-    sort-stringwords
-    trigger @ getlink "_page/galiases" rot setpropstr
+: set-g-aliases (aliasesstr -- ) pop
+    (sort-stringwords
+    trigger @ getlink "_page/galiases" rot setpropstr)
 ;
   
   
-: set-p-aliases (aliasesstr -- )
-    sort-stringwords
-    myproploc "_page/aliases" rot setpropstr
+: set-p-aliases (aliasesstr -- ) pop
+    (sort-stringwords
+    myproploc "_page/aliases" rot setpropstr)
 ;
   
   
@@ -786,8 +779,8 @@ $endif
 ;
   
   
-: set-personal-alias (aliasname aliasstr -- )
-    swap tolower dup strlen
+: set-personal-alias (aliasname aliasstr -- ) cmd-alias
+    (swap tolower dup strlen
     10 > if 10 strcut pop then
     swap get-p-aliases
     " " swap over strcat strcat
@@ -805,30 +798,30 @@ $endif
     strip set-p-aliases
   
     "_page/alias/a-" rot strcat
-    myproploc swap rot setpropstr
+    myproploc swap rot setpropstr)
 ;
   
   
-: get-personal-alias (aliasname playerdbref -- aliasstr)
-    over over oproploc "_page/alias/a-" rot strcat getpropstr
+: get-personal-alias (aliasname playerdbref -- aliasstr) swap alias-get
+    (over over oproploc "_page/alias/a-" rot strcat getpropstr}  lib/alias Natasha@HLM 22 June 2002
     dup if rot rot pop pop exit then
     pop over over int intostr "Alias" swap strcat
     "-" strcat swap strcat
     trigger @ getlink swap over over getpropstr
     dup not if pop pop pop pop pop "" exit then
     rot rot 0 setprop
-    swap pop over swap set-personal-alias
+    swap pop over swap set-personal-alias)
 ;
   
   
 : get-global-alias (aliasname -- aliasstr)
-    trigger @ getlink "_page/galias/g-"
-    rot strcat getpropstr
+    alias-global-registry ("_page/galias/g-"}  lib/alias Natasha@HLM 22 June 2002; use alias-global-registry, not page program Natasha@HLM 27 June 2002 )
+    swap alias-get (rot strcat getpropstr)
 ;
   
   
-: set-global-alias (aliasname aliasstr -- )
-    over get-global-alias
+: set-global-alias (aliasname aliasstr -- ) alias-global-registry cmd-alias  ( lib/alias global support Natasha@HLM 27 June 2002 )
+    (over get-global-alias
     me @ "w" flag? not and
     me @ trigger @ getlink owner dbcmp not and
     "_page/galiasown/g-" 4 pick strcat
@@ -837,12 +830,12 @@ $endif
         "Permission denied." tell
         pop pop exit
     then
-    (aliasname aliasstr)
+    {aliasname aliasstr}
     dup not if
         "_page/galiasown/g-" 3 pick strcat
         trigger @ getlink swap 0 setprop
     then
-    (aliasname aliasstr)
+    {aliasname aliasstr}
   
     swap tolower dup strlen
     10 > if 10 strcut pop then
@@ -858,13 +851,9 @@ $endif
         "Global alias cleared." tell
     then
     strip set-g-aliases
-  
-    "_page/galiasown/g-" 3 pick strcat
-    trigger @ getlink swap
-    me @ int intostr setpropstr
-  
+    
     "_page/galias/g-" rot strcat
-    trigger @ getlink swap rot setpropstr
+    trigger @ getlink swap rot setpropstr)
 ;
   
   
@@ -878,7 +867,7 @@ $endif
   
 ( Line 888. )
 ( *** END PROPS ON PROG *** )
-
+ 
   
   
   
@@ -903,6 +892,7 @@ $endif
 ;
   
 : get-timestr ( -- timestr)
+ 
     "%I:%M%p" systime timefmt tolower
     dup "0" 1 strncmp not if
         1 strcut swap pop
@@ -912,6 +902,7 @@ $endif
   
 : get-timestr24h ( -- timestr)
     "%H:%M" systime timefmt
+ 
 ;
   
   
@@ -920,7 +911,7 @@ $endif
 ( alias listing stuff )
   
 : list-personal-aliases ( - )
-    "  Personal Aliases List" tell
+    "" "" cmd-alias ("  Personal Aliases List" tell
     "Alias Name -- Alias Expansion" tell
     "----------    --------------------------------------------------" tell
     me @ get-p-aliases sort-stringwords
@@ -929,12 +920,12 @@ $endif
         " " split swap dup 4 pick get-personal-alias
         " -- " swap strcat over 10 fillspace swap strcat
         strcat tell
-    repeat pop pop
+    repeat pop pop)
 ;
   
   
 : list-global-aliases ( - )
-    "   Global Aliases List" tell
+    "" "" alias-global-registry cmd-alias ("   Global Aliases List" tell}  lib/alias global support Natasha@HLM 27 June 2002
     "Alias Name -- Alias Expansion" tell
     "----------    --------------------------------------------------" tell
     get-g-aliases sort-stringwords
@@ -943,11 +934,11 @@ $endif
         " " split swap dup get-global-alias
         " -- " swap strcat over 10 fillspace swap strcat
         strcat tell
-    repeat pop
+    repeat pop)
 ;
   
-: list-matching-aliases (namestr -- )
-  foreground "Aliases containing the name \"" over strcat "\"" strcat tell
+: list-matching-aliases (namestr -- ) "" swap alias-global-registry cmd-alias  ( lib/alias global support Natasha@HLM 27 June 2002 )
+  (foreground "Aliases containing the name \"" over strcat "\"" strcat tell
   "Alias Name -- Alias Expansion" tell
   "----------    --------------------------------------------------" tell
   tolower get-g-aliases " " strcat get-p-aliases strcat sort-stringwords
@@ -958,7 +949,7 @@ $endif
         dup " " swap over strcat strcat tolower
         4 pick " " swap over strcat strcat
         instr not if pop else tell then
-    repeat pop
+    repeat pop)
 ;
   
   
@@ -1096,36 +1087,36 @@ $endif
   
   
 : ignored?       (playerdbref -- ignored?)
-    getignorestr
+    dup me @ "page" ignores? me @ rot "page" ignores? or (getignorestr}  $lib/ignore Natasha@HLM 13 June 2002; mod to reciprocate Natasha@HLM 27 June 2002
     me @ int intostr
     " " strcat " #" swap
-    strcat instr
+    strcat instr)
 ;
   
-  
-: ignoring?       (playerdbref -- ignored?)
-    int intostr " " strcat
+$def ignoring? ignored?
+(: ignoring?       {playerdbref -- ignored?}  mod to reciprocate Natasha@HLM 27 June 2002
+    me @ swap "page" ignores? {int intostr " " strcat}  $lib/ignore Natasha@HLM 13 June 2002
     me @ getignorestr
     " #" rot strcat instr
-;
+;)
   
   
 : ignore-dbref (dbref -- )
-    int intostr " " strcat
+    me @ swap "page" ignore-add  (int intostr " " strcat}  $lib/ignore Natasha@HLM 13 June 2002
     " #" swap strcat
     me @ getignorestr
     swap over over instr not
     if strcat else pop then
-    me @ setignorestr
+    me @ setignorestr)
 ;
   
   
 : unignore-dbref (dbref -- )
-    int intostr " " strcat
+    me @ swap "page" ignore-del  (int intostr " " strcat}  $lib/ignore Natasha@HLM 13 June 2002
     " #" swap strcat
     me @ getignorestr
     swap split strcat
-    me @ setignorestr
+    me @ setignorestr)
 ;
   
   
@@ -1140,7 +1131,7 @@ $endif
   
   
 : list-ignored ( -- string)
-    "" me @ getignorestr
+    me @ "page" ignore-list #20 ($lib/look) "short-list" call  ("" me @ getignorestr}  $lib/ignore Natasha@HLM 13 June 2002
     strip single-space
     begin
         dup while
@@ -1152,7 +1143,7 @@ $endif
             else pop
         then
     repeat pop sort-stringwords " " strcat
-    comma-format
+    comma-format)
 ;
         
     
@@ -1347,6 +1338,18 @@ $ifdef MAILTYPE=PAGEMAIL
     then
 ;
   
+: mail-nuke   ( -- )   (*Tyro}  Stolen from SPR's page by Natasha@HLM 13 June 2002 )
+  me @ mail-count dup
+    if "Delete " over intostr " page-mail message" strcat strcat swap 1 =
+      if "? (yes/no)" else "s? (yes/no)" then strcat .tell
+    read strip " " strcat "{yes|y} " smatch
+      if me @ oproploc "_page/mail#" remove_prop
+      "All page-mail messages nuked.  Have a nice day." .tell
+      else "Aborted." .tell
+      then
+    else "No page-mail messages to nuke." .tell
+    then
+;
   
 : mail-send (message player -- )
     dup mail-count 40 < over "truewizard" flag? or not if
@@ -1657,7 +1660,7 @@ $endif
     dup if
         comma-format dup " " instr
         if " are " else " is " then
-        "currently ignoring you."
+        "currently ignoring or ignored by you."
         strcat strcat tell
     else pop
     then
@@ -1729,18 +1732,18 @@ $endif
 (******* END ADDED BY RISS *******)
   
 : away? (dbref -- bool)
-    oproploc "_page/away" getpropstr
+    away-away? (oproploc "_page/away" getpropstr}  use $lib/away Natasha@HLM 27 December 2002)
 ;
   
 : idle-length (dbref -- int)
     dup player? if
         descriptors dup not if pop -1 exit then
-        1 - swap descr_idle
+        1 - swap descridle
         begin
             over
         while
             swap 1 - swap
-            rot descr_idle
+            rot descridle
             over over > if swap then pop
         repeat
         swap pop
@@ -2167,12 +2170,11 @@ $endif
 ( help stuff )
   
   
-$def }tell }list { me @ }list array_notify
-  
 : show-changes
 {
 VERSION "   Changes" strcat
 "---------------------------------------------------------------------------"
+"v3.02  6/27/03  Used $lib/alias, $lib/away, and $lib/ignore."
 "v3.01  5/20/02  Added %W for 24 hour time in message formats."
 "v3.00  3/16/00  Optimized the code somewhat for FBMUCK 6."
 "v2.51  7/ 3/96  Added %i sub for idle messages to give idle time.  Added"
@@ -2184,14 +2186,14 @@ VERSION "   Changes" strcat
 "v2.34  2/ 5/92  Make lastpaged/r/group encrypted.  Improved encryptions."
 "                 Added partial name matching for last five pagers."
 "v2.32  1/22/92  Added #lookup <player> to list aliases w/ them in them."
-"v2.31 10/31/91  Summoning now gives room# if pagee owns room pager is in."
-"v2.30 10/12/91  Added #priority for letting players page you despite haven."
-"v2.29 10/11/91  Added #sleepmsg, #haven and #ignore messages."
 "-- Type 'page #help' to see more info on each command.  \"feeps 4-ever!\" --"
 }tell
 ;
   
 (  old changes:
+"v2.31 10/31/91  Summoning now gives room# if pagee owns room pager is in."
+"v2.30 10/12/91  Added #priority for letting players page you despite haven."
+"v2.29 10/11/91  Added #sleepmsg, #haven and #ignore messages."
 "v2.26 10/10/91  Fixed #multimax probs, and made #mail remember last paged."
 "v2.25  9/ 6/91  Fixed #proploc page-mail copying problem.  Added #multimax."
 "v2.23  8/21/91  Added #erase for erasing messages mistakenly #mailed."
@@ -2246,6 +2248,7 @@ VERSION "   " strcat UPDATED strcat "   Credits" strcat
 "  Tugrik:       multiple selectable formats"
 "And for help with the code itself"
 "  Fre'ta:       Configurability, strencrypt/strdecrypt, #idle, #away"
+"  Natasha:      $lib/alias, $lib/away, $lib/ignore use"
 "  Riss:         Interactive notification"
 "And this leaves only multi-player paging, #version, #changes, #hints,"
 "#index and page-posing as completely my own ideas that no-one else"
@@ -2258,7 +2261,7 @@ VERSION "   " strcat UPDATED strcat "   Credits" strcat
 {
 VERSION "   " strcat UPDATED strcat "   Index" strcat
 "----------------------------------------------------------------"
-
+ 
 $ifndef MAILTYPE=NONE
 "Aliases            2,A               Multi-paging          1    "
 "Away               4                 Multimax              2    "
@@ -2277,9 +2280,9 @@ $ifndef MAILTYPE=NONE
 "Inform             3                 Summoning             1    "
 "Mailing            1                 Version               1    "
 "Mail-checking      3                 Who                   1    "
-
+ 
 $else
-
+ 
 "Aliases            2,A               Oformats              3,A,B"
 "Away               4                 Page format           A,B  "
 "Changes            1                 Pose format           A,B  "
@@ -2296,7 +2299,7 @@ $else
 "Multi-paging       1                 Version               1    "
 "Multimax           2                 Who                   1    "
 $endif
-
+ 
 "--  1 = page #help      2 = page #help2     3 = page #help3   --"
 "--  4 = page #help4     A = page #hints     B = page #hints2  --"
 }tell
@@ -2589,9 +2592,9 @@ VERSION "   " strcat UPDATED strcat "   Hints2" strcat
             pop show-hints2 exit
         then
   
-        me @ name tolower "guest" 5 strncmp not if
+        (me @ name tolower "guest" 5 strncmp not if}  Guests can page Natasha@HLM 5 January 2003
             pop "Permission denied." tell exit
-        then
+        then)
   
         dup "#feep" 5 stringmatch? if
             do-feep pop exit
@@ -2602,9 +2605,9 @@ VERSION "   " strcat UPDATED strcat "   Hints2" strcat
             tell exit
         then
         dup "#!away" 3 stringmatch? if
-            pop me @ oproploc "_page/away" 0 setprop
+            "" "" back-cmd (pop me @ oproploc "_page/away" 0 setprop}  use $lib/away Natasha@HLM 27 December 2002
             "Away flag reset."
-            tell exit
+            tell) exit
         then
         dup "#echo" 2 stringmatch? if
             pop "" set_page_echo
@@ -2664,9 +2667,9 @@ $endif
             dup "#away" 3 stringmatch? if
                 pop strip dup
                 "#clear" stringcmp not if pop "" then
-                me @ set-awaymsg
+                "" away-cmd (me @ set-awaymsg}  use $lib/away Natasha@HLM 27 December 2002
                 me @ oproploc "_page/away" "yes" setprop
-                "Away message and away flag are now set." tell exit
+                "Away message and away flag are now set." tell) exit
             then
             dup "#sleepmsg" 3 stringmatch? if
                 pop strip dup
@@ -2852,6 +2855,13 @@ $else
                 pop "page #check" me @ name QUICKcheck exit
 $endif
             then
+            dup "#nuke" 2 stringmatch? if
+$ifdef MAILTYPE=PAGEMAIL
+                pop mail-nuke exit
+$else
+                "KABOOM!" .tell
+$endif
+            then
 $endif
   
             dup "#haven" 3 stringmatch? if
@@ -2862,11 +2872,11 @@ $endif
                 "\"" strcat tell exit
             then
             dup "#away" 3 stringmatch? if
-                pop me @ "_page/away" "yes" setprop
+                pop "" "" away-cmd (me @ "_page/away" "yes" setprop}  use $lib/away Natasha@HLM 27 December 2002
                 "Away flag set." tell
                 "Your away message is \""
                 me @ get-awaymsg strcat
-                "\"" strcat tell exit
+                "\"" strcat tell) exit
             then
             dup "#sleepmsg" 3 stringmatch? if
                 pop "Your sleep message is \""
@@ -3051,6 +3061,7 @@ $endif
   
   
 : main
+    me @ player? not if "Only players may page." .tell pop exit then  ( str }  Only players can page Natasha@HLM 5 January 2003 )
   
     getday setday
   
@@ -3083,6 +3094,18 @@ $endif
 .
 c
 q
-@action page=#0=tmp/page
-@link $tmp/page=cmd-page
+@register #me cmd-page=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@action page;pag;pa;p=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@set $tmp/exit1=_page/formats/f-page:You page, "%m" to %n.
+@set $tmp/exit1=_page/formats/f-pose:You page-pose, "%i %m" to %n
+@set $tmp/exit1=_page/formats/o-page:%n pages, "%m" to %t.
+@set $tmp/exit1=_page/formats/o-pose:In a page-pose to %t, %n %m
+@set $tmp/exit1=_page/formats/opage:%n pages, "%m" to %t.
+@set $tmp/exit1=_page/formats/opose:In a page-pose to %t, %n %m
+@set $tmp/exit1=_page/formats/page:You page, "%m" to %n.
+@set $tmp/exit1=_page/formats/pose:You page-pose, "%i %m" to %n
 page #setup

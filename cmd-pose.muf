@@ -1,4 +1,4 @@
-@prog cmd-pose
+@program cmd-pose
 1 99999 d
 1 i
 (

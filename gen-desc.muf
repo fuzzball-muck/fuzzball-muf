@@ -1,4 +1,4 @@
-@prog gen-desc-docs
+@program gen-desc-docs
 1 99999 d
 1 i
 Quick Usage Summary of $desc (gen-desc v2.0)
@@ -243,7 +243,7 @@ _proploc_ok?:yes
 .
 q
 @register gen-desc-docs=desc-docs
-@prog gen-desc-2
+@program gen-desc-2
 1 99999 d
 1 i
 (
@@ -291,6 +291,11 @@ $include $lib/lmgr
 $include $lib/strings
 $include $lib/props
 $include $lib/edit
+
+$author Conrad Wong
+$doccmd @list $desc-docs
+$version 2.0 
+ 
 lvar lbracket   ( count of left brackets found )
 lvar search     ( current place to search )
  
@@ -309,7 +314,6 @@ lvar search     ( current place to search )
                 .tell
         then
 ;
-public get-legal-prop
  
 ( count-char -- counts the number of the specified character in the string
                 and returns the number of occurences)
@@ -395,7 +399,6 @@ public get-legal-prop
         repeat
         pop swap
 ;
-public split-args
  
 ( format-print -- given a string, breaks it into a number of lines formatted
                   to fit the given screen width )
@@ -413,7 +416,6 @@ public split-args
         1 rot 0 swap 1 1 EDITfmt_rng                    ( s1 s2 ... sn n )
         EDITdisplay
 ;
-public format-print
  
 ( wipe-list -- deletes a list of strings on the top of the stack )
 : wipe-list ( s[1] ... s[n] n -- )
@@ -422,7 +424,6 @@ public format-print
         repeat
         pop
 ;
-public wipe-list
  
 ( select-item -- given a string, a list of matching strings, and functions,
                  pick out the function that goes with the string, if any )
@@ -498,7 +499,6 @@ lvar debug
         repeat
         strcat                                          ( s' )
 ;
-public eval-loop
  
 : second-pass ( s -- s' )
         dup not if
@@ -549,23 +549,28 @@ public eval-loop
                 pop
         then
 ;
-public gen-desc
 
-$pubdef .eval-loop "$desc" match "eval-loop" call
-$pubdef .format-print "$desc" match "format-print" call
-$pubdef .gen-desc "$desc" match "gen-desc" call
-$pubdef .get-legal-prop "$desc" match "get-legal-prop" call
-$pubdef .split-args "$desc" match "split-args" call
-$pubdef .wipe-list "$desc" match "wipe-list" call
+public eval-loop
+public format-print
+public gen-desc
+public get-legal-prop
+public split-args
+public wipe-list
+
+$pubdef .eval-loop	__PROG__ "eval-loop" call
+$pubdef .format-print	__PROG__ "format-print" call
+$pubdef .gen-desc	__PROG__ "gen-desc" call
+$pubdef .get-legal-prop	__PROG__ "get-legal-prop" call
+$pubdef .split-args	__PROG__ "split-args" call
+$pubdef .wipe-list	__PROG__ "wipe-list" call
 .
 c
 q
 @register gen-desc-2=desc
-@set $desc=W
+@set $desc=3
 @set $desc=L
-@set $desc=/_/de:@$desc %list[doc]
-@set $desc=/_docs:@list $desc-docs
-@prog gen-desc-lib
+@set $desc=W
+@program gen-desc-lib
 1 99999 d
 1 i
 (
@@ -573,6 +578,10 @@ gen-desc library v2.0 written on May 11, 1992
  
 Contains all the tokens and macro subroutines which are implemented in $desc.
 )
+ 
+$author Conrad Wong
+$lib-version 2.0
+ 
 $include $lib/lmgr
 $include $lib/props
 $include $lib/strings
@@ -1135,5 +1144,5 @@ public do-prand
 c
 q
 @register gen-desc-lib=desc-lib
-@set $desc-lib=L
 @set $desc-lib=2
+@set $desc-lib=L

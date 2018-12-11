@@ -1,4 +1,4 @@
-@prog cmd-edit
+@program cmd-edit
 1 99999 d
 1 i
 ( cmd-edit
@@ -12,60 +12,62 @@
 ( CHANGES: Added a 'checkperms' routine to prevent non-wiz users     )
 (          from changing @wizard or ~restricted props -- Jessy 7/00  )
 (                                                                    )
-  
-$include $lib/strings
-  
+ 
+$author Tygryss
+$doccmd @list __PROG__=!@1-12
+$version 1.02
+ 
 : checkperms ( s --  )
   dup "@" stringpfx
   over "/@" instr
   3 pick "~" stringpfx
   4 rotate "/~" instr or or or
   me @ "W" flag? not and if
-    "Permission denied." .tell pid kill
+    "Permission denied." tell pid kill
   then
 ;
  
 : replace-text ( str -- str )
-    "Please enter the text it should be changed to." .tell
-    "##edit> " swap strcat .tell read
+    "Please enter the text it should be changed to." tell
+    "##edit> " swap strcat tell read
 ;
-  
+ 
 : error
-    "Name: Edit v1.02   Written by Tygryss   Last updated 3/31/92" .tell
-    "Desc: Lets you use the tinyfugue /grab feature to edit a message" .tell
-    "       or property.  Requires tinyfugue 1.5.0 or later with this" .tell
-    "       trigger defined:  /def -fg -p100 -t\"##edit> *\" = /grab %-1" .tell
-    " " .tell
-    "Syntax: edit <object>=<propname>   or" .tell
-    "        edit <object>=@<mesgtype>" .tell
-    " " .tell
-    "<mesgtype> can be name/desc/succ/osucc/fail/ofail/drop/odrop" .tell
+    "Name: Edit v1.02   Written by Tygryss   Last updated 3/31/92" tell
+    "Desc: Lets you use the tinyfugue /grab feature to edit a message" tell
+    "       or property.  Requires tinyfugue 1.5.0 or later with this" tell
+    "       trigger defined:  /def -fg -p100 -t\"##edit> *\" = /grab %-1" tell
+    " " tell
+    "Syntax: edit <object>=<propname>   or" tell
+    "        edit <object>=@<mesgtype>" tell
+    " " tell
+    "<mesgtype> can be name/desc/succ/osucc/fail/ofail/drop/odrop" tell
 ;
-  
+ 
 : change-main
-		"me" match me !
-    "=" .split .stripspaces
+    "me" match me !
+    "=" split strip
     dup not if error exit then
-    swap .stripspaces
+    swap strip
     dup not if error exit then
     swap dup "@" 1 strncmp if ( property? )
         swap match
         dup #-1 dbcmp if
             "I don't see that here."
-            .tell exit
+            tell exit
         then
         dup #-2 dbcmp if
             "I don't know which one you mean!"
-            .tell exit
+            tell exit
         then
         dup #-3 dbcmp if
             "I don't know what you mean!"
-            .tell exit
+            tell exit
         then
         dup owner me @ dbcmp not
         me @ "w" flag? not and if
             "Permission denied."
-            .tell exit
+            tell exit
         then
         swap over over 
 				dup checkperms
@@ -76,26 +78,26 @@ $include $lib/strings
         else
             0 addprop
         then
-        "Property changed." .tell
+        "Property changed." tell
     else  ( ; for message? )
         1 strcut swap pop
         swap match
         dup #-1 dbcmp if
             "I don't see that here."
-            .tell exit
+            tell exit
         then
         dup #-2 dbcmp if
             "I don't know which one you mean!"
-            .tell exit
+            tell exit
         then
         dup #-3 dbcmp if
             "I don't know what you mean!"
-            .tell exit
+            tell exit
         then
         dup owner me @ dbcmp not
         me @ "w" flag? not and if
             "Permission denied."
-            .tell exit
+            tell exit
         then
         swap dup "name" stringcmp not if
             pop dup name replace-text setname
@@ -115,11 +117,15 @@ $include $lib/strings
             pop dup odrop replace-text setodrop
         else pop error
         then then then then then then then then
-        "Message changed." .tell
+        "Message changed." tell
     then
 ;
 .
 c
 q
 @register #me cmd-edit=tmp/prog1
+@set $tmp/prog1=3
 @set $tmp/prog1=W
+@action edit=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

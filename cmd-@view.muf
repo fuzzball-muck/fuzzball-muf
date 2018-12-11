@@ -1,4 +1,4 @@
-@prog cmd-@view
+@program cmd-@view
 1 99999 d
 1 i
 : show-docs ( d -- )
@@ -49,6 +49,7 @@
 c
 q
 @register #me cmd-@view=tmp/prog1
+@set $tmp/prog1=3
 @set $tmp/prog1=W
 @action @view=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

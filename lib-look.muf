@@ -1,4 +1,4 @@
-@prog lib-look
+@program lib-look
 1 99999 d
 1 i
 ( Set of library routines for doing 'look' functions. )
@@ -60,9 +60,8 @@
        will simulate the usual 'look' command.
 )
  
-$include $lib/strings
-$include $lib/match
-$include $lib/stackrng
+$doccmd @list __PROG__=!@1-58
+$lib-version 1.31
  
 lvar sme
 lvar sloc
@@ -86,7 +85,7 @@ lvar realtrig
 ;
  
 : control? ( d -- i )
-  me @ swap .controls
+  me @ swap controls
 ;
  
 : dark? ( d -- i )
@@ -213,13 +212,13 @@ lvar realtrig
 ;
  
 : str-desc ( s -- )
-  .stripspaces dup
+  strip dup
   if
     dup "@" 1 strncmp
     if
       .tell
     else
-      1 strcut swap pop " " .split .stripspaces swap
+      1 strcut swap pop " " split strip swap
       dup "$" 1 strncmp
       if
         atoi dbref
@@ -228,7 +227,7 @@ lvar realtrig
       then
       dup ok?
       if
-        dup trigger @ owner swap .controls over "Link_OK" flag? or
+        dup trigger @ owner swap controls over "Link_OK" flag? or
         if
           safecall
         else
@@ -266,12 +265,7 @@ lvar realtrig
   dup desc str-desc
   dup room?
   if
-$ifndef __version<Muck2.2fb4.5
-    (patch since LOCKED? goes too deep)
     me @ over locked?
-$else
-    0
-$endif
     if
       dup fail dup
       if
@@ -308,40 +302,39 @@ $endif
   match db-desc
 ;
  
-public safecall
-public unparse
-public contents-filter
-public get-contents
-public long-display
-public short-list
-public short-display
-public list-contents
-public str-desc
-public dbstr-desc
-public db-desc
 public cmd-look
-
-$pubdef .cmd-look "$lib/look" match "cmd-look" call
-$pubdef .contents-filter "$lib/look" match "contents-filter" call
-$pubdef .db-desc "$lib/look" match "db-desc" call
-$pubdef .dbstr-desc "$lib/look" match "dbstr-desc" call
-$pubdef .get-contents "$lib/look" match "get-contents" call
-$pubdef .list-contents "$lib/look" match "list-contents" call
-$pubdef .long-display "$lib/look" match "long-display" call
-$pubdef .safecall "$lib/look" match "safecall" call
-$pubdef .short-display "$lib/look" match "short-display" call
-$pubdef .short-list "$lib/look" match "short-list" call
-$pubdef .str-desc "$lib/look" match "str-desc" call
-$pubdef .unparse "$lib/look" match "unparse" call
+public contents-filter
+public db-desc
+public dbstr-desc
+public get-contents
+public list-contents
+public long-display
+public safecall
+public short-display
+public short-list
+public str-desc
+public unparse
+ 
+$pubdef .cmd-look		__PROG__ "cmd-look" call
+$pubdef .contents-filter	__PROG__ "contents-filter" call
+$pubdef .db-desc		__PROG__ "db-desc" call
+$pubdef .dbstr-desc		__PROG__ "dbstr-desc" call
+$pubdef .get-contents		__PROG__ "get-contents" call
+$pubdef .list-contents		__PROG__ "list-contents" call
+$pubdef .long-display		__PROG__ "long-display" call
+$pubdef .safecall		__PROG__ "safecall" call
+$pubdef .short-display		__PROG__ "short-display" call
+$pubdef .short-list		__PROG__ "short-list" call
+$pubdef .str-desc		__PROG__ "str-desc" call
+$pubdef .unparse		__PROG__ "unparse" call
 .
 c
 q
 @register lib-look=lib/look
 @register #me lib-look=tmp/prog1
+@set $tmp/prog1=2
+@set $tmp/prog1=H
 @set $tmp/prog1=L
 @set $tmp/prog1=S
-@set $tmp/prog1=H
-@set $tmp/prog1=2
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/look=1-58
-@set $tmp/prog1=/_lib-version:1.31
+@register #me =tmp

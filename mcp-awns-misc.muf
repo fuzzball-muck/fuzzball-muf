@@ -1,4 +1,4 @@
-@prog mcp-awns-misc
+@program mcp-awns-misc
 1 99999 d
 1 i
 ( mcp-awns-misc   copyright 9/21/2002 by Revar Desmera                 )
@@ -15,9 +15,9 @@
 (       Allows a client to specify its timezone more accurately.       )
  
 $author Revar Desmera <revar@belfry.com>
-$version 1.001
 $lib-version 1.0
 $note Released under the LGPL.
+$version 1.001
  
  
 $def PKG_PING     "dns-com-awns-ping"

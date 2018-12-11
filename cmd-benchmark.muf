@@ -1,4 +1,4 @@
-@prog cmd-benchmark
+@program cmd-benchmark
 1 99999 d
 1 i
 lvar runsecs
@@ -38,6 +38,5 @@ lvar runsecs
 c
 q
 @register #me cmd-benchmark=tmp/prog1
-@set $tmp/prog1=W
 @set $tmp/prog1=3
-
+@set $tmp/prog1=W

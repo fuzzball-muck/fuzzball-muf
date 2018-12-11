@@ -1,4 +1,4 @@
-@prog cmd-@objeditgui
+@program cmd-@objeditgui
 1 99999 d
 1 i
 ( cmd-@objeditgui  Copyright 7/28/2002 by revar@belfry.com )
@@ -77,7 +77,6 @@ $def ALLOW_CUSTOM_GENDERS 1 (change to 0 if custom genders not allowed )
  
 ( -------------------------------------------------------------------------- )
  
-$include $lib/case
 $include $lib/lmgr
 $include $lib/match
 $include $lib/optionsinfo
@@ -1263,9 +1262,9 @@ $def yesprop? getpropstr 1 strcut pop "y" stringcmp not
 c
 q
 @register #me cmd-@objeditgui=tmp/prog1
-@set $tmp/prog1=W
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=L
+@set $tmp/prog1=W
 @action @objeditgui;@objeditgu;@objeditg;@objedit;@objedi;@objed=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 

@@ -1,5 +1,5 @@
 @program lib-arrays
-1 9999 d
+1 99999 d
 1 i
 (*
   Lib-Arrays v1.1
@@ -86,6 +86,9 @@
       passed = resulting array with each passing element.
       failed = resulting array with each failing element.
 *)
+
+$author Chris Brine [Moose/Van] <ashitaka@home.com>
+$lib-version 1.1
  
 : ArrCommas ( a -- s )
     dup array_count 2 > if
@@ -326,72 +329,49 @@
     rot pop
 ;
   
-public ArrCommas ( a -- s )
-public ArrLeft ( a @1 @2 icol schar -- a )
-public ArrRight ( a @1 @2 icol schar -- a )
-public ArrCenter ( a @1 @2 icol schar -- a )
-public ArrIndent ( a @1 @2 icol schar -- a )
-public ArrFormat ( a @1 @2 icol -- a )
-public ArrJoinRng ( a @1 @2 schar -- a )
-public ArrList ( d a @1 @2 iBolLineNum -- )
-public ArrSearch ( @ a ? -- i )
-public ArrCopy ( a @1 @2 @3 -- a )
-public ArrMove ( a @1 @2 @3 -- a )
-public ArrPlaceItem ( @ a ? -- a )
-public ArrShuffle ( a -- a )
-public ArrReplace ( a @1 @2 s1 s2 -- a )
-public ArrSort ( a i -- a )
-public ArrMPIparse ( d a @1 @2 s i -- a )
-public ArrKey? ( a @ -- i )
+public ArrCenter	$libdef ArrCenter
+public ArrCommas	$libdef ArrCommas
+public ArrCopy		$libdef ArrCopy
+public ArrFilter	$libdef ArrFilter
+public ArrFormat	$libdef ArrFormat
+public ArrIndent	$libdef ArrIndent
+public ArrJoinRng	$libdef ArrJoinRng
+public ArrKey?		$libdef ArrKey?
+public ArrLeft		$libdef ArrLeft
+public ArrList		$libdef ArrList
+public ArrMPIparse	$libdef ArrMPIparse
+public ArrMove		$libdef ArrMove
+public ArrPlaceItem	$libdef ArrPlaceItem
+public ArrProcess	$libdef ArrProcess
+public ArrReplace	$libdef ArrReplace
+public ArrRight		$libdef ArrRight
+public ArrSearch	$libdef ArrSearch
+public ArrShuffle	$libdef ArrShuffle
+public ArrSort		$libdef ArrSort
   
-public ArrProcess ( dict:arr addr:func -- dict:result )
-public ArrFilter  ( dict:arr addr:func -- dict:result dict:remainder )
-  
-$lib-version 1.1
-  
-$pubdef ArrCommas    "$lib/arrays" match "ArrCommas" call
-$pubdef ArrLeft      "$lib/arrays" match "ArrLeft" call
-$pubdef ArrRight     "$lib/arrays" match "ArrRight" call
-$pubdef ArrCenter    "$lib/arrays" match "ArrCenter" call
-$pubdef ArrIndent    "$lib/arrays" match "ArrIndent" call
-$pubdef ArrFormat    "$lib/arrays" match "ArrFormat" call
-$pubdef ArrJoinRng   "$lib/arrays" match "ArrJoinRng" call
-$pubdef ArrList      "$lib/arrays" match "ArrList" call
-$pubdef ArrSearch    "$lib/arrays" match "ArrSearch" call
-$pubdef ArrCopy      "$lib/arrays" match "ArrCopy" call
-$pubdef ArrMove      "$lib/arrays" match "ArrMove" call
-$pubdef ArrPlaceItem "$lib/arrays" match "ArrPlaceItem" call
-$pubdef ArrShuffle   "$lib/arrays" match "ArrShuffle" call
-$pubdef ArrReplace   "$lib/arrays" match "ArrReplace" call
-$pubdef ArrSort      "$lib/arrays" match "ArrSort" call
-$pubdef ArrMPIparse  "$lib/arrays" match "ArrMPIparse" call
-$pubdef ArrKey?      "$lib/arrays" match "ArrKey?" call
-  
-$pubdef ArrProcess   "$lib/arrays" match "ArrProcess" call
-$pubdef ArrFilter    "$lib/arrays" match "ArrFilter" call
-  
-$pubdef Array_Commas    "$lib/arrays" match "ArrCommas" call
-$pubdef Array_Left      "$lib/arrays" match "ArrLeft" call
-$pubdef Array_Right     "$lib/arrays" match "ArrRight" call
-$pubdef Array_Center    "$lib/arrays" match "ArrCenter" call
-$pubdef Array_Indent    "$lib/arrays" match "ArrIndent" call
-$pubdef Array_Format    "$lib/arrays" match "ArrFormat" call
-$pubdef Array_JoinRng   "$lib/arrays" match "ArrJoinRng" call
-$pubdef Array_List      "$lib/arrays" match "ArrList" call
-$pubdef Array_Search    "$lib/arrays" match "ArrSearch" call
-$pubdef Array_Copy      "$lib/arrays" match "ArrCopy" call
-$pubdef Array_Move      "$lib/arrays" match "ArrMove" call
-$pubdef Array_PlaceItem "$lib/arrays" match "ArrPlaceItem" call
-$pubdef Array_Shuffle   "$lib/arrays" match "ArrShuffle" call
-$pubdef Array_Replace   "$lib/arrays" match "ArrReplace" call
-$pubdef Array_MPIparse  "$lib/arrays" match "ArrMPIparse" call
-  
-$pubdef Array_Process   "$lib/arrays" match "ArrProcess" call
-$pubdef Array_Filter    "$lib/arrays" match "ArrFilter" call
+$pubdef Array_Center    __PROG__ "ArrCenter" call
+$pubdef Array_Commas    __PROG__ "ArrCommas" call
+$pubdef Array_Copy      __PROG__ "ArrCopy" call
+$pubdef Array_Filter    __PROG__ "ArrFilter" call
+$pubdef Array_Format    __PROG__ "ArrFormat" call
+$pubdef Array_Indent    __PROG__ "ArrIndent" call
+$pubdef Array_JoinRng   __PROG__ "ArrJoinRng" call
+$pubdef Array_Key?      __PROG__ "ArrKey?" call
+$pubdef Array_Left      __PROG__ "ArrLeft" call
+$pubdef Array_List      __PROG__ "ArrList" call
+$pubdef Array_MPIparse  __PROG__ "ArrMPIparse" call
+$pubdef Array_Move      __PROG__ "ArrMove" call
+$pubdef Array_PlaceItem __PROG__ "ArrPlaceItem" call
+$pubdef Array_Process   __PROG__ "ArrProcess" call
+$pubdef Array_Replace   __PROG__ "ArrReplace" call
+$pubdef Array_Right     __PROG__ "ArrRight" call
+$pubdef Array_Search    __PROG__ "ArrSearch" call
+$pubdef Array_Shuffle   __PROG__ "ArrShuffle" call
+$pubdef Array_Sort      __PROG__ "ArrSort" call
 .
 c
 q
 @register lib-arrays=lib/arrays
-@set $lib/arrays=l
-@set $lib/arrays=m3
-@set $lib/arrays=v
+@set $lib/arrays=3
+@set $lib/arrays=L
+@set $lib/arrays=V

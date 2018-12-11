@@ -1,4 +1,4 @@
-@prog cmd-who
+@program cmd-who
 1 99999 d
 1 i
 $def MIN_IDLE 3 (minutes)

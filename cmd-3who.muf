@@ -1,5 +1,5 @@
 @program cmd-3who
-1 9999 d
+1 99999 d
 1 i
 : stimestr (i -- s)
     dup 86400 > if
@@ -17,7 +17,6 @@
     dup strlen 4 - strcut swap pop
 ;
   
-  
 : mtimestr (i -- s)
     "" over 86400 > if
         over 86400 / intostr "d " strcat strcat
@@ -32,8 +31,7 @@
     dup strlen 2 - strcut
     swap pop strcat
 ;
-  
-  
+ 
 : collate-entry (i -- s)
     dup condbref name
     over contime mtimestr
@@ -48,9 +46,7 @@
     swap strcat strcat
     swap conidle stimestr strcat
 ;
-  
-  
-  
+ 
 : get-namelist  ( -- {s})
     0 concount
     begin
@@ -61,8 +57,7 @@
     repeat
     pop
 ;
-  
-  
+ 
 lvar col
 : show-namelist ({s} -- )
     begin
@@ -74,7 +69,7 @@ lvar col
         over 3 / 3 pick 3 % 1 +
         3 / + col @ + 1 +
         rotate strcat
-        .tell 3 -
+        tell 3 -
     repeat
     dup if
         ""
@@ -83,25 +78,28 @@ lvar col
             rot strcat "   " strcat
             swap 1 - swap
         repeat
-        .tell
+        tell
     then
     pop
 ;
-  
-  
+ 
 : show-who
     preempt
     "Name         OnTime Idle  " dup strcat
-    "Name         Ontime Idle" strcat .tell
+    "Name         Ontime Idle" strcat tell
     get-namelist
     show-namelist
     concount intostr
     " players are connected."
-    strcat .tell
+    strcat tell
 ;
 .
 c
 q
-@set cmd-3who=w
+@register #me cmd-3who=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
 @action 3who;3w=#0=tmp/exit1
-@link $tmp/exit1=cmd-3who
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

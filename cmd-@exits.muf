@@ -1,4 +1,4 @@
-@prog cmd-@exits
+@program cmd-@exits
 1 99999 d
 1 i
 $include $lib/strings
@@ -34,4 +34,5 @@ $include $lib/match
 c
 q
 @register #me cmd-@exits=tmp/prog1
+@set $tmp/prog1=3
 @set $tmp/prog1=W

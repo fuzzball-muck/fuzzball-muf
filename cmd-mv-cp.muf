@@ -1,6 +1,6 @@
-@prog cmd-mv-cp
+@program cmd-mv-cp
 1 99999 d
-i
+1 i
 ( cmd-mv-cp
     cp [origobj][=prop],[destobj][=destprop]
       Copies prop from origobj to destobj, renaming it to destprop.
@@ -23,23 +23,23 @@ i
     9/99 Added a line at the beginning of main to catch dbref spoofing.
     -- Jessy
 )
-
-$include $lib/strings
-$include $lib/edit
+ 
+$doccmd @list __PROG__=!@1-22
+ 
 $include $lib/match
-
+ 
 lvar copy?
-
+ 
 : checkperms ( s --  )
   dup "@" stringpfx
   over "/@" instr
   3 pick "~" stringpfx
   4 rotate "/~" instr or or or
   me @ "W" flag? not and if
-    "Permission denied." .tell pid kill
+    "Permission denied." tell pid kill
   then
 ;
-
+ 
 : cp-mv-prop ( d s d s -- i )
   dup checkperms
   3 pick checkperms
@@ -54,7 +54,7 @@ lvar copy?
       pop 4 pick 4 pick propdir? not if
         "I don't see what property to "
         copy? @ if "copy." else "move." then
-        strcat .tell pop pop pop pop 0 exit
+        strcat tell pop pop pop pop 0 exit
       then
     then
   then
@@ -76,17 +76,15 @@ lvar copy?
   copy? @ not if remove_prop else pop pop then
   1
 ;
-
+ 
 : cp-prop ( d s d s -- i )
   1 copy? ! cp-mv-prop
 ;
-public cp-prop
-
+ 
 : mv-prop ( d s d s -- i )
   0 copy? ! cp-mv-prop
 ;
-public mv-prop
-
+ 
 : strip-slashes ( s -- s' )
   begin
     dup while
@@ -95,15 +93,15 @@ public mv-prop
     pop
   repeat
 ;
-
+ 
 : parse-command ( s -- )
   "me" match me !
   command @ tolower
-  "command @ = \"" over strcat "\"" strcat .tell
+  "command @ = \"" over strcat "\"" strcat tell
   "c" instr copy? !
 
   dup "#help" stringcmp not if
-    pop
+    pop {
     copy? @ if
       "cp origobj=prop,destobj=destprop"
       "  Copies prop from origobj to destobj, renaming it to destprop."
@@ -118,18 +116,18 @@ public mv-prop
     "  if prop is omitted, it asks the user for it."
     "  if both prop and origobj are omitted, it asks the user for both."
     "  if both destobj and destprop are omitted, it asks the user for them."
-    depth EDITdisplay exit
+    }tell exit
   then
 
-  "," .split .strip swap .strip
-  "=" .split .strip swap .strip
+  "," split strip swap strip
+  "=" split strip swap strip
   dup if
     .noisy_match
     dup not if pop exit then
   else
     over not if
       "Please enter the name of the original object."
-      .tell pop read .strip
+      tell pop read strip
     then
     dup if
       .noisy_match
@@ -141,18 +139,18 @@ public mv-prop
   begin
     strip-slashes
     dup not while
-    "Please enter the name of the original property." .tell
-    pop read .strip
+    "Please enter the name of the original property." tell
+    pop read strip
   repeat
   swap
-  "=" .split .strip strip-slashes swap .strip
+  "=" split strip strip-slashes swap strip
   begin
     over over or not while
     pop pop
-    "Please enter the name of the destination object." .tell
-    read .strip
-    "Please enter the name of the destination property." .tell
-    read .strip
+    "Please enter the name of the destination object." tell
+    read strip
+    "Please enter the name of the destination property." tell
+    read strip
     strip-slashes swap
   repeat
   dup if
@@ -168,18 +166,23 @@ public mv-prop
   cp-mv-prop if
     copy? @ if "Property copied."
     else "Property moved."
-    then .tell
+    then tell
   then
 ;
-
-$pubdef copy-prop "$global/mv-cp" match "cp-prop" call
-$pubdef move-prop "$global/mv-cp" match "mv-prop" call
+ 
+public cp-prop
+public mv-prop
+ 
+$pubdef copy-prop __PROG__ "cp-prop" call
+$pubdef move-prop __PROG__ "mv-prop" call
 .
 c
 q
-@register cmd-mv-cp=global/mv-cp
 @register #me cmd-mv-cp=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
+@set $tmp/prog1=V
+@set $tmp/prog1=W
 @action cp;mv;propcp;propmv=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #me =tmp

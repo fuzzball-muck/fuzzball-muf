@@ -1,9 +1,7 @@
-@prog cmd-guitest
+@program cmd-guitest
 1 99999 d
 1 i
 $include $lib/gui
-$def tell .tell
-$def }join } array_make "" array_join
  
 $def URL1 "https://www.belfry.com/pics/revhead.gif"
 $def URL2 "https://www.belfry.com/pics/foxen.gif"
@@ -14,12 +12,12 @@ $def URL4 "https://www.belfry.com/pics/belfry.jpg"
     dlogid @ GUI_VALUES_GET var! vals
     context @ "descr" [] var! dscr
     
-    { ctrlid @ " sent " event @ " event!" }join tell 
+    { ctrlid @ " sent " event @ " event!" }join .tell 
   
     vals @ foreach
         swap " = " strcat swap "\r" array_join strcat
         "\r    "  "\r" subst
-        tell
+        .tell
     repeat
     0
 ;
@@ -382,16 +380,16 @@ $def URL4 "https://www.belfry.com/pics/belfry.jpg"
         background
         gui_event_process
         pop pop
-        "Done." tell
+        "Done." .tell
     else
         ( Put in old-style config system here. )
-		"Gui not supported!" tell
+		"Gui not supported!" .tell
     then
 ;
 .
 c
 q
 @register #me cmd-guitest=tmp/prog1
-@set $tmp/prog1=W
-@set $tmp/prog1=L
 @set $tmp/prog1=2
+@set $tmp/prog1=L
+@set $tmp/prog1=W

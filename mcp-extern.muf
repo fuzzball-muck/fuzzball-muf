@@ -1,4 +1,4 @@
-@prog mcp-extern.muf
+@program mcp-extern.muf
 1 99999 d
 1 i
 ( mcp-extern v1.0  Copyright Nov.2001 by Revar.  Released under the LGPL.

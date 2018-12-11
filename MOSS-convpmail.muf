@@ -1,4 +1,4 @@
-@prog MOSS-mailconvert-pmail
+@program MOSS-mailconvert-pmail
 1 99999 d
 i
 ( This is a simple <HA> program to convert page #mail to MOSS mail )
@@ -155,7 +155,5 @@ $def converter 16 localvar
 .
 c
 q
-@set MOSS-mailconvert-pmail=!d
-@set MOSS-mailconvert-pmail=!z
-@set MOSS-mailconvert-pmail=!l
-@set MOSS-mailconvert-pmail=w
+@set MOSS-mailconvert-pmail=3
+@set MOSS-mailconvert-pmail=W

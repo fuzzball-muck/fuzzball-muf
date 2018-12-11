@@ -1,4 +1,4 @@
-@prog cmd-uptime
+@program cmd-uptime
 1 99999 d
 1 i
 ( cmd-uptime v2.0 by Revar Desmera <revar@belfry.com> )

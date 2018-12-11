@@ -1,4 +1,4 @@
-@prog lib-optionsgui
+@program lib-optionsgui
 1 99999 d
 1 i
 ( $lib/optionsgui  Copyright 7/22/2002 by Revar <revar@belfry.com> )
@@ -25,9 +25,9 @@
 (     Split optionsinfo calls into $lib/optionsinfo.               )
 
 $author Revar Desmera <revar@belfry.com>
-$version 1.104
 $lib-version 1.102
 $note Released under the LGPL.
+$version 1.104
 
 (
 
@@ -294,7 +294,6 @@ $note Released under the LGPL.
 )
 
 
-$include $lib/case
 $include $lib/gui
 $include $lib/optionsinfo
 $include $lib/optionsmisc
@@ -1336,20 +1335,17 @@ $def DEFAULT_CAPTION "Edit the following data and click on 'Done' or 'Apply' to 
     then
     opts_id @
 ;
-PUBLIC gui_options_generate
 
 
 : gui_options_value_set[ int:opts_id str:optname any:value -- ]
     opts_id @ optname @ "value" value @ optionsinfo_set_indexed
     ( FIXME: Must implement updating of dialogs. )
 ;
-PUBLIC gui_options_value_set
 
 
 : gui_options_free[ int:opts_id -- ]
     opts_id @ optionsinfo_del
 ;
-PUBLIC gui_options_free
 
 
 : gui_options_process[ int:dscr any:caller_ctx addr:save_cb str:title arr:optionsinfo -- ]
@@ -1369,14 +1365,11 @@ PUBLIC gui_options_free
         then
     then
 ;
-PUBLIC gui_options_process
-
-
-$pubdef GUI_OPTIONS_GENERATE  "$lib/optionsgui" match "gui_options_generate" call
-$pubdef GUI_OPTIONS_VALUE_SET  "$lib/optionsgui" match "gui_options_value_set" call
-$pubdef GUI_OPTIONS_FREE  "$lib/optionsgui" match "gui_options_free" call
-$pubdef GUI_OPTIONS_PROCESS  "$lib/optionsgui" match "gui_options_process" call
-
+ 
+public gui_options_free		$libdef gui_options_free
+public gui_options_generate	$libdef gui_options_generate
+public gui_options_process	$libdef gui_options_process
+public gui_options_value_set	$libdef gui_options_value_set
 .
 c
 q

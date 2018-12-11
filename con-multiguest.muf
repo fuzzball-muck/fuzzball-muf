@@ -1,5 +1,5 @@
 @program con-multiguest
-1 9999 d
+1 99999 d
 1 i
 (IMPORTANT NOTE:  Guests must be able to use @name and @password.)
 (This program will force them to rename and repasswd themselves, so players..)
@@ -185,13 +185,14 @@ $def PassWdMake (i -- s) 3 + 9 * intostr "TimE" swap strcat "tWINe" strcat
 c
 q
 @register con-multiguest=con/multiguest
-@set con-multiguest=w
+@set con-multiguest=3
+@set con-multiguest=W
 @action mgs=me
 @link mgs=con-multiguest
 mgs
 @recycle mgs
-@prog con-callmultiguest
-1 9999 d
+@program con-callmultiguest
+1 99999 d
 1 i
 ( Have all the guest chars call this program from a _connect propqueue )
 (This calls the !Link_OK multi-guest program, to keep the password...)

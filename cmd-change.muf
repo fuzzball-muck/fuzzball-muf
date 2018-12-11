@@ -1,4 +1,4 @@
-@prog cmd-change
+@program cmd-change
 1 99999 d
 1 i
 ( cmd-change                                                         )
@@ -13,25 +13,27 @@
 ( CHANGES: Added a 'checkperms' routine to prevent non-wiz users     )
 (          from changing @wizard or ~restricted props -- Jessy 7/00  )
 (                                                                    )
-  
-$include $lib/strings
-  
+ 
+$author Tygryss
+$doccmd @list __PROG__=!@1-12
+$version 1.02
+ 
 : checkperms ( s --  )
   dup "@" stringpfx
   over "/@" instr
   3 pick "~" stringpfx
   4 rotate "/~" instr or or or
   me @ "W" flag? not and if
-    "Permission denied." .tell pid kill
+    "Permission denied." tell pid kill
   then
 ;
  
 : in-string? (str searchstr -- bool)
     instr dup not if
-      "I don't see the sequence you want me to change." .tell
+      "I don't see the sequence you want me to change." tell
     then
 ;
-  
+ 
 : replace-text ( str old new -- str )
 (doesn't crash the server like subst with expanding strs to >4096 chars )
     3 pick 3 pick instr dup if
@@ -44,62 +46,62 @@ $include $lib/strings
     then
     pop pop
 ;
-  
+ 
 : error
-    "Name: Change v1.02   Written by Tygryss   Last updated 3/31/92" .tell
-    "Desc: Lets you replace some text in a message or property with" .tell
-    "       new text.  Useful for fixing typos in a long message." .tell
-    " " .tell
-    "Syntax: change <object>=<propname>:/<old>/<new>   or" .tell
-    "        change <object>=<mesgtype>;/<old>/<new>" .tell
-    " " .tell
-    "<mesgtype> can be name/desc/succ/osucc/fail/ofail/drop/odrop" .tell
-    "The first character after the : or ; is the delimiter character," .tell
-    "  in this case a '/'." .tell
+    "Name: Change v1.02   Written by Tygryss   Last updated 3/31/92" tell
+    "Desc: Lets you replace some text in a message or property with" tell
+    "       new text.  Useful for fixing typos in a long message." tell
+    " " tell
+    "Syntax: change <object>=<propname>:/<old>/<new>   or" tell
+    "        change <object>=<mesgtype>;/<old>/<new>" tell
+    " " tell
+    "<mesgtype> can be name/desc/succ/osucc/fail/ofail/drop/odrop" tell
+    "The first character after the : or ; is the delimiter character," tell
+    "  in this case a '/'." tell
 ;
-  
+ 
 : change-main
-		"me" match me !
-    "=" .split
+    "me" match me !
+    "=" split
     dup not if error exit then
-    swap .stripspaces
+    swap strip
     dup not if error exit then
     swap dup ":" instr over ";" instr
     over not over not and if error exit then
     dup not if pop 5000 then swap
     dup not if pop 5000 then swap
     < if ( : for property? )
-        ":" .split
+        ":" split
         dup not if error exit then
-        swap .stripspaces
+        swap strip
         dup not if error exit then
         swap 1 strcut swap over over
         instr not if error exit then
-        swap over .split rot over swap
+        swap over split rot over swap
         instr if error exit then
         4 rotate match
         dup #-1 dbcmp if
             "I don't see that here."
-            .tell exit
+            tell exit
         then
         dup #-2 dbcmp if
             "I don't know which one you mean!"
-            .tell exit
+            tell exit
         then
         dup #-3 dbcmp if
             "I don't know what you mean!"
-            .tell exit
+            tell exit
         then
         dup owner me @ dbcmp not
         me @ "w" flag? not and if
             "Permission denied."
-            .tell exit
+            tell exit
         then
         4 rotate over over 
 				dup checkperms
 				getpropstr
         dup not if
-            "I can't change a property that doesn't exist." .tell
+            "I can't change a property that doesn't exist." tell
             pop pop pop pop pop exit
         then
         dup 6 pick in-string? not if pop pop pop pop pop exit then
@@ -109,33 +111,33 @@ $include $lib/strings
         else
             0 addprop
         then
-        "Property changed." .tell
+        "Property changed." tell
     else  ( ; for message? )
-        ";" .split
+        ";" split
         dup not if error exit then
-        swap .stripspaces
+        swap strip
         dup not if error exit then
         swap 1 strcut swap over over
         instr not if error exit then
-        swap over .split rot over swap
+        swap over split rot over swap
         instr if error exit then
         4 rotate match
         dup #-1 dbcmp if
             "I don't see that here."
-            .tell exit
+            tell exit
         then
         dup #-2 dbcmp if
             "I don't know which one you mean!"
-            .tell exit
+            tell exit
         then
         dup #-3 dbcmp if
             "I don't know what you mean!"
-            .tell exit
+            tell exit
         then
         dup owner me @ dbcmp not
         me @ "w" flag? not and if
             "Permission denied."
-            .tell exit
+            tell exit
         then
         dup 5 rotate
         dup "@" 1 strncmp not if 1 strcut swap pop then
@@ -173,13 +175,18 @@ $include $lib/strings
             replace-text setodrop
         else
             "I don't recognize the field named \""
-            swap strcat "\"" strcat .tell exit
+            swap strcat "\"" strcat tell exit
         then then then then then then then then
-        "Message changed." .tell
+        "Message changed." tell
     then
 ;
 .
 c
 q
 @register #me cmd-change=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
 @set $tmp/prog1=W
+@action change=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

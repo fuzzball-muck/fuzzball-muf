@@ -1,4 +1,4 @@
-@prog cmd-lsprop
+@program cmd-lsprop
 1 99999 d
 1 i
 ( cmd-lsprop - display all props on an object, or in subdirectories on

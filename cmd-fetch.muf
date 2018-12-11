@@ -1,11 +1,10 @@
-@prog cmd-fetch
+@program cmd-fetch
 1 99999 d
 1 i
-$include $lib/strings
 $include $lib/match
-  
+ 
 : fetch
-  " from " .split .strip swap .strip swap
+  " from " split strip swap strip swap
   (itemS contS)
   dup not if
     pop trigger @ "_prefs/container" getpropstr
@@ -46,7 +45,7 @@ $include $lib/match
       me @ over locked? if
 	dup fail dup not if
 	  pop "You can't pick " over name strcat " up." strcat
-	then .tell
+	then tell
 	dup ofail if
 	  me @ name " " strcat over ofail strcat
 	  me @ swap pronoun_sub
@@ -54,7 +53,7 @@ $include $lib/match
 	then
         pop continue
       else
-	dup succ dup not if pop "Taken." then .tell
+	dup succ dup not if pop "Taken." then tell
 	dup osucc if
 	  me @ name " " strcat over osucc strcat
 	  me @ swap pronoun_sub
@@ -64,7 +63,7 @@ $include $lib/match
     else
       "Fetching " over name strcat
       " from " strcat 3 pick name strcat
-      "." strcat .tell
+      "." strcat tell
     then
     (itemDn ... itemD2 itemcountI-- contD itemD1)
     me @ moveto
@@ -74,6 +73,8 @@ $include $lib/match
 c
 q
 @register #me cmd-fetch=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
 @set $tmp/prog1=W
 @action fetch;retrieve;grab=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

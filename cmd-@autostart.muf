@@ -1,5 +1,5 @@
-@prog cmd-@restart
-1 9999 d
+@program cmd-@autostart
+1 99999 d
 1 i
 : restart
   me @ "wizard" flag? not if
@@ -25,6 +25,7 @@
 .
 c
 q
-@set cmd-@restart=w
-@action @restart=#0=tmp/exit1
-@link $tmp/exit1=cmd-@restart
+@set cmd-@autostart=3
+@set cmd-@autostart=W
+@action @autostart=#0=tmp/exit1
+@link $tmp/exit1=cmd-@autostart

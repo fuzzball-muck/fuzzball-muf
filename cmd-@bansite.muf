@@ -1,5 +1,5 @@
-@prog cmd-@bansite
-1 9999 d
+@program cmd-@bansite
+1 99999 d
 1 i
 $def BannedPropdir "@banned/"
 $def BannedPropdirLoc #0
@@ -44,7 +44,6 @@ $def BannedPropdirLoc #0
     me @ "Done." notify
 ;
   
-$def .tell me @ swap notify
 : show-help ( -- )
     "@bansite v1.0  Written 11/11/93 by Foxen" .tell
     "----------------------------------------------------------------" .tell
@@ -96,8 +95,8 @@ c
 q
 @register #me cmd-@bansite=tmp/prog1
 @register #prop #0:_connect/ cmd-@bansite=bansite
-@set $tmp/prog1=W
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=L
+@set $tmp/prog1=W
 @action @bansite=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

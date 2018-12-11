@@ -1,5 +1,5 @@
-@prog cmd-lookat
-1 9999 d
+@program cmd-lookat
+1 99999 d
 1 i
 ( cmd-lookat  Copyright 9/11/91 by Garth Minette                 )
 (                                 foxen@netcom.com               )

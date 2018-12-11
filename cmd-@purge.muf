@@ -1,5 +1,5 @@
-@prog cmd-@purge
-1 9999 d
+@program cmd-@purge
+1 99999 d
 1 i
 $include $lib/strings
 $include $lib/match
@@ -7,7 +7,7 @@ $include $lib/match
 : main
    "me" match me !
   
-   "=" .split strip
+   "=" split strip
    "yes" stringcmp if
       "Use \"@purge <player>=yes\" to purge a player's possessions."
       me @ swap notify pop exit
@@ -34,6 +34,7 @@ $include $lib/match
 .
 c
 q
+@set cmd-@purge=3
 @set cmd-@purge=W
 @action @purge=#0=tmp/exit1
 @link $tmp/exit1=cmd-@purge

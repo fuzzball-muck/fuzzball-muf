@@ -1,4 +1,4 @@
-@prog lib-reflist
+@program lib-reflist
 1 99999 d
 1 i
 ( DBref list manager -- REF
@@ -53,9 +53,9 @@
     where if it is true, the list only lets you add players to it.  Otherwise
     it lets you add regular objects to it.
 )
-  
-$include $lib/strings
-$include $lib/props
+ 
+$doccmd @list __PROG__=1-52@
+ 
 $include $lib/look
 $include $lib/match
  
@@ -66,13 +66,13 @@ $include $lib/match
   over swap array_next
   if [] else pop pop #-1 then
 ;
-  
+ 
 : REF-list  (objref reflistname -- liststr)
   array_get_reflist
   array_vals
   .short-list
 ;
-  
+ 
 : REF-filter (a d s -- dx...d1 i)
   array_get_reflist
   0 array_make swap
@@ -85,8 +85,7 @@ $include $lib/match
   repeat
   swap pop array_vals
 ;
-  
-  
+ 
 : REF-editlist-help
   if
     "To add a player, enter their name.  To remove a player, enter their name"
@@ -104,7 +103,7 @@ $include $lib/match
     strcat strcat strcat strcat .tell
   then
 ;
-  
+ 
 : REF-editlist  (players? objref reflistname -- )
   3 pick REF-editlist-help
   "The object list currently contains:" .tell
@@ -146,29 +145,28 @@ $include $lib/match
     then
   repeat
 ;
-  
-  
-PUBLIC REF-next $libdef REF-next
-PUBLIC REF-list $libdef REF-list
-PUBLIC REF-filter $libdef REF-filter
-PUBLIC REF-editlist $libdef REF-editlist
-
-$pubdef REF-add reflist_add
-$pubdef REF-allrefs array_get_reflist array_vals
-$pubdef REF-array array_get_reflist
-$pubdef REF-array-set array_put_reflist
-$pubdef REF-delete reflist_del
-$pubdef REF-first array_get_reflist dup if 0 [] else pop #-1 then
-$pubdef REF-inlist? reflist_find
+ 
+public REF-editlist	$libdef REF-editlist
+public REF-filter	$libdef REF-filter
+public REF-list		$libdef REF-list
+public REF-next		$libdef REF-next
+ 
+$pubdef REF-add		reflist_add
+$pubdef REF-allrefs	array_get_reflist array_vals
+$pubdef REF-array	array_get_reflist
+$pubdef REF-array-set	array_put_reflist
+$pubdef REF-delete	reflist_del
+$pubdef REF-first	array_get_reflist dup if 0 [] else pop #-1 then
+$pubdef REF-inlist?	reflist_find
 .
 c
 q
 @register lib-reflist=lib/reflist
 @register #me lib-reflist=tmp/prog1
+@set $tmp/prog1=2
+@set $tmp/prog1=B
 @set $tmp/prog1=L
 @set $tmp/prog1=H
 @set $tmp/prog1=S
-@set $tmp/prog1=B
-@set $tmp/prog1=2
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/reflist=1-46
+@register #me =tmp

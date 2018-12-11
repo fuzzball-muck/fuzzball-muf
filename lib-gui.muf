@@ -1,4 +1,4 @@
-@prog lib-gui
+@program lib-gui
 1 99999 d
 1 i
 (
@@ -263,11 +263,11 @@
 )
  
 $author Revar Desmera <revar@belfry.com>
+$doccmd @list __PROG__=!@1-260
 $lib-version 6.003
-$version 6.003
 $note This is a MUF library to make it much simpler to create GUI dialogs.
- 
- 
+$version 6.003
+
 : list_parse[ list:spec -- dict:args list:ctrls ]
     ""      var! key
     { }dict var! args
@@ -298,8 +298,7 @@ $note This is a MUF library to make it much simpler to create GUI dialogs.
     then
     args @ ctrls @
 ;
-  
-   
+ 
 : gui_generate_ctrl[ str:dlogid str:pane list:ctrlspec -- dictHandlers ]
     ctrlspec @ 0 []
     var! type
@@ -412,8 +411,7 @@ $note This is a MUF library to make it much simpler to create GUI dialogs.
     then
     handlers @
 ;
-  
-  
+ 
 : gui_generate_simple[ int:dscr str:dlogtype str:title list:dlogspec --
                        dict:handlers str:dlogid ]
   
@@ -446,8 +444,7 @@ $note This is a MUF library to make it much simpler to create GUI dialogs.
   
     handlers @ dlogid @
 ;
-  
-  
+ 
 : gui_generate_paned[ int:dscr str:dlogtype str:title list:dlogspec --
                       dict:handlers str:dlogid ]
     { }list var! panes
@@ -509,8 +506,7 @@ $note This is a MUF library to make it much simpler to create GUI dialogs.
   
     handlers @ dlogid @
 ;
-  
-  
+ 
 : gui_generate[ int:Dscr list:DlogSpec -- dict:Handlers str:DlogID ]
     DlogSpec @ 0 [] var! type
     DlogSpec @ 1 [] var! title
@@ -525,7 +521,6 @@ $note This is a MUF library to make it much simpler to create GUI dialogs.
         gui_generate_simple
     then
 ;
-PUBLIC gui_generate
  
 (--------------------------------------------------------------)
 ( Gui Dispatcher                                               )
@@ -545,7 +540,7 @@ PUBLIC gui_generate
     then
     1
 ;
-  
+ 
 : gui_dict_add (dict1 dict2 -- dict3)
     ( adds all items from dict2 to dict1, removing those items with false values )
     foreach
@@ -556,7 +551,6 @@ PUBLIC gui_generate
         then
     repeat
 ;
- 
  
 lvar GuiHandlers
 lvar OtherHandlers
@@ -572,8 +566,6 @@ lvar OtherStateData
         { "GUI." dlogid @ strcat handlers @ }dict GuiHandlers !
     then
 ;
-PUBLIC gui_dlog_register
- 
  
 : gui_dlog_deregister[ str:dlogid -- ]
     GuiHandlers @ if
@@ -591,8 +583,6 @@ PUBLIC gui_dlog_register
         { }dict GuiStateData !
     then
 ;
-PUBLIC gui_dlog_deregister
- 
  
 : gui_dlogs_registered[ -- dict:GuiHandlers ]
     GuiHandlers @ if
@@ -601,8 +591,6 @@ PUBLIC gui_dlog_deregister
         { }dict dup GuiHandlers !
     then
 ;
-PUBLIC gui_dlogs_registered
- 
  
 : gui_dlog_statedata_set[ str:dlogid any:data -- ]
     GuiStateData @ if
@@ -613,8 +601,6 @@ PUBLIC gui_dlogs_registered
         { "GUI." dlogid @ strcat data @ }dict GuiStateData !
     then
 ;
-PUBLIC gui_dlog_statedata_set
- 
  
 : event_register[ str:eventid addr:callback -- ]
     OtherHandlers @ if
@@ -623,8 +609,6 @@ PUBLIC gui_dlog_statedata_set
         { eventid @ callback @ }dict OtherHandlers !
     then
 ;
-PUBLIC event_register
- 
  
 : event_deregister[ str:eventid -- ]
     OtherHandlers @ if
@@ -638,8 +622,6 @@ PUBLIC event_register
         { }dict OtherStateData !
     then
 ;
-PUBLIC event_deregister
- 
  
 : events_registered[ -- dict:EventHandlers ]
     OtherHandlers @ if
@@ -648,8 +630,6 @@ PUBLIC event_deregister
         { }dict dup OtherHandlers !
     then
 ;
-PUBLIC events_registered
- 
  
 : event_statedata_set[ str:eventid any:data -- ]
     OtherStateData @ if
@@ -658,8 +638,6 @@ PUBLIC events_registered
         { eventid @ data @ }dict OtherStateData !
     then
 ;
-PUBLIC event_statedata_set
- 
  
 : gui_event_process[ -- dict:Context str:Event ]
     GuiHandlers @ not if { }dict GuiHandlers ! then
@@ -755,7 +733,6 @@ PUBLIC event_statedata_set
         then
     repeat
 ;
-PUBLIC gui_event_process
  
 : _gui_messagebox_cb[ int:dscr str:dlogid str:ctrlid str:event -- int:exit ]
     1
@@ -819,62 +796,57 @@ PUBLIC gui_event_process
     pop "id" []
     buttonmap @ swap array_getitem
 ;
-PUBLIC gui_messagebox
  
-$pubdef GUI_DLOGS_REGISTERED   "$lib/gui" match "gui_dlogs_registered"   call
-$pubdef GUI_DLOG_REGISTER      "$lib/gui" match "gui_dlog_register"      call
-$pubdef GUI_DLOG_DEREGISTER    "$lib/gui" match "gui_dlog_deregister"    call
-$pubdef GUI_DLOG_STATEDATA_SET "$lib/gui" match "gui_dlog_statedata_set" call
+public event_deregister		$libdef event_deregister
+public event_register		$libdef event_register
+public event_statedata_set	$libdef event_statedata_set
+public events_registered	$libdef events_registered
+public gui_dlog_deregister	$libdef gui_dlog_deregister
+public gui_dlog_register	$libdef gui_dlog_register
+public gui_dlog_statedata_set	$libdef gui_dlog_statedata_set
+public gui_dlogs_registered	$libdef gui_dlogs_registered
+public gui_event_process	$libdef gui_event_process
+public gui_generate		$libdef gui_generate
+public gui_messagebox		$libdef gui_messagebox
  
-$pubdef EVENTS_REGISTERED      "$lib/gui" match "events_registered"   call
-$pubdef EVENT_REGISTER         "$lib/gui" match "event_register"      call
-$pubdef EVENT_DEREGISTER       "$lib/gui" match "event_deregister"    call
-$pubdef EVENT_STATEDATA_SET    "$lib/gui" match "event_statedata_set" call
+$pubdef {HELPER_DLOG	{ D_HELPER
+$pubdef {SIMPLE_DLOG	{ D_SIMPLE
+$pubdef {TABBED_DLOG	{ D_TABBED
  
-$pubdef GUI_GENERATE           "$lib/gui" match "gui_generate"      call
-$pubdef GUI_EVENT_PROCESS      "$lib/gui" match "gui_event_process" call
-$pubdef GUI_MESSAGEBOX         "$lib/gui" match "gui_messagebox"    call
+$pubdef {BUTTON		{ C_BUTTON
+$pubdef {CHECKBOX	{ C_CHECKBOX
+$pubdef {COMBOBOX	{ C_COMBOBOX
+$pubdef {DATUM		{ C_DATUM
+$pubdef {EDIT		{ C_EDIT
+$pubdef {IMAGE		{ C_IMAGE
+$pubdef {LABEL		{ C_LABEL
+$pubdef {LISTBOX	{ C_LISTBOX
+$pubdef {MULTIEDIT	{ C_MULTIEDIT
+$pubdef {PASSWORD	{ C_PASSWORD
+$pubdef {RADIO		{ C_RADIOBTN
+$pubdef {SCALE		{ C_SCALE
+$pubdef {SPINNER	{ C_SPINNER
+$pubdef {TREE		{ C_TREE
  
-$pubdef {SIMPLE_DLOG  { D_SIMPLE
-$pubdef {TABBED_DLOG  { D_TABBED
-$pubdef {HELPER_DLOG  { D_HELPER
+$pubdef {HRULE		{ C_HRULE
+$pubdef {VRULE		{ C_VRULE
  
-$pubdef {DATUM     { C_DATUM
-$pubdef {LABEL     { C_LABEL
-$pubdef {IMAGE     { C_IMAGE
-$pubdef {BUTTON    { C_BUTTON
-$pubdef {CHECKBOX  { C_CHECKBOX
-$pubdef {RADIO     { C_RADIOBTN
-$pubdef {PASSWORD  { C_PASSWORD
-$pubdef {EDIT      { C_EDIT
-$pubdef {MULTIEDIT { C_MULTIEDIT
-$pubdef {COMBOBOX  { C_COMBOBOX
-$pubdef {LISTBOX   { C_LISTBOX
-$pubdef {TREE      { C_TREE
-$pubdef {SCALE     { C_SCALE
-$pubdef {SPINNER   { C_SPINNER
+$pubdef {FRAME		{ C_FRAME
+$pubdef {MENU		{ C_MENU
+$pubdef {NOTEBOOK	{ C_NOTEBOOK
+$pubdef {PANE		{ "notebook_pane"
  
-$pubdef {HRULE     { C_HRULE
-$pubdef {VRULE     { C_VRULE
- 
-$pubdef {FRAME     { C_FRAME
-$pubdef {MENU      { C_MENU
-$pubdef {NOTEBOOK  { C_NOTEBOOK
-$pubdef {PANE      { "notebook_pane"
- 
-$pubdef }DLOG      }list
-$pubdef }PANE      }list
-$pubdef }MENU      }list
-$pubdef }CTRL      }list
+$pubdef }CTRL		}list
+$pubdef }DLOG		}list
+$pubdef }MENU		}list
+$pubdef }PANE		}list
 .
 c
 q
 @register lib-gui=lib/gui
 @register #me lib-gui=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=H
 @set $tmp/prog1=L
 @set $tmp/prog1=S
-@set $tmp/prog1=H
 @set $tmp/prog1=V
-@set $tmp/prog1=Z
-@set $tmp/prog1=3
-

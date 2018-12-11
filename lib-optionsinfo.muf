@@ -1,4 +1,4 @@
-@prog lib-optionsinfo
+@program lib-optionsinfo
 1 99999 d
 1 i
 ( $lib/optionsinfo Copyright 8/13/2003 by Revar <revar@belfry.com> )
@@ -11,9 +11,9 @@
 (     Initial relase.                                              )
 
 $author Revar Desmera <revar@belfry.com>
-$version 1.000
 $lib-version 1.000
 $note Released under the LGPL.
+$version 1.000
 
 (
     Docs go here.
@@ -149,34 +149,23 @@ lvar opts_info_topnum
     opts_grouporder_arr @ id @ array_delitem opts_grouporder_arr !
 ;
 
-public optionsinfo_get
-public optionsinfo_getgroups
-public optionsinfo_getgrouplabel
-public optionsinfo_get_group_opts
-public optionsinfo_set
-public optionsinfo_new
-public optioninfo_get
-public optioninfo_set
-public optionsinfo_set_indexed
-public optionsinfo_del
-
-$libdef optionsinfo_get
-$libdef optionsinfo_getgroups
-$libdef optionsinfo_getgrouplabel
-$libdef optionsinfo_get_group_opts
-$libdef optionsinfo_set
-$libdef optionsinfo_new
-$libdef optioninfo_get
-$libdef optioninfo_set
-$libdef optionsinfo_set_indexed
-$libdef optionsinfo_del
+public optioninfo_get			$libdef optioninfo_get
+public optioninfo_set			$libdef optioninfo_set
+public optionsinfo_del			$libdef optionsinfo_del
+public optionsinfo_get			$libdef optionsinfo_get
+public optionsinfo_get_group_opts	$libdef optionsinfo_get_group_opts
+public optionsinfo_getgroups		$libdef optionsinfo_getgroups
+public optionsinfo_getgrouplabel	$libdef optionsinfo_getgrouplabel
+public optionsinfo_new			$libdef optionsinfo_new
+public optionsinfo_set			$libdef optionsinfo_set
+public optionsinfo_set_indexed		$libdef optionsinfo_set_indexed
 .
 c
 q
 @register lib-optionsinfo=lib/optionsinfo
 @register #me lib-optionsinfo=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
+@set $tmp/prog1=W
 

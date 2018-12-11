@@ -1,12 +1,12 @@
-@prog cmd-newwa
+@program cmd-whereare
 1 99999 d
 1 i
 ( WhereAre v6.03   Copyright 2002 by Revar revar@belfry.com )
 ( Released under the terms of the LGPL.                     )
  
 $author Revar Desmera <revar@belfry.com>
-$version 6.03
 $note Released under the terms of the LGPL.
+$version 6.03
  
 $def WA_PROP  "_whereare"
 $def DIR_PROP "_wherearedir"
@@ -490,12 +490,10 @@ $endif
 .
 c
 q
-@register #me cmd-newwa=tmp/prog1
-@set $tmp/prog1=W
+@register #me cmd-whereare=tmp/prog1
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
-@action WhereAre;wa=#0=tmp/exit1
+@set $tmp/prog1=W
+@action whereare;wa=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-@propset $tmp/exit1=str:/_/de:wa #help for info.
-

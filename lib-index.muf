@@ -1,8 +1,7 @@
-@prog lib-index
+@program lib-index
 1 99999 d
 1 i
 ( lib-index
-  by ErmaFelna
  
   This library consists of a set of routines to manipulate elements
     consisting of name:value pairs.  It stores both a 'list' of all the
@@ -111,8 +110,9 @@
       previous to it in the index.
 )
  
-$include $lib/match
-$include $lib/stackrng
+$author ErmaFelna
+$doccmd @list __PROG__=!@1-108
+$lib-version 1.2
  
 : int-quickerror  ( dbref index name value errstring -- 0 )
   .tell pop pop pop pop 0
@@ -176,11 +176,11 @@ $include $lib/stackrng
 ;
  
 : editcheck ( dbref index name value -- " " " " noerror? )
-  me @ 5 pick .controls
+  me @ 5 pick controls
   if
     1 exit
   then
-  trig owner 5 pick .controls trig "_public" getpropstr and
+  trig owner 5 pick controls trig "_public" getpropstr and
   if
     3 pick 1 strcut "_.@" swap instr
     if
@@ -720,43 +720,42 @@ public index-first                   public std-index-first
 public index-last                    public std-index-last
 public index-next                    public std-index-next
 public index-prev                    public std-index-prev
-
-$pubdef .index-add "$lib/index" match "index-add" call
-$pubdef .index-add-sort "$lib/index" match "index-add-sort" call
-$pubdef .index-delete "$lib/index" match "index-delete" call
-$pubdef .index-envmatch "$lib/index" match "index-envmatch" call
-$pubdef .index-first "$lib/index" match "index-first" call
-$pubdef .index-last "$lib/index" match "index-last" call
-$pubdef .index-match "$lib/index" match "index-match" call
-$pubdef .index-matchrange "$lib/index" match "index-matchrange" call
-$pubdef .index-next "$lib/index" match "index-next" call
-$pubdef .index-prev "$lib/index" match "index-prev" call
-$pubdef .index-remove "$lib/index" match "index-remove" call
-$pubdef .index-set "$lib/index" match "index-set" call
-$pubdef .index-value "$lib/index" match "index-value" call
-$pubdef .index-write "$lib/index" match "index-write" call
-
-$pubdef .std-index-add "$lib/index" match "index-add" call
-$pubdef .std-index-add-sort "$lib/index" match "index-add-sort" call
-$pubdef .std-index-delete "$lib/index" match "index-delete" call
-$pubdef .std-index-envmatch "$lib/index" match "index-envmatch" call
-$pubdef .std-index-first "$lib/index" match "index-first" call
-$pubdef .std-index-last "$lib/index" match "index-last" call
-$pubdef .std-index-match "$lib/index" match "index-match" call
-$pubdef .std-index-matchrange "$lib/index" match "index-matchrange" call
-$pubdef .std-index-next "$lib/index" match "index-next" call
-$pubdef .std-index-prev "$lib/index" match "index-prev" call
-$pubdef .std-index-remove "$lib/index" match "index-remove" call
-$pubdef .std-index-set "$lib/index" match "index-set" call
-$pubdef .std-index-value "$lib/index" match "index-value" call
-$pubdef .std-index-write "$lib/index" match "index-write" call
+ 
+$pubdef .index-add		__PROG__ "index-add" call
+$pubdef .index-add-sort		__PROG__ "index-add-sort" call
+$pubdef .index-delete		__PROG__ "index-delete" call
+$pubdef .index-envmatch		__PROG__ "index-envmatch" call
+$pubdef .index-first		__PROG__ "index-first" call
+$pubdef .index-last		__PROG__ "index-last" call
+$pubdef .index-match		__PROG__ "index-match" call
+$pubdef .index-matchrange	__PROG__ "index-matchrange" call
+$pubdef .index-next		__PROG__ "index-next" call
+$pubdef .index-prev		__PROG__ "index-prev" call
+$pubdef .index-remove		__PROG__ "index-remove" call
+$pubdef .index-set		__PROG__ "index-set" call
+$pubdef .index-value		__PROG__ "index-value" call
+$pubdef .index-write		__PROG__ "index-write" call
+$pubdef .std-index-add		__PROG__ "std-index-add" call
+$pubdef .std-index-add-sort	__PROG__ "std-index-add-sort" call
+$pubdef .std-index-delete	__PROG__ "std-index-delete" call
+$pubdef .std-index-envmatch	__PROG__ "std-index-envmatch" call
+$pubdef .std-index-first	__PROG__ "std-index-first" call
+$pubdef .std-index-last		__PROG__ "std-index-last" call
+$pubdef .std-index-match	__PROG__ "std-index-match" call
+$pubdef .std-index-next		__PROG__ "std-index-next" call
+$pubdef .std-index-prev		__PROG__ "std-index-prev" call
+$pubdef .std-index-remove	__PROG__ "std-index-remove" call
+$pubdef .std-index-set		__PROG__ "std-index-set" call
+$pubdef .std-index-value	__PROG__ "std-index-value" call
+$pubdef .std-index-write	__PROG__ "std-index-write" call
 .
 c
 q
 @register lib-index=lib/index
 @register #me lib-index=tmp/prog1
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=H
+@set $tmp/prog1=L
+@set $tmp/prog1=S
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/index=1-109
-@set $tmp/prog1=/_lib-version:1.2
+@register #me =tmp

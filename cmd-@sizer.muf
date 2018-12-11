@@ -1,8 +1,8 @@
 @program cmd-@sizer
-1 9999 d
+1 99999 d
 1 i
-$include $lib/strings
 $include $lib/match
+$include $lib/strings
   
 $def locknodebytes 18
 $def propdirbytes 28

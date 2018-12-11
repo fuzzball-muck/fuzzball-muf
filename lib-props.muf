@@ -1,4 +1,4 @@
-@prog lib-props
+@program lib-props
 1 99999 d
 1 i
 ( PROPS Library -- Contains useful property handling routines.
@@ -20,9 +20,10 @@
     Given a property name and dbref, finds the property, whether on the dbref
     itself, an environment of the dbref, or a proploc of the dbref.  If none,
     returns #-1.
-  
 )
-  
+ 
+$doccmd @list __PROG__=!@1-20
+ 
 : setpropstr (dbref propname strval -- )
     dup not if
         pop remove_prop
@@ -30,15 +31,15 @@
         0 addprop
     then
 ;
-  
+ 
 : envprop (startdbref propname -- stringvalue)
   envpropstr swap pop
 ;
-  
+ 
 : envsearch (startdbref propname -- locationdbref)
   envpropstr pop
 ;
-  
+ 
 : proplocsearch ( startdbref propname -- locationdbref )
   over swap                                   ( d d s )
   me @ "search" remove_prop
@@ -73,25 +74,25 @@
     then
     pop envsearch
 ;
-  
-PUBLIC setpropstr $libdef setpropstr
-PUBLIC envprop $libdef envprop
-PUBLIC envsearch $libdef envsearch
-PUBLIC locate-prop $libdef locate-prop
-
-$pubdef .envprop "$lib/props" match "envprop" call
-$pubdef .envsearch "$lib/props" match "envsearch" call
-$pubdef .locate-prop "$lib/props" match "locate-prop" call
-$pubdef .setpropstr "$lib/props" match "setpropstr" call
+ 
+public envprop		$libdef envprop
+public envsearch	$libdef envsearch
+public locate-prop	$libdef locate-prop
+public setpropstr	$libdef setpropstr
+ 
+$pubdef .addpropstr	__PROG__ "setpropstr" call
+$pubdef .envprop	__PROG__ "envprop" call
+$pubdef .envsearch	__PROG__ "envsearch" call
+$pubdef .locate-prop	__PROG__ "locate-prop" call
+$pubdef .setpropstr	__PROG__ "setpropstr" call
 .
 c
 q
 @register lib-props=lib/props
 @register #me lib-props=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=H
 @set $tmp/prog1=L
 @set $tmp/prog1=S
-@set $tmp/prog1=H
-@set $tmp/prog1=B
 @set $tmp/prog1=V
-@set $tmp/prog1=2
-@set $tmp/prog1=/_docs:@list $lib/props=1-20
+@register #me =tmp

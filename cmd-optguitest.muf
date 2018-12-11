@@ -1,4 +1,4 @@
-@prog cmd-optguitest
+@program cmd-optguitest
 1 99999 d
 1 i
 $include $lib/optionsgui
@@ -120,7 +120,7 @@ $include $lib/optionsgui
 c
 q
 @register #me cmd-optguitest=tmp/prog1
-@set $tmp/prog1=W
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=L
+@set $tmp/prog1=W
 

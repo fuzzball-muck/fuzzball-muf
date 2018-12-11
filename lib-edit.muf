@@ -1,4 +1,4 @@
-@prog lib-edit
+@program lib-edit
 1 99999 d
 1 i
 ( Stack Based String Range Editing Routines
@@ -77,14 +77,11 @@ between the top of the string range and the bottom parameter.
       Takes a range and formats it similarly to the way that the UNIX fmt
       command would, splitting long lines, and joining short ones.
 )
-  
-$include $lib/strings
+ 
+$doccmd @list __PROG__=!@1-76
+ 
 $include $lib/stackrng
-$define SRNGextract sr-extractrng $enddef
-$define SRNGinsert  sr-insertrng  $enddef
-$define SRNGcopy    sr-copyrng    $enddef
-  
-  
+ 
 : EDITforeach ( {str_rng} ... offset 'function data start end -- {str_rng'} )
               ( 'function must be addr of a [string data -- string] function)
     5 pick 6 + pick dup 4 pick <
@@ -96,17 +93,14 @@ $define SRNGcopy    sr-copyrng    $enddef
     swap -1 * rotate
     swap 1 + swap EDITforeach
 ;
-  
-  
-  
+ 
 : EDITsearch  ( {rng} ... offset string start -- {rng} pos )
     dup 4 pick 5 + pick > if pop pop pop 0 exit then
     3 pick 5 + dup pick + over - pick 3 pick
     instr if rot rot pop pop exit then
     1 + EDITsearch
 ;
-  
-  
+ 
 : EDITreplace ( {rng} ... offset oldstr newstr start end -- {rng'} )
     over 6 pick 7 + pick > 3 pick 3 pick > or if
         pop pop pop pop pop exit
@@ -115,8 +109,7 @@ $define SRNGcopy    sr-copyrng    $enddef
     5 pick 7 pick subst swap -1 * rotate
     swap 1 + swap EDITreplace
 ;
-  
-  
+ 
 : EDITmove    ( {rng} ... offset dest start end -- {rng'} )
     3 pick over > if
         rot over 4 pick - 1 + - rot rot
@@ -129,16 +122,13 @@ $define SRNGcopy    sr-copyrng    $enddef
     ( {rng'} ... {rng2} offset dest )
     SRNGinsert
 ;
-  
-  
+ 
 : EDITcopy    ( {rng} ... offset dest start end -- {rng'} )
     over - 1 + swap 4 pick 2 + rot rot SRNGcopy
     dup 3 + rotate over 3 + rotate
     SRNGinsert
 ;
-  
-  
-  
+ 
 : EDITsort    ( {rng} ascending?  CaseSensitive? -- {rng'} )
     if
         if SORTTYPE_CASE_ASCEND
@@ -152,11 +142,10 @@ $define SRNGcopy    sr-copyrng    $enddef
 	var! sorttype
 	array_make sorttype @ array_sort array_vals
 ;
-  
-  
+ 
 : EDITjoin ( {rng} -- string )
     dup 2 < if pop exit then
-    rot STRsts rot STRsls
+    rot striptail rot striplead
     over dup strlen 
     dup if
       1 - strcut pop
@@ -167,8 +156,7 @@ $define SRNGcopy    sr-copyrng    $enddef
     swap strcat strcat swap
     1 - EDITjoin
 ;
-  
-  
+ 
 : EDITsplit-splitloop (string splitchars last -- string string)
     over not if
         swap pop
@@ -179,7 +167,7 @@ $define SRNGcopy    sr-copyrng    $enddef
     over over < if swap then pop
     EDITsplit-splitloop
 ;
-  
+ 
 : EDITsplit-split (string splitchars rmargin wrapmargin --
                    excess splitchars rmargin wrapmargin string)
     4 rotate 3 pick strcut swap 3 pick strcut
@@ -189,7 +177,7 @@ $define SRNGcopy    sr-copyrng    $enddef
     (splitchars rmargin wrapmargin str excess)
     -5 rotate
 ;
-  
+ 
 : EDITsplit-loop ({rng} string splitchars rmargin wrapwargin -- {rng})
     4 pick strlen 3 pick < if
         pop pop pop
@@ -200,12 +188,11 @@ $define SRNGcopy    sr-copyrng    $enddef
     EDITsplit-split -6 rotate 5 rotate 1 + -5 rotate
     EDITsplit-loop
 ;
-  
+ 
 : EDITsplit   ( string splitchars rmargin wrapmargin -- {rng} )
     0 -5 rotate EDITsplit-loop
 ;
-  
-  
+ 
 : EDITformat-loop  ( {rng} splitchars rmargin wrapmargin {rng2} -- {rng'} )
     dup 5 + pick not if
         dup 3 + dup rotate pop dup rotate pop
@@ -213,13 +200,13 @@ $define SRNGcopy    sr-copyrng    $enddef
     then
     dup 4 + 1 1 SRNGextract pop
     ( {rng} splitchars rmargin wrapmargin {rng2} string )
-    dup STRblank? not if
+    dup striplead if
         over 6 + dup pick swap dup pick swap 1 - pick
         EDITsplit dup 2 + rotate + 1 - swap
         ( {rng} splitchars rmargin wrapmargin {rng2} string )
         over 6 + pick dup if
             3 pick + 6 + pick
-            dup STRblank?
+            dup striplead not
         else pop "" 1
         then
         ( {rng} splitchars rmargin wrapmargin {rng2} string nocat? )
@@ -232,12 +219,11 @@ $define SRNGcopy    sr-copyrng    $enddef
     then
     EDITformat-loop
 ;
-  
+ 
 : EDITformat  ( {rng} splitchars rmargin wrapmargin -- {rng'} )
     0 EDITformat-loop
 ;
-  
-  
+ 
 : EDITfmt_rng ( {str_rng} ... offset cols start end -- {str_rng'} ... )
     over - 1 + over swap
     ({rng} ... off cols start start cnt )
@@ -248,8 +234,7 @@ $define SRNGcopy    sr-copyrng    $enddef
     dup 3 + rotate over 3 + rotate
     SRNGinsert
 ;
-  
-  
+ 
 : EDITshuffle-innerloop ( {rng} shuffles loop -- {rng'} )
     dup not if pop exit then
     4 rotate 4 pick            ( {rng} shuffles loop item cnt )
@@ -257,18 +242,17 @@ $define SRNGcopy    sr-copyrng    $enddef
     4 + -1 * rotate            ( {rng} shuffles loop )
     1 - EDITshuffle-innerloop
 ;
-  
+ 
 : EDITshuffle-outerloop ( {rng} shuffles -- {rng'} )
     dup not if pop exit then
     over EDITshuffle-innerloop
     1 - EDITshuffle-outerloop
 ;
-  
+ 
 : EDITshuffle ( {rng} -- {rng'} )
     8 EDITshuffle-outerloop
 ;
-  
-  
+ 
 : EDITlist    ( {rng} ... offset nums? start end -- {rng} ... )
     over over >
     3 pick 6 pick 7 + pick > or if
@@ -285,28 +269,24 @@ $define SRNGcopy    sr-copyrng    $enddef
     me @ swap notify
     swap 1 + swap EDITlist
 ;
-    
-  
-  
+ 
 : EDITdisplay ( {str_rng} -- )
     dup if
         dup 1 + rotate me @ swap notify
         1 - EDITdisplay exit
     then pop
 ;
-  
-  
+ 
 : EDITleft-func (string null -- string )
-    pop STRsls
+    pop striplead
 ;
-  
+ 
 : EDITleft ( {strrng} ... offset start end -- {strrng'} ... )
     'EDITleft-func "" -4 rotate -4 rotate EDITforeach
 ;
-  
-  
+ 
 : EDITcenter-func (string cols -- string )
-    swap STRstrip dup strlen
+    swap strip dup strlen
     dup 4 pick >= if
         pop swap pop exit
     then
@@ -315,14 +295,13 @@ $define SRNGcopy    sr-copyrng    $enddef
     dup strcat dup strcat
     swap strcut pop swap strcat
 ;
-  
+ 
 : EDITcenter ( {strrng} ... offset cols start end -- {strrng'} ... )
     'EDITcenter-func -4 rotate EDITforeach
 ;
-  
-  
+ 
 : EDITright-func (string cols -- string )
-    swap STRstrip dup strlen
+    swap strip dup strlen
     dup 4 pick >= if
         pop swap pop exit
     then
@@ -331,25 +310,23 @@ $define SRNGcopy    sr-copyrng    $enddef
     dup strcat dup strcat
     swap strcut pop swap strcat
 ;
-  
+ 
 : EDITright ( {strrng} ... offset cols start end -- {strrng'} ... )
     'EDITright-func -4 rotate EDITforeach
 ;
-  
-  
+ 
 : EDITindent-func (str cols -- str)
-    swap dup strlen swap STRsls
+    swap dup strlen swap striplead
     dup strlen rot swap - rot +
     dup 1 < if pop exit then
     "                                        "
     dup strcat dup strcat
     swap strcut pop swap strcat
 ;
-  
+ 
 : EDITindent ( {str_rng} ... offset cols start end -- {str_rng'} ... )
     'EDITindent-func -4 rotate EDITforeach
 ;
-  
  
 : EDITjoin_rng ( {str_rng} ... offset start end -- {str_rng'} ... )
     over - 1 + over
@@ -359,30 +336,30 @@ $define SRNGcopy    sr-copyrng    $enddef
     EDITjoin 1 4 rotate 4 rotate
     SRNGinsert
 ;
-
-PUBLIC EDITsearch $libdef EDITsearch
-PUBLIC EDITreplace $libdef EDITreplace
-PUBLIC EDITmove $libdef EDITmove
-PUBLIC EDITcopy $libdef EDITcopy
-PUBLIC EDITlist $libdef EDITlist
-PUBLIC EDITleft $libdef EDITleft
-PUBLIC EDITcenter $libdef EDITcenter
-PUBLIC EDITright $libdef EDITright
-PUBLIC EDITindent $libdef EDITindent
-PUBLIC EDITfmt_rng $libdef EDITfmt_rng
-PUBLIC EDITjoin_rng $libdef EDITjoin_rng
-
-PUBLIC EDITshuffle $libdef EDITshuffle
-PUBLIC EDITsort $libdef EDITsort
-PUBLIC EDITjoin $libdef EDITjoin
-PUBLIC EDITdisplay $libdef EDITdisplay
-PUBLIC EDITsplit $libdef EDITsplit
-PUBLIC EDITformat $libdef EDITformat
+ 
+public EDITcenter	$libdef EDITcenter
+public EDITcopy		$libdef EDITcopy
+public EDITdisplay	$libdef EDITdisplay
+public EDITformat	$libdef EDITformat
+public EDITfmt_rng	$libdef EDITfmt_rng
+public EDITindent	$libdef EDITindent
+public EDITjoin		$libdef EDITjoin
+public EDITjoin_rng	$libdef EDITjoin_rng
+public EDITleft		$libdef EDITleft
+public EDITlist		$libdef EDITlist
+public EDITmove		$libdef EDITmove
+public EDITreplace	$libdef EDITreplace
+public EDITright	$libdef EDITright
+public EDITsearch	$libdef EDITsearch
+public EDITshuffle	$libdef EDITshuffle
+public EDITsort		$libdef EDITsort
+public EDITsplit	$libdef EDITsplit
 .
 c
 q
 @register lib-edit=lib/edit
 @register #me lib-edit=tmp/prog1
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/edit=1-80
+@register #me =tmp

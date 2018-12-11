@@ -1,5 +1,5 @@
 @program cmd-@ignore.muf
-1 9999 d
+1 99999 d
 i
 ( cmd-@ignore 10 Sep 2002 by Steve <muf@quantumrain.com> )
  
@@ -232,4 +232,4 @@ $def Guest? ( d -- i ) name "Guest" stringpfx
 .
 c
 q
-@set cmd-@ignore.muf=M3
+@set cmd-@ignore.muf=3

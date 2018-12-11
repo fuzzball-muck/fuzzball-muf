@@ -1,4 +1,4 @@
-@prog lib-mesgbox
+@program lib-mesgbox
 1 99999 d
 1 i
 ( **** Message Box Object -- MBOX- ****
@@ -59,21 +59,24 @@
     MBOX-message  [refnum base dbref -- {strrange}]
       Returns the contents of the given message number in the message box
       as a range of strings.
-  
 )
-  
+ 
+$doccmd @list __PROG__=!@1-59
+$version 1.2
+ 
 $include $lib/mesg
-  
+ 
 : MBOX-count (base dbref -- count)
     MSG-count
 ;
-  
+ 
 : MBOX-ref2num (refnum base dbref -- mesgnum)
     MSG-item atoi
 ;
-  
+ 
 lvar n2r_num
 lvar n2r_cnt
+ 
 : MBOX-num2ref (mesgnum base dbref -- refnum)
     rot n2r_num !
     over over MBOX-count n2r_cnt !
@@ -92,30 +95,29 @@ lvar n2r_cnt
     rot 3 pick 3 pick MBOX-ref2num intostr
     rot "/" strcat swap strcat swap
 ;
-  
+ 
 : MBOX-delmesg (refnum base dbref -- )
     3 pick 3 pick 3 pick MBOX-ref2prop
     MSG-destroy MSG-delitem
 ;
-  
+ 
 : MBOX-destroy-loop (base dbref cnt -- )
     dup not if pop pop pop exit then
     dup 4 pick 4 pick MBOX-delmesg
     1 - MBOX-destroy-loop
 ;
-  
+ 
 : MBOX-destroy (base dbref -- )  
     over over over over MBOX-count
     MBOX-destroy-loop
     MSG-destroy
 ;
-  
+ 
 : MBOX-create ( base dbref -- )
     over over MBOX-destroy
     0 "0" 4 rotate 4 rotate MSG-create
 ;
-  
-  
+ 
 : MBOX-append ({strrange} infostr base dbref -- refnum)
     over over MSG-info
     ({strrange} infostr base dbref next)
@@ -132,8 +134,7 @@ lvar n2r_cnt
     MSG-create
     (ref)
 ;
-  
-  
+ 
 : MBOX-insmesg ({strrange} infostr refnum base dbref -- refnum)
     over over MSG-info
     dup atoi 1 + intostr
@@ -149,51 +150,50 @@ lvar n2r_cnt
     ({strrange} infostr mbase dbref)
     MSG-create
 ;
-  
-  
+ 
 : MBOX-setmesg ({strrange} infostr refnum base dbref -- )
     MBOX-ref2prop MSG-create
 ;
-  
-  
+ 
 : MBOX-msginfo (refnum base dbref -- infostr)
     MBOX-ref2prop MSG-info
 ;
-  
-  
+ 
 : MBOX-setinfo (infostr refnum base dbref -- )
     MBOX-ref2prop MSG-setinfo
 ;
-  
-  
+ 
 : MBOX-message (refnum base dbref -- {strrange})
     MBOX-ref2prop MSG-message
 ;
-  
+ 
 : MBOX-badref? (refnum base dbref -- bad?)
     MBOX-count over < swap 1 < or
 ;
-  
-PUBLIC MBOX-ref2prop $libdef MBOX-ref2prop
-PUBLIC MBOX-ref2num $libdef MBOX-ref2num
-PUBLIC MBOX-num2ref $libdef MBOX-num2ref
-PUBLIC MBOX-create $libdef MBOX-create
-PUBLIC MBOX-count $libdef MBOX-count
-PUBLIC MBOX-destroy $libdef MBOX-destroy
-PUBLIC MBOX-append $libdef MBOX-append
-PUBLIC MBOX-insmesg $libdef MBOX-insmesg
-PUBLIC MBOX-delmesg $libdef MBOX-delmesg
-PUBLIC MBOX-setmesg $libdef MBOX-setmeg
-PUBLIC MBOX-msginfo $libdef MBOX-msginfo
-PUBLIC MBOX-setinfo $libdef MBOX-setinfo
-PUBLIC MBOX-message $libdef MBOX-message
-PUBLIC MBOX-badref? $libdef MBOX-badref?
+ 
+public MBOX-append	$libdef MBOX-append
+public MBOX-badref?	$libdef MBOX-badref?
+public MBOX-count	$libdef MBOX-count
+public MBOX-create	$libdef MBOX-create
+public MBOX-delmesg	$libdef MBOX-delmesg
+public MBOX-destroy	$libdef MBOX-destroy
+public MBOX-insmesg	$libdef MBOX-insmesg
+public MBOX-message	$libdef MBOX-message
+public MBOX-msginfo	$libdef MBOX-msginfo
+public MBOX-num2ref	$libdef MBOX-num2ref
+public MBOX-ref2num	$libdef MBOX-ref2num
+public MBOX-ref2prop	$libdef MBOX-ref2prop
+public MBOX-setinfo	$libdef MBOX-setinfo
+public MBOX-setmesg	$libdef MBOX-setmesg
 .
 c
 q
 @register lib-mesgbox=lib/mesgbox
 @register #me lib-mesgbox=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=B
+@set $tmp/prog1=H
 @set $tmp/prog1=L
+@set $tmp/prog1=S
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/mesgbox=1-58
-@set $tmp/prog1=/_version:1.2
+@register #me =tmp

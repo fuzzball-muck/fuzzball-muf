@@ -1,4 +1,4 @@
-@prog cmd-@bringitdown
+@program cmd-@bringitdown
 1 99999 d
 1 i
 $def WARNTIMES 15 10 5 1
@@ -87,8 +87,8 @@ $def WARNTIMES 15 10 5 1
 c
 q
 @register #me cmd-@bringitdown=tmp/prog1
-@set $tmp/prog1=W
 @set $tmp/prog1=3
+@set $tmp/prog1=W
 @chown $tmp/prog1=#1
 @action @bringitdown=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

@@ -1,5 +1,5 @@
-@prog cmd-bootall
-1 9999 d
+@program cmd-bootall
+1 99999 d
 1 i
 : bootall
   "Disconnecting: " swap strcat

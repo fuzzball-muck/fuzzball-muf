@@ -1,5 +1,5 @@
 @program cmd-sweep
-1 10000 d
+1 99999 d
 1 i
 ( CMD-SWEEP   by Tygryss, IMiR of XR     Written 2/5/91        )
 ( Sends home all players in a room who are sleeping, and who   )
@@ -20,11 +20,12 @@
   @/sweepable?        If 'yes', player it is set on can be swept by anyone,
                        they are swept home, always.
 )
-$include $lib/strings
-  
+ 
+$doccmd @list __PROG__=!@1-19
+ 
 $def LOGOUT_SAFE_TIME 180
 $def getlinkfix dup program? if owner else getlink then
-
+ 
 : doenvprop[ ref:obj str:prop -- str:result ]
     obj @ prop @ envprop if
         prop @ "[sweep]"  0 parseprop
@@ -32,13 +33,9 @@ $def getlinkfix dup program? if owner else getlink then
         pop ""
     then
 ;
-  
-: show-list
-   dup not if pop exit then
-   me @ over 2 + rotate notify
-   1 - show-list
-;
+ 
 : show-help
+   {
 "__Propname_________ _where_ _What_it_does____________________________________"
 " _sweep              you     message shown when you sweep a room.            "
 " _swept or _osweep   you     message shown when you are swept.               "
@@ -61,13 +58,13 @@ $def getlinkfix dup program? if owner else getlink then
 "   with the prefix '_sweep_', containing the format, then specifying them at "
 "   sweep time.  ie: if you have a _sweep_nasty format set, you can use it by "
 "   typing 'sweep <player>=nasty'                                             "
-22 show-list
+   }tell
 ;
-  
+ 
 : home-object (objectdbref -- )
    #-3 moveto
 ;
-  
+ 
 : home-objects (playerdbref objdbref -- )
    dup not if pop pop exit then   (exit if done with the player's contents)
    over over owner dbcmp not if   (if object owned by the player, ignore it)
@@ -82,7 +79,7 @@ $def getlinkfix dup program? if owner else getlink then
    then
    home-objects                   (go on to next object in player's contents)
 ;
-  
+ 
 : home-player (dbref -- )
    dup name " " strcat over "_osweep" doenvprop
    dup not if pop over "_swept" doenvprop then
@@ -103,23 +100,23 @@ $def getlinkfix dup program? if owner else getlink then
 pop exit
    dup contents home-objects         (& home objects carried)
 ;
-  
+ 
 : authorized? (dbref -- bool)
    dup location "_sweep_authorized" doenvprop " " strcat
    swap intostr " " strcat "#" swap strcat instr
 ;
-  
+ 
 : immune? (dbref -- bool)
    dup location "_sweep_immune" doenvprop " " strcat
    swap intostr " " strcat "#" swap strcat instr
 ;
-  
+ 
 : awake-or-recent? (dbref -- bool )
    dup awake? if pop 1 exit then
    timestamps pop rot rot pop pop
    systime swap - LOGOUT_SAFE_TIME <=
 ;
-  
+ 
 : home-players (sweep? #swept dbref -- #swept)
    dup not if pop swap pop exit then   (exit if done with room's contents)
    dup player? not if                  (if not a player object, ignore it)
@@ -151,7 +148,7 @@ pop exit
    then
    home-players               (go on to next object in rooms contents)
 ;
-  
+ 
 : sweep-room
    "me" match me !
    dup not if
@@ -187,7 +184,7 @@ pop exit
       then
    else (sweep <object>)
   
-      "=" .split .stripspaces swap .stripspaces
+      "=" split strip swap strip
       dup "#help" stringcmp not if
          pop show-help exit
       then
@@ -269,6 +266,10 @@ pop exit
 .
 c
 q
+@register #me cmd-sweep=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
 @action sweep;swee=#0=tmp/exit1
-@link $tmp/exit1=cmd-sweep
-
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

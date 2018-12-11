@@ -1,11 +1,10 @@
-@prog cmd-@image
+@program cmd-@image
 1 99999 d
 1 i
 $include $lib/match
 $include $lib/strings
   
 $def IMAGE_PACKAGE "dns-org-fuzzball-image"
-$def }tell }list { me @ }list array_notify
   
 : list-imagers[ -- ]
     0 var! count
@@ -166,7 +165,7 @@ $def }tell }list { me @ }list array_notify
 c
 q
 @register #me cmd-@image=tmp/prog1
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=L
 @action @image;@imag;@ima;@im=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

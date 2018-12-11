@@ -1,4 +1,4 @@
-@prog lib-bolding.muf
+@program lib-bolding.muf
 1 99999 d
 1 i
 $lib-version    1.04

@@ -1,4 +1,4 @@
-@prog multiplexer
+@program multiplexer
 1 99999 d
 1 i
 ( MULTIPLEXER v.2.0fb                          by Mercy Sha'ali Veh )

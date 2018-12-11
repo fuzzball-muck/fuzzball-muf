@@ -1,5 +1,5 @@
 @program lib-mpi
-1 9999 d
+1 99999 d
 1 i
 ( Lib-MPI   version 1.0  Created 2/7/94 by Foxen
 A library to facilitate parsing of MPI within the standard @desc, @succ, etc
@@ -15,6 +15,9 @@ PARSE_DROP  [d -- s]  Like DROP, but parses embedded MPI and returns result.
 PARSE_ODROP [d -- s]  Like ODROP, but parses embedded MPI and returns result.
 )
  
+$doccmd @list __PROG__=!@1-13
+$version 1.0
+ 
 : parse_desc  "_/de"  "(@Desc)"  1 parseprop ;
 : parse_idesc "_/ide" "(@Idesc)" 1 parseprop ;
 : parse_succ  "_/sc"  "(@Succ)"  1 parseprop ;
@@ -23,21 +26,20 @@ PARSE_ODROP [d -- s]  Like ODROP, but parses embedded MPI and returns result.
 : parse_ofail "_/ofl" "(@Ofail)" 0 parseprop ;
 : parse_drop  "_/dr"  "(@Drop)"  1 parseprop ;
 : parse_odrop "_/odr" "(@Odrop)" 0 parseprop ;
-
-PUBLIC parse_desc $libdef parse_desc
-PUBLIC parse_idesc $libdef parse_idesc
-PUBLIC parse_succ $libdef parse_succ
-PUBLIC parse_osucc $libdef parse_osucc
-PUBLIC parse_fail $libdef parse_fail
-PUBLIC parse_ofail $libdef parse_ofail
-PUBLIC parse_drop $libdef parse_drop
-PUBLIC parse_odrop $Libdef parse_odrop
+ 
+public parse_desc	$libdef parse_desc
+public parse_drop	$libdef parse_drop
+public parse_fail	$libdef parse_fail
+public parse_idesc	$libdef parse_idesc
+public parse_ofail	$libdef parse_ofail
+public parse_odrop	$libdef parse_odrop
+public parse_osucc	$libdef parse_osucc
+public parse_succ	$libdef parse_succ
 .
 c
 q
 @register lib-mpi=lib/mpi
+@set $lib/mpi=3
 @set $lib/mpi=L
-@set $lib/mpi=W
 @set $lib/mpi=V
-@set $lib/mpi=_docs:@list $lib/mpi=1-14
-@set $lib/mpi=_version:1.0
+@set $lib/mpi=W

@@ -1,14 +1,16 @@
-@prog con-mailwarn
+@program con-mailwarn
 1 99999 d
 1 i
+$version 1.2
+ 
 $include $lib/props
-$include $lib/match
-$define maildir "page-mail#" $enddef
+ 
+$define maildir "_page/mail#" $enddef
   
 : mail-warn
   maildir me @ over .locate-prop
   dup ok? if
-    me @ over .controls not if pop me @ then
+    me @ over controls not if pop me @ then
     swap getpropstr atoi
   else
     pop pop 0
@@ -22,12 +24,14 @@ $define maildir "page-mail#" $enddef
   then
   "You sense that you have " swap strcat
   " waiting." strcat
-  .tell
-  "You can read your page-mail with 'page #mail'" .tell
+  tell
+  "You can read your page-mail with 'page #mail'" tell
 ;
 .
 c
 q
 @register #prop #0:_connect con-mailwarn=mailwarn
-@set con-mailwarn=_version:1.2
-@set con-mailwarn=L
+@register #me con-mailwarn=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@register #me =tmp

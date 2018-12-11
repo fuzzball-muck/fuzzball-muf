@@ -1,4 +1,4 @@
-@prog lib-stackrng
+@program lib-stackrng
 1 99999 d
 1 i
 ( ***** Stack based range handling object -- SRNG ****                 
@@ -38,17 +38,13 @@
      takes two ranges on the stack and swaps them.
   
 )
-  
+ 
+$doccmd @list __PROG__=!@1-37
+ 
 : catranges ( {rng1} {rng2} -- {rng} )
     dup 2 + rotate +
 ;
-  
-  
-: popoffn ({rng} -- )
-    popn
-;
-  
-  
+ 
 : copyrange ( {rng} ... offset num pos -- {rng} ... {subrng} )
     1 - var! pos
     var! num
@@ -73,8 +69,7 @@
     stuff @ array_vals pop
     subrng @ array_vals
 ;
-  
-  
+ 
 : extractrange ( {rng} ... offset num pos -- {rng'} ... {subrng} )
     1 - var! pos
     var! num
@@ -102,19 +97,18 @@
     stuff @ array_vals pop
     subrng @ array_vals
 ;
-  
-  
+ 
 : swapranges ( {rng1} {rng2} -- {rng2} {rng1} )
     array_make var! tmp
     array_make var! tmp2
     tmp @ array_vals
     tmp2 @ array_vals
 ;
-  
+ 
 : deleterange  ( {rng} ... offset num pos -- {rng'} )
     extractrange popn
 ;
-  
+ 
 : insertrange  ( {rng1} ... {rng2} offset pos -- {rng} ... )
     1 - var! pos
     var! offset
@@ -132,8 +126,7 @@
     array_vals
     stuff @ array_vals pop
 ;
-  
-  
+ 
 : filterrange ( {rng} funcaddr -- {rng'} {filtrdrng} )
     var! cb
     { }list var! outrng
@@ -149,31 +142,40 @@
     range @ array_vals
     outrng @ array_vals
 ;
-  
  
 public catranges
-public popoffn
-public extractrange
-public swapranges
 public copyrange
 public deleterange
-public insertrange
+public extractrange
 public filterrange
-
-$pubdef sr-catrng "$lib/stackrng" match "catranges" call
-$pubdef sr-copyrng "$lib/stackrng" match "copyrange" call
-$pubdef sr-deleterng "$lib/stackrng" match "deleterange" call
-$pubdef sr-extractrng "$lib/stackrng" match "extractrange" call
-$pubdef sr-filterrng "$lib/stackrng" match "filterrange" call
-$pubdef sr-insertrng "$lib/stackrng" match "insertrange" call
-$pubdef sr-poprng "$lib/stackrng" match "popoffn" call
-$pubdef sr-swaprng "$lib/stackrng" match "swapranges" call
+public insertrange
+public swapranges
+ 
+$pubdef sr-catrng	__PROG__ "catranges" call
+$pubdef sr-copyrng	__PROG__ "copyrange" call
+$pubdef sr-deleterng	__PROG__ "deleterange" call
+$pubdef sr-extractrng	__PROG__ "extractrange" call
+$pubdef sr-filterrng	__PROG__ "filterrange" call
+$pubdef sr-insertrng	__PROG__ "insertrange" call
+$pubdef sr-poprng	popn
+$pubdef sr-swaprng	__PROG__ "swapranges" call
+ 
+$pubdef SRNGcat		__PROG__ "catranges" call
+$pubdef SRNGcopy	__PROG__ "copyrange" call
+$pubdef SRNGdelete	__PROG__ "deleterange" call
+$pubdef SRNGextract	__PROG__ "extractrange" call
+$pubdef SRNGfilter	__PROG__ "filterrange" call
+$pubdef SRNGinsert	__PROG__ "insertrange" call
+$pubdef SRNGpop		popn
+$pubdef SRNGswap	__PROG__ "swapranges" call
 .
 c
-q
+q 
 @register lib-stackrng=lib/stackrng
 @register #me lib-stackrng=tmp/prog1
-@set $tmp/prog1=L
-@set $tmp/prog1=V
 @set $tmp/prog1=3
-
+@set $tmp/prog1=H
+@set $tmp/prog1=L
+@set $tmp/prog1=S
+@set $tmp/prog1=V
+@register #me =tmp

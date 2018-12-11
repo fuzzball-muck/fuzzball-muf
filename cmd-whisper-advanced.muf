@@ -1,4 +1,4 @@
-@prog cmd-whisper
+@program cmd-whisper-advanced
 1 99999 d
 1 i
 ( MUFwhisper    Copyright 4/30/91 by Revar <revar@belfry.com>    )
@@ -8,6 +8,8 @@
 ( Program requires M3 setting for storage of the _whisp/ props   )
   
 ( CONFIGURATION )
+$include $lib/ignore
+$include $lib/alias
   
 ( Restrict guests from whispering to anyone but a wizard )
 ( $def RESTRICTWIZ )
@@ -26,10 +28,6 @@
 $def VERSION "MUFwhisper v1.26 by Foxen, Nightwind, and Brenda"
 $def UPDATED "Updated 06/22/00"
   
-$def tell me @ swap notify
-$def strip-leadspaces striplead
-$def strip-trailspaces striptail
-$def stripspaces strip
   
 $ifdef ENCRYPTPROPS
 ( encryption stuff )
@@ -179,7 +177,7 @@ $def setpropstr setprop
 ;
   
 : comma-format (string -- formattedstring)
-    stripspaces single-space
+    strip single-space
     ", " " " subst
     dup ", " rinstr dup if
         1 - strcut 2 strcut
@@ -238,7 +236,7 @@ $def setpropstr setprop
 ;
   
 : do-pmatch  ( playername -- [dbref] succ? )
-    .pmatch dup #-2 dbcmp if pop -1 exit then
+    pmatch dup #-2 dbcmp if pop -1 exit then
     dup ok? if 1 else pop 0 then
 ;
   
@@ -271,7 +269,7 @@ $define IGNORELIST "_whisp/ignoring" $enddef
 $define PRIORITYLIST "_whisp/prioritizing" $enddef
   
 : being-ignored? (dbref -- bool)
-    IGNORELIST me @ REF-inlist?
+    dup me @ "page" ignores? me @ rot "page" ignores? or (IGNORELIST me @ REF-inlist?)
 ;
   
 : prioritized?  (dbref -- bool)
@@ -444,7 +442,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ( player getting stuff )
   
 : get-playerdbrefs-remote  (cnt "" "" playersstr -- dbref_range ambig unrec)
-    dup not if pop stripspaces exit then
+    dup not if pop strip exit then
     " " split swap
     dup do-pmatch dup 0 > if
         pop swap pop 5 rotate
@@ -464,7 +462,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : get-playerdbrefs  (count nullstr null playersstr -- dbref_range ambig unrec)
-    dup not if pop stripspaces exit then
+    dup not if pop strip exit then
     " " split swap
     dup player-match? dup 0 > if
         pop swap pop 5 rotate
@@ -484,14 +482,14 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : refs2names  (dbrefrange count nullstr -- dbrefrange namestr)
-    over not if swap pop stripspaces exit then
+    over not if swap pop strip exit then
     3 pick 3 + rotate dup -5 rotate
     name strcat " " strcat
     swap 1 - swap refs2names
 ;
   
 : remove-sleepers (dbrefrange count nullstr -- dbrefrange sleeperstr)
-    over not if swap pop stripspaces exit then
+    over not if swap pop strip exit then
     3 pick 3 + rotate dup awake? if
         -4 rotate
     else
@@ -502,7 +500,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : remove-ignorers (dbrefrange count nullstr -- dbrefrange ignorestr)
-    over not if swap pop stripspaces exit then
+    over not if swap pop strip exit then
     3 pick 3 + rotate dup being-ignored? not if
         -4 rotate
     else
@@ -513,7 +511,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : remove-notusing (dbrefrange count nullstr -- dbrefrange notusingstr)
-    over not if swap pop stripspaces exit then
+    over not if swap pop strip exit then
     3 pick 3 + rotate dup notusing? not over prioritized? or if
         -4 rotate
     else
@@ -524,7 +522,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : do-getplayers-remote (players -- dbrefrange)
-    stripspaces single-space
+    strip single-space
     0 "" "" 4 rotate get-playerdbrefs-remote
     dup if
         comma-format dup " " instr
@@ -548,7 +546,14 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 ;
   
 : do-getplayers (players -- dbrefrange)
-    stripspaces single-space
+    me @ swap alias-expand
+    dup foreach swap pop  ( arrDbs db )
+        dup location loc @ dbcmp not if  ( arrDbs db )
+            dup "%D isn't here to be whispered to." fmtstring .tell  ( arrDbs db )
+            1 array_make swap array_diff  ( arrDbs )
+        else pop then  ( arrDbs )
+    repeat array_vals  ( dbN..db1 intN )
+    (strip single-space
     0 "" "" 4 rotate get-playerdbrefs
     dup if
         comma-format dup " " instr
@@ -568,7 +573,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         "ambiguous." strcat
         me @ swap notify
     else pop
-    then
+    then)
 ;
   
 : do-sleepers (dbrefrange -- dbrefrange')
@@ -587,7 +592,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
     dup if
         comma-format dup " " instr
         if " are " else " is " then
-        "currently whisper ignoring you." strcat
+        "currently ignoring or ignored by you." strcat
         strcat me @ swap notify
     else pop
     then
@@ -734,7 +739,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         4 pick "%n" subst    (dbrng cnt names msg msg fmt)
         me @ name "%i" subst (dbrng cnt names msg msg fmt)
         swap "%m" subst      (dbrng cnt names msg fmt)
-        tell whisper-toeach
+        .tell whisper-toeach
     else pop pop pop
     then
 ;
@@ -743,13 +748,13 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
     get-lastversion dup VERSION strcmp if
         dup if
         "Whisper has been upgraded.  Type 'whisper #changes' to see the latest mods."
-            tell
-            "You last used " over strcat tell
+            .tell
+            "You last used " over strcat .tell
         then
         VERSION set-lastversion
     then pop
  
-    stripspaces
+    strip
     dup "#R" 2 strncmp not if
         2 strcut swap pop
         me @ getlastwhisperdgroup
@@ -784,12 +789,12 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         me @ name tolower "guest" 5 strncmp if
             dup "#on" 3 stringmatch? if
                 pop set-whisper-on "You will now receive whispers as normal."
-                tell exit
+                .tell exit
             then
             dup "#off" 3 stringmatch? if
                 pop set-whisper-off 
-                "You will no longer receive whispers at all." tell 
-                "Use 'whisp #on' to restore." tell exit
+                "You will no longer receive whispers at all." .tell 
+                "Use 'whisp #on' to restore." .tell exit
             then
             dup " " split swap "#priority" 3 stringmatch? if
                 multi-priority exit
@@ -800,27 +805,36 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
             else pop
             then
             dup " " split swap "#ignore" 2 stringmatch? if
-                multi-ignore exit
+                "page" cmd-ignore-add (multi-ignore) exit
             else pop
             then
             dup " " split swap "#!ignore" 3 stringmatch? if
-                multi-unignore exit
+                "page" cmd-ignore-del (multi-unignore) exit
             else pop
             then
             dup " " split swap "#prepend" 3 stringmatch? if
                 add-prepend exit
             else pop
             then
+            dup " " split swap "#alias" 2 stringmatch? if
+                "=" split cmd-alias exit
+            else pop
+            then
+            dup " " split swap "#global" 2 stringmatch? if
+                "=" split alias-global-registry cmd-alias exit
+            else pop
+            then
         then
         "whisper: Illegal command: " swap strcat me @ swap notify
         "Type \"whisper #help\" for help." me @ swap notify exit
     then
+    me @ notusing? if command @ "You aren't using whisper. '%s #on' to restore." fmtstring .tell exit then  ( Don't let notusing people use Natasha@HLM 3 January 2003 )
     dup "=" instr not if
         "What do you want to whisper?"
         tell pop exit
     else
         "=" split
-        stripspaces
+        strip
         dup whisperpose? if
             1 strcut swap pop
             me @ name
@@ -829,7 +843,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
             not if " " strcat then
             swap strcat
         then
-        swap stripspaces single-space
+        swap strip single-space
         remember-whisperee
         multi-whisper        (do a message whisper)
     then
@@ -837,10 +851,8 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 .
 c
 q
-@register #me cmd-whisper=tmp/prog1
-@set $tmp/prog1=L
-@set $tmp/prog1=V
+@register #me cmd-whisper-advanced=tmp/prog1
 @set $tmp/prog1=3
+@set $tmp/prog1=V
 @action whisper;whispe;whisp;whis;whi;wh;w=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-

@@ -1,4 +1,4 @@
-@prog lib-strings
+@program lib-strings
 1 99999 d
 1 i
 ( ***** Misc String routines -- STR *****
@@ -30,22 +30,22 @@ These convert between ascii integers and string character.
 This routine is useful for parsing command line input:
   STRparse   [       str -- str1 str2 str3] " #X Y  y = Z"  ->  "X" "Y y" " Z"
 )
-  
-  
+ 
+$doccmd @list __PROG__=!@1-29
+ 
 : sms ( str -- str')
   begin
     dup "  " instr while
     " " "  " subst
   repeat
 ;
-  
-  
+ 
 : fillfield (str padchar fieldwidth -- padstr)
   rot ansi_strlen - dup 1 < if pop pop "" exit then
   swap over begin swap dup strcat swap 2 / dup not until pop
   swap ansi_strcut pop
 ;
-  
+ 
 : STRparse ( s -- s1 s2 s3 )
   (
     Before: " #option  tom dick  harry = message "
@@ -60,49 +60,50 @@ This routine is useful for parsing command line input:
   then
   strip sms rot
 ;
-    
-  
+ 
 public sms
 public fillfield
-public STRparse $libdef STRparse
-
-$pubdef .asc ctoi
-$pubdef .blank? striplead not
-$pubdef .center "%|*s" fmtstring
-$pubdef .chr itoc dup not if pop "." then
-$pubdef .command_parse "$lib/strings" match "STRparse" call
-$pubdef .fillfield "$lib/strings" match "fillfield" call
-$pubdef .left "%-*s" fmtstring
-$pubdef .right "%*s" fmtstring
-$pubdef .rsplit rsplit
-$pubdef .singlespace "$lib/strings" match "sms" call
-$pubdef .sls striplead
-$pubdef .sms "$lib/strings" match "sms" call
-$pubdef .split split
-$pubdef .strip strip
-$pubdef .stripspaces strip
-$pubdef .sts striptail
-$pubdef STRasc ctoi
-$pubdef STRblank? striplead not
-$pubdef STRcenter "%|*s" fmtstring
-$pubdef STRchr itoc dup not if pop "." then
-$pubdef STRfillfield "$lib/strings" match "fillfield" call
-$pubdef STRleft "%-*s" fmtstring
-$pubdef STRright "%*s" fmtstring
-$pubdef STRrsplit rsplit
-$pubdef STRsinglespace "$lib/strings" match "sms" call
-$pubdef STRsls striplead
-$pubdef STRsms "$lib/strings" match "sms" call
-$pubdef STRsplit split
-$pubdef STRstrip strip
-$pubdef STRsts striptail
+public STRparse		$libdef STRparse
+ 
+$pubdef .asc		ctoi
+$pubdef .blank?		striplead not
+$pubdef .center		"%|*s" fmtstring
+$pubdef .chr		itoc dup not if pop "." then
+$pubdef .command_parse	__PROG__ "STRparse" call
+$pubdef .fillfield	__PROG__ "fillfield" call
+$pubdef .left		"%-*s" fmtstring
+$pubdef .right		"%*s" fmtstring
+$pubdef .rsplit		rsplit
+$pubdef .singlespace	__PROG__ "sms" call
+$pubdef .sls		striplead
+$pubdef .sms		__PROG__ "sms" call
+$pubdef .split		split
+$pubdef .strip		strip
+$pubdef .stripspaces	strip
+$pubdef .sts		striptail
+ 
+$pubdef STRasc		ctoi
+$pubdef STRblank?	striplead not
+$pubdef STRcenter	"%|*s" fmtstring
+$pubdef STRchr		itoc dup not if pop "." then
+$pubdef STRfillfield	__PROG__ "fillfield" call
+$pubdef STRleft		"%-*s" fmtstring
+$pubdef STRright	"%*s" fmtstring
+$pubdef STRrsplit	rsplit
+$pubdef STRsinglespace	__PROG__ "sms" call
+$pubdef STRsls		striplead
+$pubdef STRsms		__PROG__ "sms" call
+$pubdef STRsplit	split
+$pubdef STRstrip	strip
+$pubdef STRsts		striptail
 .
 c
 q
 @register lib-strings=lib/strings
 @register #me lib-strings=tmp/prog1
+@set $tmp/prog1=2
 @set $tmp/prog1=L
+@set $tmp/prog1=S
+@set $tmp/prog1=H
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/strings=1-29
-
-
+@register #me =tmp

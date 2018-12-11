@@ -1,5 +1,5 @@
-@prog Lib-Debug.muf
-1 9999 d
+@program Lib-Debug.muf
+1 99999 d
 i
 $def HEADER "Lib-Debug.muf -- Syvel @ FurryFaire -- 18 Aug 1998"
 $def VERSION "$Id: lib-debug.muf,v 1.1 2007/08/28 09:22:10 revar Exp $"
@@ -59,7 +59,6 @@ $def VERSION "$Id: lib-debug.muf,v 1.1 2007/08/28 09:22:10 revar Exp $"
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 )
 $include $lib/strings
-$include $lib/case
 
 lvar CALL-OWN
 
@@ -307,12 +306,12 @@ $endif
         end
     endcase strcat caller owner swap notify
 ;
-public showstack $libdef showstack
-public comment $libdef comment
-public debugon $libdef debugon
-public debugoff $libdef debugoff
-public showvar $libdef showvar
-public pause_prog $Libdef pause_prog
+public comment		$libdef comment
+public debugon		$libdef debugon
+public debugoff		$libdef debugoff
+public pause_prog	$libdef pause_prog
+public showstack 	$libdef showstack
+public showvar		$libdef showvar
 .
 c
 q

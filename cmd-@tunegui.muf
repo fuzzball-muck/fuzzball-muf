@@ -1,12 +1,11 @@
-@prog cmd-@tunegui
+@program cmd-@tunegui
 1 99999 d
 1 i
 ( cmd-@tunegui  Copyright 7/23/2002 by Revar <revar@belfry.com> )
 $author Revar Desmera <revar@belfry.com>
-$version 1.010
 $note Released under the GNU LGPL.
+$version 1.010
  
-$include $lib/case
 $include $lib/optionsgui
  
  
@@ -66,8 +65,7 @@ $include $lib/optionsgui
 c
 q
 @register #me cmd-@tunegui=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
-
+@set $tmp/prog1=W

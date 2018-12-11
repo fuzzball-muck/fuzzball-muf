@@ -1,19 +1,17 @@
-@prog cmd-bbsgui
+@program cmd-bbsgui
 1 99999 d
 1 i
 $include $lib/gui
-$def tell descrcon swap connotify
-$def }join } array_make "" array_join
   
 : generic_handler[ int:dscr str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ GUI_VALUES_GET var! vals
     
-    { ctrlid @ " sent " event @ " event!" }join dscr @ tell 
+    { ctrlid @ " sent " event @ " event!" }join dscr @ .tell 
   
     vals @ foreach
-        swap "=" strcat dscr @ tell
+        swap "=" strcat dscr @ .tell
         foreach
-            "    " swap strcat dscr @ tell
+            "    " swap strcat dscr @ .tell
             pop
         repeat
     repeat
@@ -23,11 +21,11 @@ $def }join } array_make "" array_join
 : postyes_callback[ int:dscr str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ GUI_VALUES_GET var! vals
  
-    "This is where I would post the message." dscr @ tell
+    "This is where I would post the message." dscr @ .tell
     vals @ foreach
-        swap "=" strcat dscr @ tell
+        swap "=" strcat dscr @ .tell
         foreach
-            "    " swap strcat dscr @ tell
+            "    " swap strcat dscr @ .tell
             pop
         repeat
     repeat
@@ -115,7 +113,7 @@ $def }join } array_make "" array_join
             "Message " msgnum @
             " would have it's protection flag toggled here."
         }join
-        dscr @ tell
+        dscr @ .tell
     then
     0
 ;
@@ -129,7 +127,7 @@ $def }join } array_make "" array_join
     gui_messagebox
     "Yes" strcmp not if
         msgnum @ "Message %i would be deleted here." fmtstring
-        dscr @ tell
+        dscr @ .tell
     then
     0
 ;
@@ -224,7 +222,7 @@ $def }join } array_make "" array_join
 c
 q
 @register #me cmd-bbsgui=tmp/prog1
-@set $tmp/prog1=L
 @set $tmp/prog1=3
+@set $tmp/prog1=L
 
 

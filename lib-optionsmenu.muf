@@ -1,4 +1,4 @@
-@prog lib-optionsmenu
+@program lib-optionsmenu
 1 99999 d
 1 i
 ( $lib/optionsmenu  Copyright 10/18/2002 by Revar <revar@belfry.com> )
@@ -15,9 +15,9 @@
 (     Changed regexps to PCRE style regexps to match the server.     )
 
 $author Revar Desmera <revar@belfry.com>
-$version 1.002
 $lib-version 1.001
 $note Released under the LGPL.
+$version 1.002
 
 (
 
@@ -252,7 +252,6 @@ $def MENU_ITEM_COLOR         "bold" textattr
 $def MENU_INSTRUCTION_COLOR  "bold,yellow,bg_black" textattr
 $def MENU_ERROR_COLOR        "bold,red,bg_black" textattr
 
-$include $lib/case
 $include $lib/editor
 $include $lib/optionsinfo
 $include $lib/optionsmisc
@@ -1001,15 +1000,15 @@ lvar main_title
     then
     me @ "< Done. >" MENU_INSTRUCTION_COLOR notify
 ;
-PUBLIC menu_options_process
-$libdef MENU_OPTIONS_PROCESS
+ 
+public menu_options_process	$libdef menu_options_process
 .
 c
 q
 @register lib-optionsmenu=lib/optionsmenu
 @register #me lib-optionsmenu=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
+@set $tmp/prog1=W
 

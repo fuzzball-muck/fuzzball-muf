@@ -1,4 +1,4 @@
-@prog gen-mesgboard
+@program gen-mesgboard
 1 99999 d
 1 i
 ( MUFmessageBoard v3.0    Copyright 5/31/91 by Garth Minette )
@@ -24,23 +24,20 @@
   
 $def VERSION "MessageBoard v3.0"
 $def GUI 1
-$include $lib/strings
-$include $lib/props
-$include $lib/match
-$include $lib/lmgr
-$include $lib/mesg
-$include $lib/mesgbox
 $include $lib/edit
 $include $lib/editor
+$include $lib/lmgr
+$include $lib/match
+$include $lib/mesg
+$include $lib/mesgbox
+$include $lib/props
+$include $lib/strings
   
 $def .sedit_std EDITOR
-$def STRtolower tolower
 $def DAYOFFSET 7800
  
 $ifdef GUI
 $include $lib/gui
-$def tell descrcon swap connotify
-$def }join } array_make "" array_join
 lvar messData
 lvar curMess
 lvar messDlog
@@ -57,9 +54,6 @@ $ifdef DAYOFFSET
     DAYOFFSET -
 $endif
 ;
-  
-  
-$define showrange EDITdisplay $enddef
   
   
 ( ***** Message Board Object -- MBRD *****
@@ -87,7 +81,7 @@ $define showrange EDITdisplay $enddef
     swap intostr " " strcat swap strcat
     swap int intostr " " strcat swap strcat
     swap intostr " " strcat swap strcat
-    swap ";" " " subst STRtolower " " strcat
+    swap ";" " " subst tolower " " strcat
     swap strcat "$" swap strcat
 ;
   
@@ -228,12 +222,12 @@ lvar tmp
   
     (display the message)
     "" 4 pick 4 pick 4 pick MBRDdisplay-header
-    MBOX-message showrange
+    MBOX-message EDITdisplay
     0 (No error.)
 ;
   
 : MBRDdisplay (parmstr base dbref -- err)
-    rot STRtolower -3 rotate (lowercase parmstr)
+    rot tolower -3 rotate (lowercase parmstr)
   
     begin (Not a loop.  Used for fake case, to provide breaks)
   
@@ -289,7 +283,7 @@ lvar tmp
   
             (display the message)
             "" 4 pick 4 pick 4 pick MBRDdisplay-header
-            MBOX-message showrange
+            MBOX-message EDITdisplay
             me @ "  " notify
             break
         then
@@ -693,7 +687,7 @@ $def get_gui_val [] array_vals pop
         else
             preempt
             refNum @ basename bbsobj @ MBOX-badref? if
-                "Bad objref" refNum intostr strcat DESCR tell
+                "Bad objref" refNum intostr strcat DESCR .tell
             else
                 refnum @ basename bbsobj @ 3 pick 3 pick 3 pick MBRDparseinfo
                 4 rotate not -4 rotate MBRDsetinfo
@@ -722,7 +716,7 @@ $def get_gui_val [] array_vals pop
     "Yes" strcmp not if
         preempt
         refNum @ basename bbsobj @ MBOX-badref? if
-            "Bad objref" refNum intostr strcat DESCR tell
+            "Bad objref" refNum intostr strcat DESCR .tell
         else
             refNum @ basename bbsobj @ MBRDperms? not if
                 (not owner of mesgboard or poster)
@@ -753,7 +747,7 @@ $def get_gui_val [] array_vals pop
         mItem @ "refnum" [] var! refNum
         preempt
         refNum @ basename bbsobj @ MBOX-badref? if
-            "Bad objref" mItem intostr strcat DESCR tell
+            "Bad objref" mItem intostr strcat DESCR .tell
         else
             messDlog @ "subj" mItem @ "subject" [] GUI_VALUE_SET
             messDlog @ "date" mItem @ "date" [] GUI_VALUE_SET
@@ -772,7 +766,7 @@ $def get_gui_val [] array_vals pop
 : gui_listchange_cb[ dict:context str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ "msgs" GUI_VALUE_GET "" array_join atoi curMess !
     messData @ array_count curMess @ < if
-        "How did we get to an item that doesn't exist?" DESCR tell
+        "How did we get to an item that doesn't exist?" DESCR .tell
     else
         gui_listchange
     then
@@ -781,7 +775,7 @@ $def get_gui_val [] array_vals pop
  
 : gui_keywdchange_cb[ dict:context str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ "keylst" GUI_VALUE_GET "" array_join messKeys !
-    "New keywords : " messKeys @ strcat DESCR tell
+    "New keywords : " messKeys @ strcat DESCR .tell
     1 msg_index_gen
     0
 ;
@@ -890,7 +884,7 @@ $def get_gui_val [] array_vals pop
  
 : gui-update[ dict:context str:event -- int:exitReq ]
     1 msg_index_gen
-    "Message list updated." DESCR tell
+    "Message list updated." DESCR .tell
     120 "update" timer_start    
     0
 ;
@@ -966,7 +960,7 @@ $ifdef GUI
 $else
 17
 $endif
-showrange
+EDITdisplay
 ;
   
   
@@ -1024,9 +1018,9 @@ $ifdef GUI
                 gui_event_process
                 pop pop
                 me @ location me @ me @ name " finishes browsing the bulletin board." strcat notify_except
-                "Done." DESCR tell exit
+                "Done." DESCR .tell exit
             else
-                "GUI not available with this client." DESCR tell exit
+                "GUI not available with this client." DESCR .tell exit
             then
         then
 $endif
@@ -1044,9 +1038,9 @@ q
 @register gen-mesgboard=mesgboard
 @register #me gen-mesgboard=tmp/prog1
 @register #me gen-mesgboard=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
+@set $tmp/prog1=W
 
 

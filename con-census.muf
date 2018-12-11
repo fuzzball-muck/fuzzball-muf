@@ -1,18 +1,17 @@
-@prog con-census
-1 9999 d
+@program con-census
+1 99999 d
 1 i
 (Connect time census program by Garth Minette <foxen@netcom.com>)
 (Version 1.2)
-  
+ 
 (Number of users listed in sorted list of most hours online that month)
 $def TOP_LIST_COUNT 20
-  
-  
+ 
 : GetOnTimeProp (player -- dbref propname)
   prog "_players/%m/" systime timefmt
   rot int intostr strcat
 ;
-  
+ 
 : update-record (d s i -- )
   3 pick 3 pick getpropval
   over < if
@@ -21,23 +20,23 @@ $def TOP_LIST_COUNT 20
     pop pop pop
   then
 ;
-  
+ 
 : check-max-today
   prog "_day/%y/%m/%d" systime timefmt
   concount update-record
 ;
-  
+ 
 : check-max-record
   prog "_most_on_ever"
   concount update-record
 ;
-  
+ 
 : log-player-login
   me @ awake? 1 > if exit then
   me @ "@/logintime" "" systime addprop
   me @ "@/notedtime" remove_prop
 ;
-  
+ 
 : english-delta-time (i -- s)
   60 / dup 60 %
   dup if intostr " minutes " strcat else pop "" then
@@ -45,7 +44,7 @@ $def TOP_LIST_COUNT 20
   dup if intostr " hours " strcat else pop "" then
   swap strcat
 ;
-  
+ 
 : get-recorded-time-period ( -- s)
   prog timestamps pop pop pop
   systime swap - 86400 /
@@ -56,30 +55,11 @@ $def TOP_LIST_COUNT 20
   intostr " days" strcat
   "in the last " swap strcat
 ;
-  
-: announce-usage
-  me @ GetOnTimeProp getpropval
-  dup 60 < if pop exit then
-  "## You have been online for "
-  swap english-delta-time strcat
-  get-recorded-time-period strcat
-  me @ swap notify
-;
-  
-  
-: login-handler
-  check-max-today
-  check-max-record
-  log-player-login
-  
-  me @ "_prefs/logintime?" getpropstr
-  "yes" stringcmp not if announce-usage then
-;
-  
+ 
 : into2digits (i -- s)
   dup intostr swap 10 < if "0" swap strcat then
 ;
-  
+ 
 : int2time (i -- s)
   dup 60 % into2digits swap 60 /
   dup 60 % into2digits "." strcat swap 60 /
@@ -87,7 +67,7 @@ $def TOP_LIST_COUNT 20
   dup strlen 4 - strcut swap pop
   "." strcat swap strcat swap strcat
 ;
-  
+ 
 : update-sorted-moston (dbref oldtime newtime -- )
   prog "_mosttime/%m/" systime timefmt
   over over 6 rotate int2time strcat over over remove_prop
@@ -109,7 +89,7 @@ $def TOP_LIST_COUNT 20
     pop pop
   then
 ;
-  
+ 
 : update-usetime (d -- )
   dup "@/notedtime" getpropval
   over "@/notedtime" "" systime addprop
@@ -126,15 +106,36 @@ $def TOP_LIST_COUNT 20
   update-sorted-moston
   "" swap addprop
 ;
+ 
+: announce-usage
+  me @ update-usetime
+  me @ GetOnTimeProp getpropval
+  dup 60 < if
+    "## You have only been online for a short while."
+  else
+    "## You have been online for "
+    swap english-delta-time strcat
+    get-recorded-time-period strcat
+  then
+  tell
+;
+ 
+: login-handler
+  check-max-today
+  check-max-record
+  log-player-login
   
-  
+  me @ "_prefs/logintime?" getpropstr
+  "yes" stringcmp not if announce-usage then
+;
+ 
 : logout-handler
   me @ update-usetime
   me @ awake? if exit then
   me @ "@/logintime" remove_prop
   me @ "@/notedtime" remove_prop
 ;
-  
+ 
 : startup-handler
   60 sleep
   begin
@@ -149,7 +150,7 @@ $def TOP_LIST_COUNT 20
     pop
   repeat
 ;
-  
+ 
 : dispatcher
   command @ "Queued event." stringcmp not if
     dup "Connect" stringcmp not if pop login-handler exit then
@@ -163,9 +164,14 @@ $def TOP_LIST_COUNT 20
 .
 c
 q
-@set con-census=W
-@set con-census=A
-@set con-census=L
-@set con-census=3
-@reg #prop #0:_connect con-census=census
-@reg #prop #0:_disconnect con-census=census
+@register #me con-census=tmp/prog1
+@register #prop #0:_connect $tmp/prog1=census
+@register #prop #0:_disconnect $tmp/prog1=census
+@set $tmp/prog1=_norestart:yes
+@set $tmp/prog1=3
+@set $tmp/prog1=A
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@action census=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

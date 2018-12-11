@@ -1,11 +1,10 @@
-@prog game-chess.muf
+@program game-chess.muf
 1 99999 d
 1 i
 ( An MCP-aware game of chess.                              )
  
 lvar piecenames
  
-$def }join }list "" array_join
 $def CHESS_PKGNAME "org-fuzzball-chess"
  
  
@@ -1863,7 +1862,7 @@ $def CHESS_PKGNAME "org-fuzzball-chess"
 c
 q
 @register #me game-chess.muf=tmp/prog1
-@set $tmp/prog1=A
 @set $tmp/prog1=3
+@set $tmp/prog1=A
 
 

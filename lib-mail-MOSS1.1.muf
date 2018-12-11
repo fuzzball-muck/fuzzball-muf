@@ -1,9 +1,8 @@
-@name MOSS1.0.muf=MOSS1.1.muf
-@prog MOSS1.1.muf
-1 10000 d
+@program MOSS1.1.muf
+1 99999 d
 i
 (
-Mail Organization and Storage System <MOSS> 1.1 my Fre'ta @ FurryMUCK, etc etc
+Mail Organization and Storage System <MOSS> 1.1 by Fre'ta @ FurryMUCK, etc etc
 Copyright 1996 by Fre'ta <Steven Lang>
  
 This code may be freely distributed!
@@ -28,6 +27,10 @@ interface, however it will show up with the 'you quick-mail' stuff.  Perhaps
 in the future I will add code to allow programs to send messages and take
 care of any displaying themselves.
 )
+ 
+$author Steven Lang [Fre'ta]
+$doccmd @list __PROG__=!@1-26
+$lib-version 1.1
  
 ( Config stuff..  If you don't want an option, comment out the line that )
 ( defines it, otherwise leave it defined, and add a value if needed )
@@ -2261,40 +2264,36 @@ $endif
   "*Done*" tellme deinit
   me @ clearlock
 ;
+ 
 PUBLIC maintenence
-PUBLIC unreadcount
 PUBLIC savedcount
 PUBLIC qcall
-
-$pubdef MAILnew "$lib/mail" match "unreadcount" call
-$pubdef MAILsaved "$lib/mail" match "savedcount" call
-$pubdef QUICKsend 1 "$lib/mail" match "qcall" call
-$pubdef QUICKread 2 "$lib/mail" match "qcall" call
-$pubdef QUICKerase 3 "$lib/mail" match "qcall" call
-$pubdef QUICKforward 4 "$lib/mail" match "qcall" call
-$pubdef QUICKcheck 5 "$lib/mail" match "qcall" call
-$pubdef QUICKscan 6 "$lib/mail" match "qcall" call
+PUBLIC unreadcount
+ 
+$pubdef MAILnew		__PROG__ "unreadcount" call
+$pubdef MAILsaved	__PROG__ "savedcount" call
+$pubdef QUICKcheck	5 __PROG__ "qcall" call
+$pubdef QUICKerase	3 __PROG__ "qcall" call
+$pubdef QUICKforward	4 __PROG__ "qcall" call
+$pubdef QUICKread	2 __PROG__ "qcall" call
+$pubdef QUICKscan	6 __PROG__ "qcall" call
+$pubdef QUICKsend	1 __PROG__ "qcall" call
 .
 c
 q
 @reg MOSS1.1.muf=lib/mail
-@set $lib/mail=!d
-@set $lib/mail=!z
-@set $lib/mail=!l
-@set $lib/mail=w
-@prog MOSS-mailwarn
-1 9999 d
+@set $lib/mail=3
+@set $lib/mail=V
+@set $lib/mail=W
+@program MOSS-mailwarn
+1 99999 d
 i
 : mane "$lib/mail" match "maintenence" call ;
 .
 c
 q
-@set MOSS-mailwarn=!d
-@set MOSS-mailwarn=!z
-@set MOSS-mailwarn=l
-@set MOSS-mailwarn=w
-@propset #0=dbref:_connect/MOSS:MOSS-mailwarn
-whisper me=MOSS 1.1 installed.  Don't forget to read and set the configuration parameters at the beginning of the program.
-whisper me=If you want to use MOSS 1.1 for page #mail, you will need to get cmd-page 2.50 or newer from the FB-MUF archive.  Edit the config options at the beginning of page, changing MAILTYPE to LIBMAIL.
-whisper me=To use MOSS 1.1 as a standalone program, or as a compliment to the LIBMAIL option of page, create an action called qmail;mail and link it to $lib/mail.
-
+@register #me MOSS-mailwarn=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@register #prop #0:_connect MOSS-mailwarn=MOSS

@@ -1,4 +1,4 @@
-@prog lib-optionsmisc
+@program lib-optionsmisc
 1 99999 d
 1 i
 ( $lib/optionsmisc Copyright 8/13/2003 by Revar <revar@belfry.com> )
@@ -11,15 +11,13 @@
 (     Initial relase.                                              )
 
 $author Revar Desmera <revar@belfry.com>
-$version 1.000
 $lib-version 1.000
 $note Released under the LGPL.
+$version 1.000
 
 (
     Docs go here.
 )
-
-$include $lib/case
 
 ( ------------------------------------------------------------- )
 
@@ -235,29 +233,20 @@ $include $lib/case
     #-1
 ;
 
-
-public optmisc_equalvals?
-public optmisc_timespan2str
-public optmisc_objtype_normalize
-public optmisc_objtype_check
-public optmisc_dbref_option_list
-public optmisc_dbref_unparse
-public optmisc_dbref_parse
-
-$libdef optmisc_equalvals?
-$libdef optmisc_timespan2str
-$libdef optmisc_objtype_normalize
-$libdef optmisc_objtype_check
-$libdef optmisc_dbref_option_list
-$libdef optmisc_dbref_unparse
-$libdef optmisc_dbref_parse
+public optmisc_dbref_option_list	$libdef optmisc_dbref_option_list
+public optmisc_dbref_parse		$libdef optmisc_dbref_parse
+public optmisc_dbref_unparse		$libdef optmisc_dbref_unparse
+public optmisc_equalvals?		$libdef optmisc_equalvals?
+public optmisc_objtype_check		$libdef optmisc_objtype_check
+public optmisc_objtype_normalize	$libdef optmisc_objtype_normalize
+public optmisc_timespan2str		$libdef optmisc_timespan2str
 .
 c
 q
 @register lib-optionsmisc=lib/optionsmisc
 @register #me lib-optionsmisc=tmp/prog1
-@set $tmp/prog1=W
+@set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=3
+@set $tmp/prog1=W
 

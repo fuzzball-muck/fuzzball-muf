@@ -1,4 +1,4 @@
-@prog lib-mesg
+@program lib-mesg
 1 99999 d
 1 i
 ( **** Message Object -- MSG- ****
@@ -52,14 +52,16 @@ Message data type:
   Base#/X       Message Items
   Base#/i       Info String
 )
-  
+ 
+$doccmd @list __PROG__=!@1-50
+ 
 ( $def the following if your muck uses the new style propdirized lists )
 ( ie:  listname#/1:line one    listename#/2:line two    etc. )
 $def SLASHED_LISTS
-  
-$include $lib/props
+ 
 $include $lib/lmgr
-  
+$include $lib/props
+ 
 : MSG-destroy (base dbref -- )
 $ifdef SLASHED_LISTS
     over over swap "#/i" strcat remove_prop
@@ -70,7 +72,7 @@ $else
 $endif
     LMGR-deletelist
 ;
-  
+ 
 : MSG-setinfo (infostr base dbref -- )
     swap
 $ifdef SLASHED_LISTS
@@ -78,7 +80,7 @@ $ifdef SLASHED_LISTS
 $endif
     "/i" strcat rot setpropstr
 ;
-  
+ 
 : MSG-create ({strrange} infostr base dbref -- )
     over over MSG-destroy
     rot 3 pick 3 pick MSG-setinfo
@@ -89,7 +91,7 @@ $ifndef SLASHED_LISTS
 $endif
     LMGR-putrange
 ;
-  
+ 
 : MSG-count (base dbref -- count)
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
@@ -101,7 +103,7 @@ $ifndef SLASHED_LISTS
 $endif
     LMGR-getcount
 ;
-  
+ 
 : MSG-message (base dbref -- {strrange})
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
@@ -115,7 +117,7 @@ $ifndef SLASHED_LISTS
 $endif
     LMGR-getlist
 ;
-  
+ 
 : safeclear (d s -- )
     over over propdir? if
         over over "" -1 addprop
@@ -124,7 +126,7 @@ $endif
         remove_prop
     then
 ;
-  
+ 
 : MSG-clearoldinfo (base dbref -- )
     swap
 $ifdef SLASHED_LISTS
@@ -134,20 +136,20 @@ $else
     "/i" strcat safeclear
 $endif
 ;
-  
+ 
 : MSG-oldinfo (base dbref -- infostr)
     swap "/i" strcat getpropstr
 ;
-  
+ 
 : MSG-newinfo (base dbref -- infostr)
     swap "#/i" strcat getpropstr
 ;
-  
+ 
 : convert-info (base dbref value -- )
     3 pick 3 pick MSG-clearoldinfo
     rot rot MSG-setinfo
 ;
-  
+ 
 : MSG-info (base dbref -- infostr)
 $ifdef SLASHED_LISTS
     over over MSG-newinfo
@@ -162,7 +164,7 @@ $else
 $endif
     pop pop pop ""
 ;
-  
+ 
 : MSG-item (itemnum base dbref -- itemstr)
 $ifndef SLASHED_LISTS
     3 pick 3 pick "/" strcat 3 pick
@@ -174,22 +176,21 @@ $ifndef SLASHED_LISTS
 $endif
     LMGR-getelem
 ;
-  
+ 
 : MSG-setitem (itemstr itemnum base dbref -- )
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
 $endif
     LMGR-putelem
 ;
-  
+ 
 : MSG-insitem (itemstr itemnum base dbref -- )
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
 $endif
     1 -4 rotate LMGR-insertrange
 ;
-  
-  
+ 
 : MSG-append (itemstr base dbref -- )
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
@@ -197,30 +198,34 @@ $endif
     over over LMGR-getcount 1 +
     rot rot LMGR-putelem
 ;
-  
+ 
 : MSG-delitem (itemnum base dbref -- )
 $ifndef SLASHED_LISTS
     swap "/" strcat swap
 $endif
     1 -4 rotate LMGR-deleterange
 ;
-  
-PUBLIC MSG-destroy $libdef MSG-destroy
-PUBLIC MSG-create $libdef MSG-create
-PUBLIC MSG-count $libdef MSG-count
-PUBLIC MSG-info $libdef MSG-info
-PUBLIC MSG-setinfo $libdef MSG-setinfo
-PUBLIC MSG-message $libdef MSG-message
-PUBLIC MSG-item $libdef MSG-item
-PUBLIC MSG-setitem $libdef MSG-setitem
-PUBLIC MSG-insitem $libdef MSG-insitem
-PUBLIC MSG-append $libdef MSG-append
-PUBLIC MSG-delitem $libdef MSG-delitem
+ 
+public MSG-append	$libdef MSG-append
+public MSG-count	$libdef MSG-count
+public MSG-create	$libdef MSG-create
+public MSG-delitem	$libdef MSG-delitem
+public MSG-destroy	$libdef MSG-destroy
+public MSG-info		$libdef MSG-info
+public MSG-insitem	$libdef MSG-insitem
+public MSG-item		$libdef MSG-item
+public MSG-message	$libdef MSG-message
+public MSG-setinfo	$libdef MSG-setinfo
+public MSG-setitem	$libdef MSG-setitem
 .
 c
 q
 @register lib-mesg=lib/mesg
 @register #me lib-mesg=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=B
+@set $tmp/prog1=H
 @set $tmp/prog1=L
+@set $tmp/prog1=S
 @set $tmp/prog1=V
-@set $tmp/prog1=/_docs:@list $lib/mesg=1-50
+@register #me =tmp

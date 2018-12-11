@@ -1,4 +1,4 @@
-@prog cmd-@doing
+@program cmd-@doing
 1 99999 d
 1 i
 ( cmd-@doing  ver 1.2
@@ -9,6 +9,8 @@
        doesn't clear doing unless you logged out for longer than 20 minutes.
 )
   
+$version 1.2
+ 
 : add-doing (s -- )
     dup strlen 40 >
     if
@@ -77,9 +79,8 @@ q
 @register #me cmd-@doing=tmp/prog1
 @register #prop #0:_connect cmd-@doing=nukedoingclear
 @register #prop #0:_disconnect cmd-@doing=doingclear
-@set $tmp/prog1=W
-@set $tmp/prog1=L
 @set $tmp/prog1=3
-@set $tmp/prog1=_version:1.2
+@set $tmp/prog1=L
+@set $tmp/prog1=W
 @action @doing;@doin;@doi;@do=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1

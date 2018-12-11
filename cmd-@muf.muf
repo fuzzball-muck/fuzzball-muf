@@ -8,8 +8,8 @@
   "@view $box/mit" for license information.
 )
 $author Natasha O'Brien <mufden@mufden.fuzzball.org>
-$version 1.0
 $note Runs MUF code you enter. A MUF version of @mpi.
+$version 1.0
  
 : rtn-pretty  ( arr -- str }  Return a prettily formatted string displaying all the contents of arr. )
     "" swap  ( str arr )
@@ -99,6 +99,7 @@ $note Runs MUF code you enter. A MUF version of @mpi.
 .
 c
 q
+@set cmd-@muf=3
 @set cmd-@muf=W
 @action @muf=#0=tmp/exit1
 @link $tmp/exit1=cmd-@muf

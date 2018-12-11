@@ -1,19 +1,11 @@
-@prog cmd-@archive
+@program cmd-@archive
 1 99999 d
 1 i
-( @const object=aefi           )
-( @dig roomname=parent=regname )
-( @act exitname=source=regname )
-( @cre thingname=value=regname )
-( @reg object=regname          )
-  
-$include $lib/strings
 $include $lib/match
-$include $lib/edit
-  
+ 
 : show-help
 {
-"Syntax: @archive <object>[=1acefil]"
+"Syntax: @archive <object>[=1acefilp]"
 " @archive <object>=1    Archive only that object."
 " @archive <object>=a    Archive all, regardless of owner.  (wizards only)."
 " @archive <object>=c    Don't archive contents."
@@ -23,9 +15,9 @@ $include $lib/edit
 " @archive <object>=l    Don't follow links or droptos in archiving."
 " @archive <object>=p    Don't archive programs at all."
 "NOTE: Turn off your client's wordwrap before logging an @archive output."
-} EDITdisplay
+}tell
 ;
-  
+ 
 lvar originalobj
 lvar here?
 lvar owned?
@@ -39,7 +31,7 @@ lvar roomcnt
 lvar exitcnt
 lvar thingcnt
 lvar progcnt
-  
+ 
 : wait-for-buffer ( -- )
     descr descrflush
     begin
@@ -48,27 +40,27 @@ lvar progcnt
         1 sleep
     repeat
 ;
- 
+
 : clear-refnames ( -- )
   me @ "_tempreg" remove_prop
 ;
-  
+ 
 : get-refname (d -- s)
   me @ over dbcmp if pop "me" exit then
   #0 over dbcmp if pop "#0" exit then
   me @ "_tempreg/" rot int intostr strcat getpropstr
   dup if "$" swap strcat then
 ;
-  
+ 
 : is-refname (d -- s)
   me @ "_tempreg/" rot int intostr strcat getpropstr
   not not
 ;
-  
+ 
 : set-refname (d s -- )
   me @ "_tempreg/" 4 rotate int intostr strcat rot 0 addprop
 ;
-  
+ 
 : in-environ? (d -- i)
   begin
     dup while
@@ -76,7 +68,7 @@ lvar progcnt
     location
   repeat pop 0
 ;
-  
+ 
 : dump-registration-loop ( d d s -- )
   begin
     over swap nextprop
@@ -89,7 +81,7 @@ lvar progcnt
       3 pick me @ dbcmp if "#me " strcat then
       4 pick name strcat "=" strcat
       over 6 strcut swap pop strcat
-      me @ swap notify
+      tell
     then
     over over propdir? if
       3 pick 3 pick 3 pick "/" strcat
@@ -98,12 +90,12 @@ lvar progcnt
   repeat
   pop pop pop
 ;
-  
+ 
 : dump-registration ( d d -- )
   (searchforobj propsobj )
   "/_reg/" dump-registration-loop
 ;
-  
+ 
 : get-globalrefs-loop (d s -- )
   begin
     over swap nextprop dup while
@@ -121,12 +113,11 @@ lvar progcnt
     then
   repeat pop pop
 ;
-  
+ 
 : get-globrefs ( -- )
   #0 "_reg/" get-globalrefs-loop
 ;
-  
-  
+ 
 : translate-lockstr (s -- s)
   "" swap
   dup "*UNLOCKED*" stringcmp not if pop pop "" exit then
@@ -141,7 +132,7 @@ lvar progcnt
   repeat
   strcat
 ;
-  
+ 
 : dump-lock (d -- )
   me @ "wizard" flag? if pop exit then
   dup "@/flk" getprop
@@ -151,10 +142,9 @@ lvar progcnt
   "@flock " rot get-refname strcat
   "=" strcat swap strcat
   wait-for-buffer
-  me @ swap notify
+  tell
 ;
-  
-  
+ 
 : dump-props-loop (s d s -- ) (refname object propdir -- )
   begin
     wait-for-buffer
@@ -185,14 +175,14 @@ lvar progcnt
       "@propset " 5 pick strcat
       "=str:" strcat 3 pick strcat
       ":" strcat swap strcat
-      me @ swap notify
+      tell
     else (not a string)
       dup int? if
         dup if
           "@propset " 5 pick strcat
           "=int:" strcat 3 pick strcat
           ":" strcat swap intostr strcat
-          me @ swap notify
+          tell
         else pop
         then
       else (not an int.)
@@ -202,14 +192,14 @@ lvar progcnt
           "@propset " 5 pick strcat
           "=dbref:" strcat 3 pick strcat
           ":" strcat swap strcat
-          me @ swap notify
+          tell
         else (not a dbref.)
           dup float? if
             dup if
               "@propset " 5 pick strcat
               "=float:" strcat 3 pick strcat
               ":" strcat swap ftostr strcat
-              me @ swap notify
+              tell
             else pop
             then
           else (not a float  Must be a lock.  Fun fun parse time.)
@@ -218,7 +208,7 @@ lvar progcnt
             "@propset " 5 pick strcat
             "=lock:" strcat 3 pick strcat
             ":" strcat swap strcat
-            me @ swap notify
+            tell
           then (float?)
         then (dbref?)
       then (int?)
@@ -227,7 +217,7 @@ lvar progcnt
     over over blessed? if
         "@bless " 4 pick strcat
         "=" strcat over strcat
-        me @ swap notify
+        tell
     then
     over over propdir? if
       3 pick 3 pick 3 pick
@@ -235,11 +225,11 @@ lvar progcnt
     then
   repeat
 ;
-  
+ 
 : dump-props (d -- )  (object -- )
   dup get-refname swap "/" dump-props-loop
 ;
-  
+ 
 : dump-flags (d -- )
   dup unparseobj dup "#" rinstr strcut swap pop
   dup strlen 1 - strcut pop
@@ -255,11 +245,11 @@ lvar progcnt
     "@set " 3 pick get-refname strcat
     "=" strcat swap 1 strcut rot rot strcat
     wait-for-buffer
-    me @ swap notify
+    tell
   repeat
   pop pop
 ;
-  
+ 
 : dump-obj (d -- )
   wait-for-buffer
   dup ok? not if pop exit then
@@ -279,12 +269,12 @@ lvar progcnt
     "@dig " 3 pick name strcat
     "=" strcat 3 pick location get-refname strcat
     "=" strcat over strcat
-    me @ swap notify
+    tell
     over swap set-refname
     dup getlink if
       "@link " over get-refname strcat
       "=" strcat over getlink get-refname strcat
-      me @ swap notify
+      tell
     then
     dup dump-lock
     dup dump-flags
@@ -320,14 +310,14 @@ lvar progcnt
       "tmp/player" playercnt @ intostr strcat
       "@pcreate " 3 pick name strcat
       "=<password>" strcat
-      me @ swap notify
+      tell
       "@register #me *" 3 pick name strcat
       "=" strcat over strcat
-      me @ swap notify
+      tell
       over swap set-refname
       "@link " over get-refname strcat
       "=" strcat over getlink get-refname strcat
-      me @ swap notify
+      tell
       dup dump-lock
       dup dump-flags
       dup dump-props
@@ -358,14 +348,14 @@ lvar progcnt
     "@create " 3 pick name strcat
     "=" strcat 3 pick pennies 1 + 5 * intostr strcat
     "=" strcat over strcat
-    me @ swap notify
+    tell
     over swap set-refname
-    "@tel " over get-refname strcat
+    "@teleport " over get-refname strcat
     "=" strcat over location get-refname strcat
-    me @ swap notify
+    tell
     "@link " over get-refname strcat
     "=" strcat over getlink get-refname strcat
-    me @ swap notify
+    tell
     dup dump-lock
     dup dump-flags
     dup dump-props
@@ -395,11 +385,11 @@ lvar progcnt
     "@action " 3 pick name strcat
     "=" strcat 3 pick location get-refname strcat
     "=" strcat over strcat
-    me @ swap notify
+    tell
     over swap set-refname
     "@link " over get-refname strcat
     "=" strcat over getlink get-refname strcat
-    me @ swap notify
+    tell
     dup dump-lock
     dup dump-flags
     dup dump-props
@@ -409,8 +399,8 @@ lvar progcnt
     progcnt @ 1 + progcnt !
     "tmp/prog" progcnt @ intostr strcat
     (dbref refname)
-    "@prog " 3 pick name strcat
-    me @ swap notify
+    "@program " 3 pick name strcat
+    tell
     me @ "1 99999 d" notify
     me @ "1 i" notify
     ( Old code: me @ "@list #" 4 pick intostr strcat force )
@@ -430,7 +420,7 @@ lvar progcnt
     over me @ dump-registration
     over name "@register #me " swap strcat
     "=" strcat over strcat
-    me @ swap notify
+    tell
     over swap set-refname
     dup dump-lock
     dup dump-flags
@@ -438,7 +428,7 @@ lvar progcnt
     pop exit
   then
 ;
-  
+ 
 : archiver
   clear-refnames
   "=" split strip swap strip
@@ -458,6 +448,7 @@ lvar progcnt
   dup originalobj !
   me @ "[Start Dump]" notify
   dump-obj
+  me @ "@register #me =tmp" notify
   me @ "[End Dump]" notify
   clear-refnames
 ;
@@ -465,8 +456,9 @@ lvar progcnt
 c
 q
 @register #me cmd-@archive=tmp/prog1
-@set $tmp/prog1=W
-@set $tmp/prog1=L
-@set $tmp/prog1=V
 @set $tmp/prog1=3
-
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@action @archive;@archiv;@archi;@arch;@arc=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp
