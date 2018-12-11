@@ -70,7 +70,7 @@ $def KEY "Put the string here"
 ( A program to call to convert any other form of mail to MOSS format )
 ( This program should take a dbref and an address, calling the address as )
 ( to from subject {mesg} sent read type )
-( to is a space seperated list of dbrefs in int format, from is the dbref )
+( to is a space-separated list of dbrefs in int format, from is the dbref )
 ( it's from, subject is the string subject, {mesg} is a string range, sent )
 ( is a 'systime' of when it was sent, read is a 'systime of when it was read )
 ( and type is 0 for new or 1 for saved )
@@ -276,7 +276,7 @@ lvar runmode
   rot swap - swap /
 ;
  
-: cmdnum ( s1 s2 --  Returns the index of s2 in a space seperated list s1 )
+: cmdnum ( s1 s2 --  Returns the index of s2 in a space-separated list s1 )
   " " swap tolower strip strcat swap " " swap tolower strip strcat swap
   over over instr rot swap strcut rot instr if
     pop 0 exit
@@ -1154,7 +1154,7 @@ $endif
   "area.  He explains, \"To see the FEEP, you must guess my five colors.  "
   "Every time you guess, I will tell you if you have a correct color, a "
   "correct color in the wrong place, or the wrong color, but I won't tell "
-  "you wich ones are which!  Each guess must be made on a seperate row on "
+  "you wich ones are which!  Each guess must be made on a separate row on "
   "the board.  If you run out of room..\" He chuckles a little, sending "
   "shivers up your spine, \"Well..  Don't run out of room.  If however you "
   "are a coward, you may at any time 'quit'.  So, on with the challenge!\""
