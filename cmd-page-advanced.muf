@@ -12,6 +12,7 @@ $version 3.02
 $include $lib/alias
 $include $lib/away
 $include $lib/ignore
+$include $lib/look
 $include $lib/props
   
 ( CONFIGURATION )
@@ -1131,7 +1132,7 @@ $def ignoring? ignored?
   
   
 : list-ignored ( -- string)
-    me @ "page" ignore-list #20 ($lib/look) "short-list" call  ("" me @ getignorestr}  $lib/ignore Natasha@HLM 13 June 2002
+    me @ "page" ignore-list .short-list  ("" me @ getignorestr}  $lib/ignore Natasha@HLM 13 June 2002
     strip single-space
     begin
         dup while
