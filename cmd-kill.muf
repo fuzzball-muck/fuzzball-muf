@@ -51,6 +51,10 @@ $def TP_KILL_BONUS 50
     "be killed in rooms which have the HAVEN flag set.  On systems where"
     "the KILL_OK flag is used, you cannot kill someone unless both you"
     "and they are set Kill_OK."
+    " "
+    "Getting killed is no big deal. If you are killed, you return to your home,"
+    "and all things you carry return to their homes. You also collect 50 pennies"
+    "in insurance money (unless you have >= 10000 pennies)."
   }tell
 ;
  
