@@ -4,6 +4,11 @@ This is a collection of MUFs and other programs or files usable with Fuzzball, a
 fuzzball-muf has no license of its own, so each file is individually licensed with whatever license it mentions in its comments.
 New submissions are welcome!  New submissions must be licensed under an open-source license or be public domain in order to be included.  The MIT (expat) license is a recommended license.
 
+The Fuzzball website:
+https://www.fuzzball.org/
+fbmuf's GitHub repository:
+https://github.com/fuzzball-muck/fuzzball-muf
+
 Other useful repositories include:
 https://github.com/natmeox/hlm-suite
 (more to be added)
