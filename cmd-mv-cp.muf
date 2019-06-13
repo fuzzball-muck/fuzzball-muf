@@ -22,6 +22,9 @@
     user is a !Quelled Wizard. -- Jessy
     9/99 Added a line at the beginning of main to catch dbref spoofing.
     -- Jessy
+    6/2019 Fixed it so prop type is preserved on copy/move, generally
+    modernized the code around prop handling as it has a lot of FB4
+    and FB5 era weirdness. (tanabi)
 )
  
 $doccmd @list __PROG__=!@1-22
@@ -43,21 +46,19 @@ lvar copy?
 : cp-mv-prop ( d s d s -- i )
   dup checkperms
   3 pick checkperms
-  4 pick 4 pick getpropstr
+ 
+  4 pick 4 pick getprop ( d s d s ? )
+ 
   dup if
-    3 pick 3 pick rot 0 addprop
+    3 pick 3 pick rot setprop
   else
-    pop 4 pick 4 pick getpropval
-    dup if
-      3 pick 3 pick "" 4 rotate addprop
-    else
-      pop 4 pick 4 pick propdir? not if
-        "I don't see what property to "
-        copy? @ if "copy." else "move." then
-        strcat tell pop pop pop pop 0 exit
-      then
+    pop 4 pick 4 pick propdir? not if
+      "I don't see what property to "
+      copy? @ if "copy." else "move." then
+      strcat tell pop pop pop pop 0 exit
     then
   then
+ 
   4 pick 4 pick propdir? if
     4 pick dup 5 pick "/" strcat nextprop
     (d s dd ds d ss)
@@ -72,6 +73,7 @@ lvar copy?
     repeat
     pop pop
   then
+  
   pop pop
   copy? @ not if remove_prop else pop pop then
   1
