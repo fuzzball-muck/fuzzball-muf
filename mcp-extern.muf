@@ -42,7 +42,13 @@ $def ALLOWED_HOSTS "localhost" "127.0.0.1"
     { ALLOWED_HOSTS }list dscr @ descrhost 
     array_findval not if 0 exit then
 
-    args @ "auth" [] 0 []
+    args @ "auth" []
+    
+    dup array? not if
+      pop 0 exit
+    then
+    
+    0 []
     AUTHTOKEN strcmp not
 ;
    
