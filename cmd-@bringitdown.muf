@@ -14,7 +14,7 @@ $def WARNTIMES 15 10 5 1
 : warn[ str:mesg str:whendown -- ]
     {
         "  "
-        { "## WARNING: " __muckname " will be shutting down " whendown @ }join
+        { "## WARNING: " "muckname" sysparm " will be shutting down " whendown @ }join
         mesg @ if
             "## " mesg @ strcat
         then
@@ -30,14 +30,14 @@ $def WARNTIMES 15 10 5 1
 
     me @ "wizard" flag?
     not if
-        "Permission denied." .tell
+        "Permission denied." tell
         pop exit
     then
 
     args @ tolower
     "#help" 5 strncmp not if
-        "@bringitdown <message> to shut down the MUCK in 15 mins, warning the users." .tell
-        "@bringitdown #restart <message> to restart in 15 mins, warning the users." .tell
+        "@bringitdown <message> to shut down the MUCK in 15 mins, warning the users." tell
+        "@bringitdown #restart <message> to restart in 15 mins, warning the users." tell
         exit
     then
 
@@ -48,7 +48,7 @@ $def WARNTIMES 15 10 5 1
         "!@restart" thecmd !
     else
         args @ "#" 1 strncmp not if
-            "Unrecognized #-option " swap strcat .tell
+            "Unrecognized #-option " swap strcat tell
             exit
         then
     then
@@ -89,7 +89,7 @@ q
 @register #me cmd-@bringitdown=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=W
-@chown $tmp/prog1=#1
 @action @bringitdown=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-
+@chown $tmp/prog1=#1
+@registrer #me =tmp

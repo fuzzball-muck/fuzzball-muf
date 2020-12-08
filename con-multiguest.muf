@@ -37,7 +37,7 @@ $def PassWdMake (i -- s) 3 + 9 * intostr "TimE" swap strcat "tWINe" strcat
 (takes guest# and returns that guests dbref)
 : get-guest-num-dbref (i -- d)
     me @ 1 addpennies
-    get-guest-num-name .pmatch
+    get-guest-num-name pmatch
 ;
   
 (Finds first existing awake guest char)

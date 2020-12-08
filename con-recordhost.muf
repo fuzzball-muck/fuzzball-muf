@@ -22,8 +22,8 @@ $endif
 c
 q
 @register #me con-recordhost=tmp/prog1
-@register #prop #0:_connect con-recordhost=lasthost
 @set $tmp/prog1=3
 @set $tmp/prog1=V
 @set $tmp/prog1=W
+@propset #0=dbref:_connect/lasthost:$tmp/prog1
 @register #me =tmp

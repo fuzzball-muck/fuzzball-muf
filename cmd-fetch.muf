@@ -10,28 +10,28 @@ $include $lib/match
     pop trigger @ "_prefs/container" getpropstr
     dup not if pop me @ "_prefs/container" getpropstr then
     dup not if
-      me @ "Syntax:  fetch <object> from <container>" notify
-      me @ "  or:  fetch <object>   (with a _prefs/container set)"
-      notify exit
+      "Syntax:  fetch <object> from <container>" tell
+      "  or:  fetch <object>   (with a _prefs/container set)" tell
+      exit
     then
   then
   match dup #-2 dbcmp if
-    me @ "I don't know which container you mean." notify exit
+    "I don't know which container you mean." tell exit
   then
   dup not if
-    me @ "I don't see that container here." notify exit
+    "I don't see that container here." tell exit
   then
   dup me @ location dbcmp not
   over location me @ dbcmp not and if
-    me @ "You must be carrying a container to remove something from it."
-    notify exit
+    "You must be carrying a container to remove something from it." tell
+    exit
   then
 
   (itemS contD)
   dup rot dup "all" stringcmp not if pop "*" then .multi_rmatch
   (contD itemDn ... itemD1 itemcountI)
   dup not if
-    me @ "I don't see that item in the container." notify exit
+    "I don't see that item in the container." tell exit
   then
   (contD itemDn ... itemD1 itemcountI)
   dup 2 + rotate

@@ -271,7 +271,7 @@ $define islocked? (d -- i) getlockstr "*UNLOCKED*" stringcmp $enddef
 : main
    'check-obj check-obj-addr !
    strip dup not if pop "here" then
-   .match_controlled
+   match_controlled
    dup #-3 dbcmp if pop me @ getlink then
    dup ok? not if pop exit then
    check-obj

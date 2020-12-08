@@ -5,8 +5,8 @@
 ( Released under the terms of the LGPL.                     )
  
 $author Revar Desmera <revar@belfry.com>
-$note Released under the terms of the LGPL.
 $version 6.03
+$note Released under the terms of the LGPL.
  
 $def WA_PROP  "_whereare"
 $def DIR_PROP "_wherearedir"
@@ -52,7 +52,6 @@ $endif
     opts @ "quell" [] not if
         me @ "w" flag? if 1 exit then
     then
-    who @ ok? not if 0 exit then
     who @ namenever_prop getpropstr if 0 EXIT then
     who @ "H" flag? if 0 EXIT then
     who @ nameok_prop getpropstr if 1 EXIT then
@@ -60,7 +59,6 @@ $endif
       if 0 exit then  (stringcmp reverse logic)
     who @ "_proploc" getpropstr atoi     (d i)
       dup if dbref else pop who @ then
-      dup ok? not if pop 0 exit then
       whereisunfind_prop getpropstr 1 strcut pop "y" stringcmp
 ;
  
@@ -269,56 +267,56 @@ $endif
  
 : set_wa_prop[ str:val -- ]
     me @ dup location controls not if
-        "Permission denied." .tell
+        "Permission denied." tell
         exit
     then
     val @ strip val !
     val @ ansi_strlen 38 > if
-        "The given comment is more than 38 characters in length." .tell
+        "The given comment is more than 38 characters in length." tell
         exit
     then
     me @ location wa_prop val @ setprop
     val @ if
-        "This room will now be shown in the whereare listings." .tell
+        "This room will now be shown in the whereare listings." tell
     else
-        "This room will no longer be shown in whereare listings." .tell
+        "This room will no longer be shown in whereare listings." tell
     then
 ;
  
 : set_wadir_prop[ str:val -- ]
     me @ dup location controls not if
-        "Permission denied." .tell
+        "Permission denied." tell
         exit
     then
     val @ strip val !
     val @ ansi_strlen 38 > if
-        "The given directions are more than 38 characters in length." .tell
+        "The given directions are more than 38 characters in length." tell
         exit
     then
     me @ location dir_prop val @ setprop
     val @ if
-        "Whereare directions set." .tell
+        "Whereare directions set." tell
     else
-        "Whereare directions cleared." .tell
+        "Whereare directions cleared." tell
     then
 ;
  
 : set_whereis[ -- ]
     me @ nameok_prop remove_prop
     me @ namenever_prop remove_prop
-    "WhereAre will now show your name #name or #wf, based on your whereis setting." .tell
+    "WhereAre will now show your name #name or #wf, based on your whereis setting." tell
 ;
  
 : set_always[ -- ]
     me @ nameok_prop "yes" setprop
     me @ namenever_prop remove_prop
-    "WhereAre will now always show your name in a WhereAre #name or #wf list." .tell
+    "WhereAre will now always show your name in a WhereAre #name or #wf list." tell
 ;
  
 : set_never[ -- ]
     me @ namenever_prop "yes" setprop
     me @ nameok_prop remove_prop
-    "WhereAre will now never show your name in a WhereAre #name or #wf list." .tell
+    "WhereAre will now never show your name in a WhereAre #name or #wf list." tell
 ;
  
 $iflib $adultlock
@@ -486,14 +484,13 @@ $endif
     args @ 0 parse_args if exit then
     show_whereare
 ;
- 
 .
 c
 q
 @register #me cmd-whereare=tmp/prog1
 @set $tmp/prog1=3
-@set $tmp/prog1=L
 @set $tmp/prog1=V
 @set $tmp/prog1=W
 @action whereare;wa=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #me =tmp

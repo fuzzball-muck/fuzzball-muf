@@ -2,38 +2,33 @@
 1 99999 d
 1 i
 ( Matching library
-  .noisy_match  [ itemname -- itemdbref ]
+  noisy_match  [ itemname -- itemdbref ]
     Takes a string with a possible item name in it.  It returns the
       dbref of the object is if is found.  If it is not found, it tells
       the user that it doesn't see that here and returns #-1.  If it
       finds several matches it tells the user that it doesn't know which
       item was meant, and returns #-2.
   
-  .noisy_pmatch   [ playername -- playerdbref]
+  noisy_pmatch   [ playername -- playerdbref]
     This routine takes a string with a possible playername and returns
       the dbref of that player, if it can find it.  If it cannot find the
       player, then it tells the user that it doesn't know who that is,
       and it returns #-1.
   
-  .controls  [ playerdbref objectdbref -- controlled? ]
-    This routine takes a player dbref and an object dbref and returns an
-      integer value of 1 if the player controls that object.  Otherwise
-      it returns a 0.
-  
-  .match_controlled  [ itemname -- itemdbref ]
+  match_controlled  [ itemname -- itemdbref ]
     This routine basically does a .noisy_match, and checks that what is
       returned is controlled by the user.  If it is not, then it tells the
       user Permission Denied, and returns #-1.  Otherwise it returns the
       dbref of the item matched.
   
-  .multi_rmatch  [objref smatchstr -- dn .. d1 n]
+  multi_rmatch  [objref smatchstr -- dn .. d1 n]
       This function takes a dbref for the thing/player/room that it is
       to match in, and a smatch style comparison string and returns the
       dbrefs of all the contained objects within who's names matched the
       string.  There is an integer on top giving how many dbrefs were
       returned.  If no items were matched, it only returns a 0.
   
-  .table_match  [ xnone xambig sn xn .. s1 x1 n comp func -- smat xmat ]
+  table_match  [ xnone xambig sn xn .. s1 x1 n comp func -- smat xmat ]
       This function takes, in order:
           - a data value of any type to return if no matches are made.
               {xnone}
@@ -54,7 +49,7 @@
           a null string and xnone if no matches are found.  It returns a
           null string and xambig if more than one match was found.
   
-  .std_table_match
+  std_table_match
     This function runs .table_match with a standard comparator fuction that
       expects the comparators to be strings.  The match comparator routine
       matches if comp matches the beginning of the comparator exactly.
@@ -165,20 +160,12 @@ $doccmd @list __PROG__=!@1-59
   multi_rmatch-loop
 ;
  
-public match_controlled
-public multi_rmatch
-public noisy_match
-public noisy_pmatch
-public std_table_match
-public table_match
- 
-$pubdef .controls		controls
-$pubdef .match_controlled	__PROG__ "match_controlled" call
-$pubdef .multi_rmatch		__PROG__ "multi_rmatch" call
-$pubdef .noisy_match		__PROG__ "noisy_match" call
-$pubdef .noisy_pmatch		__PROG__ "noisy_pmatch" call
-$pubdef .std_table_match	__PROG__ "std_table_match" call
-$pubdef .table_match		__PROG__ "table_match" call
+public match_controlled	$libdef match_controlled
+public multi_rmatch	$libdef multi_rmatch
+public noisy_match	$libdef noisy_match
+public noisy_pmatch	$libdef noisy_pmatch
+public std_table_match	$libdef std_table_match
+public table_match	$libdef table_match
 .
 c
 q

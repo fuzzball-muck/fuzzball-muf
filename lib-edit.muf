@@ -116,17 +116,17 @@ $include $lib/stackrng
     else
         3 pick 3 pick >= if pop pop pop pop exit then
     then
-    over - 1 + swap 4 pick 2 + rot rot SRNGextract
+    over - 1 + swap 4 pick 2 + rot rot sr-extractrng
     ( {rng'} ... offset dest {subrng} )
     dup 3 + rotate over 3 + rotate
     ( {rng'} ... {rng2} offset dest )
-    SRNGinsert
+    sr-insertrng
 ;
  
 : EDITcopy    ( {rng} ... offset dest start end -- {rng'} )
-    over - 1 + swap 4 pick 2 + rot rot SRNGcopy
+    over - 1 + swap 4 pick 2 + rot rot sr-copyrng
     dup 3 + rotate over 3 + rotate
-    SRNGinsert
+    sr-insertrng
 ;
  
 : EDITsort    ( {rng} ascending?  CaseSensitive? -- {rng'} )
@@ -198,7 +198,7 @@ $include $lib/stackrng
         dup 3 + dup rotate pop dup rotate pop
         dup rotate pop dup rotate pop pop exit
     then
-    dup 4 + 1 1 SRNGextract pop
+    dup 4 + 1 1 sr-extractrng pop
     ( {rng} splitchars rmargin wrapmargin {rng2} string )
     dup striplead if
         over 6 + dup pick swap dup pick swap 1 - pick
@@ -227,12 +227,12 @@ $include $lib/stackrng
 : EDITfmt_rng ( {str_rng} ... offset cols start end -- {str_rng'} ... )
     over - 1 + over swap
     ({rng} ... off cols start start cnt )
-    5 pick 3 + swap rot SRNGextract
+    5 pick 3 + swap rot sr-extractrng
     ({rng'} ... off cols start {srng})
     "- " over 4 + rotate dup 20 - EDITformat
     ({rng'} ... off start {srng})
     dup 3 + rotate over 3 + rotate
-    SRNGinsert
+    sr-insertrng
 ;
  
 : EDITshuffle-innerloop ( {rng} shuffles loop -- {rng'} )
@@ -331,10 +331,10 @@ $include $lib/stackrng
 : EDITjoin_rng ( {str_rng} ... offset start end -- {str_rng'} ... )
     over - 1 + over
     ({rng} ... off start cnt start )
-    4 pick 2 + rot rot SRNGextract
+    4 pick 2 + rot rot sr-extractrng
     ({rng'} ... off start {srng})
     EDITjoin 1 4 rotate 4 rotate
-    SRNGinsert
+    sr-insertrng
 ;
  
 public EDITcenter	$libdef EDITcenter

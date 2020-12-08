@@ -6,15 +6,7 @@
 (                                                                )
 ( This code is released under the GNU Public Licence.            )
 (                                                                )
- 
-$version 3.02
 
-$include $lib/alias
-$include $lib/away
-$include $lib/ignore
-$include $lib/look
-$include $lib/props
-  
 ( CONFIGURATION )
   
 ( Restrict guests from paging anyone but a wizard )
@@ -46,8 +38,15 @@ $endif
 $endif
 $endif
  
-$def VERSION "MUFpage v3.02 by Revar"
-$def UPDATED "Updated 6/22/03"
+$include $lib/alias
+$include $lib/away 
+$include $lib/ignore
+$include $lib/stackrng
+  
+$def VERSION "MUFpage v3.00 by Revar"
+$def UPDATED "Updated 3/16/00"
+  
+$def descr_idle descrcon conidle
   
 : oproploc ( dbref -- dbref' )
     dup "_proploc" getpropstr
@@ -69,10 +68,6 @@ $def UPDATED "Updated 6/22/03"
     me @ oproploc
 ;
   
-: tell (string -- )
-    me @ swap notify
-;
-  
 : fillspace
     swap strlen -
     "                                        " ( 40 spaces )
@@ -80,6 +75,7 @@ $def UPDATED "Updated 6/22/03"
     swap strcut pop
 ;
   
+
 ( mail encryption stuff )
   
   
@@ -262,6 +258,16 @@ Gazer's Sort routines
   
   
 ( *** routines to get and set properties *** )
+  
+: setpropstr (dbref propname value -- )
+    dup not if
+        pop 0 setprop
+    else
+        0 addprop
+    then
+;
+  
+: envprop envpropstr swap pop ;
   
 : search-prop (propname -- str)
     myproploc over getpropstr
@@ -1132,7 +1138,7 @@ $def ignoring? ignored?
   
   
 : list-ignored ( -- string)
-    me @ "page" ignore-list .short-list  ("" me @ getignorestr}  $lib/ignore Natasha@HLM 13 June 2002
+    me @ "page" ignore-list sr-shortlist ("" me @ getignorestr}  $lib/ignore Natasha@HLM 13 June 2002
     strip single-space
     begin
         dup while
@@ -1342,13 +1348,13 @@ $ifdef MAILTYPE=PAGEMAIL
 : mail-nuke   ( -- )   (*Tyro}  Stolen from SPR's page by Natasha@HLM 13 June 2002 )
   me @ mail-count dup
     if "Delete " over intostr " page-mail message" strcat strcat swap 1 =
-      if "? (yes/no)" else "s? (yes/no)" then strcat .tell
+      if "? (yes/no)" else "s? (yes/no)" then strcat tell
     read strip " " strcat "{yes|y} " smatch
       if me @ oproploc "_page/mail#" remove_prop
-      "All page-mail messages nuked.  Have a nice day." .tell
-      else "Aborted." .tell
+      "All page-mail messages nuked.  Have a nice day." tell
+      else "Aborted." tell
       then
-    else "No page-mail messages to nuke." .tell
+    else "No page-mail messages to nuke." tell
     then
 ;
   
@@ -1739,12 +1745,12 @@ $endif
 : idle-length (dbref -- int)
     dup player? if
         descriptors dup not if pop -1 exit then
-        1 - swap descridle
+        1 - swap descr_idle
         begin
             over
         while
             swap 1 - swap
-            rot descridle
+            rot descr_idle
             over over > if swap then pop
         repeat
         swap pop
@@ -2175,7 +2181,6 @@ $endif
 {
 VERSION "   Changes" strcat
 "---------------------------------------------------------------------------"
-"v3.02  6/27/03  Used $lib/alias, $lib/away, and $lib/ignore."
 "v3.01  5/20/02  Added %W for 24 hour time in message formats."
 "v3.00  3/16/00  Optimized the code somewhat for FBMUCK 6."
 "v2.51  7/ 3/96  Added %i sub for idle messages to give idle time.  Added"
@@ -2187,14 +2192,14 @@ VERSION "   Changes" strcat
 "v2.34  2/ 5/92  Make lastpaged/r/group encrypted.  Improved encryptions."
 "                 Added partial name matching for last five pagers."
 "v2.32  1/22/92  Added #lookup <player> to list aliases w/ them in them."
+"v2.31 10/31/91  Summoning now gives room# if pagee owns room pager is in."
+"v2.30 10/12/91  Added #priority for letting players page you despite haven."
+"v2.29 10/11/91  Added #sleepmsg, #haven and #ignore messages."
 "-- Type 'page #help' to see more info on each command.  \"feeps 4-ever!\" --"
 }tell
 ;
   
 (  old changes:
-"v2.31 10/31/91  Summoning now gives room# if pagee owns room pager is in."
-"v2.30 10/12/91  Added #priority for letting players page you despite haven."
-"v2.29 10/11/91  Added #sleepmsg, #haven and #ignore messages."
 "v2.26 10/10/91  Fixed #multimax probs, and made #mail remember last paged."
 "v2.25  9/ 6/91  Fixed #proploc page-mail copying problem.  Added #multimax."
 "v2.23  8/21/91  Added #erase for erasing messages mistakenly #mailed."
@@ -2249,7 +2254,6 @@ VERSION "   " strcat UPDATED strcat "   Credits" strcat
 "  Tugrik:       multiple selectable formats"
 "And for help with the code itself"
 "  Fre'ta:       Configurability, strencrypt/strdecrypt, #idle, #away"
-"  Natasha:      $lib/alias, $lib/away, $lib/ignore use"
 "  Riss:         Interactive notification"
 "And this leaves only multi-player paging, #version, #changes, #hints,"
 "#index and page-posing as completely my own ideas that no-one else"
@@ -2860,7 +2864,7 @@ $endif
 $ifdef MAILTYPE=PAGEMAIL
                 pop mail-nuke exit
 $else
-                "KABOOM!" .tell
+                "KABOOM!" tell
 $endif
             then
 $endif
@@ -3062,7 +3066,7 @@ $endif
   
   
 : main
-    me @ player? not if "Only players may page." .tell pop exit then  ( str }  Only players can page Natasha@HLM 5 January 2003 )
+    me @ player? not if "Only players may page." tell pop exit then  ( str }  Only players can page Natasha@HLM 5 January 2003 )
   
     getday setday
   
@@ -3098,15 +3102,15 @@ q
 @register #me cmd-page=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
-@set $tmp/prog1=W
 @action page;pag;pa;p=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
-@set $tmp/exit1=_page/formats/f-page:You page, "%m" to %n.
-@set $tmp/exit1=_page/formats/f-pose:You page-pose, "%i %m" to %n
-@set $tmp/exit1=_page/formats/o-page:%n pages, "%m" to %t.
-@set $tmp/exit1=_page/formats/o-pose:In a page-pose to %t, %n %m
-@set $tmp/exit1=_page/formats/opage:%n pages, "%m" to %t.
-@set $tmp/exit1=_page/formats/opose:In a page-pose to %t, %n %m
-@set $tmp/exit1=_page/formats/page:You page, "%m" to %n.
-@set $tmp/exit1=_page/formats/pose:You page-pose, "%i %m" to %n
+@propset $tmp/exit1=str:_page/formats/f-page:You page, "%m" to %n.
+@propset $tmp/exit1=str:_page/formats/f-pose:You page-pose, "%i %m" to %n.
+@propset $tmp/exit1=str:_page/formats/o-page:%n pages, "%m" to %t.
+@propset $tmp/exit1=str:_page/formats/o-pose:In a page-pose to %t, %n %m
+@propset $tmp/exit1=str:_page/formats/opage:%n pages, "%m" to %t.
+@propset $tmp/exit1=str:_page/formats/opose:In a page-pose to %t, %n %m
+@propset $tmp/exit1=str:_page/formats/page:You page, "%m" to %n.
+@propset $tmp/exit1=str:_page/formats/pose:You page-pose, "%i %m" to %n
+@register #me =tmp
 page #setup

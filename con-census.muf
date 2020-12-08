@@ -165,8 +165,6 @@ $def TOP_LIST_COUNT 20
 c
 q
 @register #me con-census=tmp/prog1
-@register #prop #0:_connect $tmp/prog1=census
-@register #prop #0:_disconnect $tmp/prog1=census
 @set $tmp/prog1=_norestart:yes
 @set $tmp/prog1=3
 @set $tmp/prog1=A
@@ -174,4 +172,6 @@ q
 @set $tmp/prog1=W
 @action census=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #prop #0:_connect $tmp/prog1=census
+@register #prop #0:_disconnect $tmp/prog1=census
 @register #me =tmp

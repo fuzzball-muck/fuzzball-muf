@@ -2,7 +2,6 @@
 1 99999 d
 1 i
 $include $lib/match
-$include $lib/strings
   
 $def locknodebytes 18
 $def propdirbytes 28
@@ -89,7 +88,7 @@ lvar propcount
     unparseobj
     " takes up an estimated " strcat
     bytesused @ overhead @ + intostr strcat
-    " bytes of memory." strcat .tell
+    " bytes of memory." strcat tell
 ;
   
 lvar who
@@ -100,17 +99,17 @@ lvar totalbytes
     0 totalbytes !
     command @ "@sizeall" stringcmp not
     command @ "@sizeallq" stringcmp not or if
-        .pmatch dup not if
-            pop "I don't know who you mean." .tell
+        pmatch dup not if
+            pop "I don't know who you mean." tell
             exit
         then
         me @ over dbcmp not
         me @ "wizard" flag? not and if
-            pop "Permission denied." .tell
+            pop "Permission denied." tell
             exit
         then
         "This will take some time to finish, so I'll tell you when I'm done."
-        .tell who !
+        tell who !
         0 begin
             dup dbtop int < while
             dup dbref ok? if
@@ -128,10 +127,10 @@ lvar totalbytes
         repeat pop
         totalbytes @ intostr
         " estimated bytes uses total." strcat
-        "@sizeall complete." .tell
-        .tell
+        "@sizeall complete." tell
+        tell
     else
-        .match_controlled
+        match_controlled
         dup not if pop exit then
         init dup obj_sizer
         display_size
@@ -140,5 +139,9 @@ lvar totalbytes
 .
 c
 q
+@register #me cmd-@sizer=tmp/prog1
+@set $tmp/prog1=V
+@set $tmp/prog1=W
 @action @sizer;@sizeall;@sizeallq;@size;@siz;@si=#0=tmp/exit1
-@link $tmp/exit1=cmd-@sizer
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

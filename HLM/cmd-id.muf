@@ -1,5 +1,5 @@
 @program cmd-id.muf
-1 1000 d
+1 99999 d
 i
 ( cmd-id.muf by Natasha@HLM
   A simple object describer.
@@ -16,9 +16,6 @@ $version 1.1
 $note A simple object describer.
 
 $include $lib/bits
-$ifnlib $lib/stoplights
-    $def .tellgood .tell
-$endif
 
 : rtn-getType  ( db -- str }  Returns a string identifying the object type of db. )
     dup ok? not if pop "garbage"  exit then  ( db )
@@ -49,25 +46,30 @@ $endif
             over getlink obj-color swap "%s     Link: %s" fmtstring  ( db str )
         then  ( db str )
     then  ( db str )
-    .tellgood pop  (  )
+    tell pop  (  )
 ;
 
 PUBLIC obj-color
 .
 c
 q
-@act id;db=#0
-@link id=cmd-id
-lsedit cmd-id=_help
+@register #me cmd-id=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@action id;db=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+lsedit $tmp/prog1=_help
 .del 1 $
 id <object>
 db <object>
  
 Displays the name and dbref for the given object.
 .end
-@set cmd-id=_obj-color/garbage:bold,black
-@set cmd-id=_obj-color/player:bold,green
-@set cmd-id=_obj-color/program:bold,red
-@set cmd-id=_obj-color/exit:bold,green
-@set cmd-id=_obj-color/room:bold,cyan
-@set cmd-id=_obj-color/thing:bold,magenta
+@set $tmp/prog1=_obj-color/garbage:bold,black
+@set $tmp/prog1=_obj-color/player:bold,green
+@set $tmp/prog1=_obj-color/program:bold,red
+@set $tmp/prog1=_obj-color/exit:bold,green
+@set $tmp/prog1=_obj-color/room:bold,cyan
+@set $tmp/prog1=_obj-color/thing:bold,magenta
+@register #me =tmp

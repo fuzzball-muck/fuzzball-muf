@@ -36,17 +36,17 @@ lvar var11 lvar var12 lvar var13 lvar var14 lvar var15
   msplit @ 
   dup not if
     exit then
-  " @" .split msplit !
-  " " .split swap 
+  " @" split msplit !
+  " " split swap 
   dup number? not if
     dup "$" instr 1 = if
         1 strcut swap pop 
         "_reg/" over strcat #0 swap getpropstr
         dup not if
-            pop "$" swap strcat " is not a registered program." strcat .tell
+            pop "$" swap strcat " is not a registered program." strcat tell
             exit 
         else swap pop atoi dbref then
-    else " is not a program." strcat .tell exit then
+    else " is not a program." strcat tell exit then
   else atoi dbref then
   dup ok? if 
     dup program? if
@@ -54,11 +54,11 @@ lvar var11 lvar var12 lvar var13 lvar var14 lvar var15
              over not variables @ and if 
                   swap pop then 
              call else
-             intostr "#" swap strcat " is not LINK_OK." strcat .tell exit then
+             intostr "#" swap strcat " is not LINK_OK." strcat tell exit then
     else
-         intostr "#" swap strcat " is not a program." strcat .tell exit then
+         intostr "#" swap strcat " is not a program." strcat tell exit then
   else
-    intostr "#" swap strcat " is not OK." strcat .tell exit then
+    intostr "#" swap strcat " is not OK." strcat tell exit then
   popall main
 ;
   
@@ -70,9 +70,9 @@ lvar var11 lvar var12 lvar var13 lvar var14 lvar var15
   dup int? if
     dup 15 <= if 
          dup variables ! set-variables else
-         pop "Internal error: excessive stack given to MUX." .tell exit then 
+         pop "Internal error: excessive stack given to MUX." tell exit then 
     then 
-  "@" .split swap .tell msplit !
+  "@" split swap tell msplit !
   main 
   popall
 ;

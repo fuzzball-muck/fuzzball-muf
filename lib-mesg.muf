@@ -55,29 +55,17 @@ Message data type:
  
 $doccmd @list __PROG__=!@1-50
  
-( $def the following if your muck uses the new style propdirized lists )
-( ie:  listname#/1:line one    listename#/2:line two    etc. )
-$def SLASHED_LISTS
- 
 $include $lib/lmgr
 $include $lib/props
  
 : MSG-destroy (base dbref -- )
-$ifdef SLASHED_LISTS
     over over swap "#/i" strcat remove_prop
-$else
-    swap "/" strcat
-    over over "i" strcat remove_prop
-    swap
-$endif
     LMGR-deletelist
 ;
  
 : MSG-setinfo (infostr base dbref -- )
     swap
-$ifdef SLASHED_LISTS
     "#" strcat
-$endif
     "/i" strcat rot setpropstr
 ;
  
@@ -86,35 +74,14 @@ $endif
     rot 3 pick 3 pick MSG-setinfo
     ({strrange} base dbref)
     1 rot rot
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-$endif
     LMGR-putrange
 ;
  
 : MSG-count (base dbref -- count)
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-    over over LMGR-getcount
-    dup if
-        rot rot pop pop exit
-    else pop
-    then
-$endif
     LMGR-getcount
 ;
  
 : MSG-message (base dbref -- {strrange})
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-    over over lmgr-getlist
-    dup if
-        dup 2 + rotate pop
-        dup 2 + rotate pop
-        exit
-    else pop
-    then
-$endif
     LMGR-getlist
 ;
  
@@ -129,12 +96,8 @@ $endif
  
 : MSG-clearoldinfo (base dbref -- )
     swap
-$ifdef SLASHED_LISTS
     over over
     "#/i" strcat safeclear
-$else
-    "/i" strcat safeclear
-$endif
 ;
  
 : MSG-oldinfo (base dbref -- infostr)
@@ -151,58 +114,31 @@ $endif
 ;
  
 : MSG-info (base dbref -- infostr)
-$ifdef SLASHED_LISTS
     over over MSG-newinfo
     dup if rot rot pop pop exit then
     pop over over MSG-oldinfo
     dup if dup -4 rotate convert-info exit then
-$else
-    over over MSG-oldinfo
-    dup if rot rot pop pop exit then
-    pop over over MSG-newinfo
-    dup if dup -4 rotate convert-info exit then
-$endif
     pop pop pop ""
 ;
  
 : MSG-item (itemnum base dbref -- itemstr)
-$ifndef SLASHED_LISTS
-    3 pick 3 pick "/" strcat 3 pick
-    LMGR-getelem
-    dup if
-        -4 rotate pop pop pop exit
-    else pop
-    then
-$endif
     LMGR-getelem
 ;
  
 : MSG-setitem (itemstr itemnum base dbref -- )
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-$endif
     LMGR-putelem
 ;
  
 : MSG-insitem (itemstr itemnum base dbref -- )
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-$endif
     1 -4 rotate LMGR-insertrange
 ;
  
 : MSG-append (itemstr base dbref -- )
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-$endif
     over over LMGR-getcount 1 +
     rot rot LMGR-putelem
 ;
  
 : MSG-delitem (itemnum base dbref -- )
-$ifndef SLASHED_LISTS
-    swap "/" strcat swap
-$endif
     1 -4 rotate LMGR-deleterange
 ;
  
