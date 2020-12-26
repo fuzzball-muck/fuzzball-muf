@@ -1,4 +1,4 @@
-@program cmd-whisper-advanced
+@program cmd-whisper
 1 99999 d
 1 i
 ( MUFwhisper    Copyright 4/30/91 by Revar <revar@belfry.com>    )
@@ -549,7 +549,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
     me @ swap alias-expand
     dup foreach swap pop  ( arrDbs db )
         dup location loc @ dbcmp not if  ( arrDbs db )
-            dup "%D isn't here to be whispered to." fmtstring .tell  ( arrDbs db )
+            dup "%D isn't here to be whispered to." fmtstring tell  ( arrDbs db )
             1 array_make swap array_diff  ( arrDbs )
         else pop then  ( arrDbs )
     repeat array_vals  ( dbN..db1 intN )
@@ -739,7 +739,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         4 pick "%n" subst    (dbrng cnt names msg msg fmt)
         me @ name "%i" subst (dbrng cnt names msg msg fmt)
         swap "%m" subst      (dbrng cnt names msg fmt)
-        .tell whisper-toeach
+        tell whisper-toeach
     else pop pop pop
     then
 ;
@@ -748,8 +748,8 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
     get-lastversion dup VERSION strcmp if
         dup if
         "Whisper has been upgraded.  Type 'whisper #changes' to see the latest mods."
-            .tell
-            "You last used " over strcat .tell
+            tell
+            "You last used " over strcat tell
         then
         VERSION set-lastversion
     then pop
@@ -789,12 +789,12 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         me @ name tolower "guest" 5 strncmp if
             dup "#on" 3 stringmatch? if
                 pop set-whisper-on "You will now receive whispers as normal."
-                .tell exit
+                tell exit
             then
             dup "#off" 3 stringmatch? if
                 pop set-whisper-off 
-                "You will no longer receive whispers at all." .tell 
-                "Use 'whisp #on' to restore." .tell exit
+                "You will no longer receive whispers at all." tell 
+                "Use 'whisp #on' to restore." tell exit
             then
             dup " " split swap "#priority" 3 stringmatch? if
                 multi-priority exit
@@ -828,7 +828,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
         "whisper: Illegal command: " swap strcat me @ swap notify
         "Type \"whisper #help\" for help." me @ swap notify exit
     then
-    me @ notusing? if command @ "You aren't using whisper. '%s #on' to restore." fmtstring .tell exit then  ( Don't let notusing people use Natasha@HLM 3 January 2003 )
+    me @ notusing? if command @ "You aren't using whisper. '%s #on' to restore." fmtstring tell exit then  ( Don't let notusing people use Natasha@HLM 3 January 2003 )
     dup "=" instr not if
         "What do you want to whisper?"
         tell pop exit
@@ -851,7 +851,7 @@ VERSION "   " strcat UPDATED strcat "   Page 1" strcat
 .
 c
 q
-@register #me cmd-whisper-advanced=tmp/prog1
+@register #me cmd-whisper=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
 @action whisper;whispe;whisp;whis;whi;wh;w=#0=tmp/exit1

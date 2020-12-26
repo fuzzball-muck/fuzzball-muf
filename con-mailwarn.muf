@@ -8,7 +8,7 @@ $include $lib/props
 $define maildir "_page/mail#" $enddef
   
 : mail-warn
-  maildir me @ over .locate-prop
+  maildir me @ over locate-prop
   dup ok? if
     me @ over controls not if pop me @ then
     swap getpropstr atoi
@@ -30,8 +30,8 @@ $define maildir "_page/mail#" $enddef
 .
 c
 q
-@register #prop #0:_connect con-mailwarn=mailwarn
 @register #me con-mailwarn=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
+@propset #0=dbref:_connect/mailwarn:$tmp/prog1
 @register #me =tmp

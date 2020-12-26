@@ -14,32 +14,6 @@ $def UPDATED "Updated 2/7/94"
   
 $include $lib/props
   
-: tell (string -- )
-    me @ swap notify
-;
-  
-: split
-    swap over over swap
-    instr dup not if
-        pop swap pop ""
-    else
-        1 - strcut rot
-        strlen strcut
-        swap pop
-    then
-;
-  
-  
-$def strip-leadspaces striplead
-$def strip-trailspaces striptail
-$def stripspaces striplead striptail
-  
-: single-space (s -- s') (strips all multiple spaces down to a single space)
-    dup "  " instr not if exit then
-    " " "  " subst single-space
-;
-  
-  
 ( help stuff )
   
   
@@ -78,7 +52,7 @@ VERSION "   " strcat UPDATED strcat "   Page1" strcat
         "Syntax:    lookat <player>'s <object>"
         tell pop exit
     then
-    " " split stripspaces swap stripspaces
+    " " split strip swap strip
     dup strlen 2 > if
         dup dup strlen 2 - strcut
         dup "'s" stringcmp not if
@@ -107,7 +81,7 @@ VERSION "   " strcat UPDATED strcat "   Page1" strcat
         "I don't know which object you mean."
         tell pop exit
     then
-    dup "_remote_look?" .envprop "no" stringcmp not
+    dup "_remote_look?" envprop "no" stringcmp not
     over "dark" flag? or if
         "You can't see that clearly."
         tell pop exit

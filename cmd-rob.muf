@@ -1,5 +1,5 @@
 @program cmd-rob
-1 100000 d
+1 99999 d
 1 i
 (*
  * cmd-rob.muf

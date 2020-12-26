@@ -1,10 +1,6 @@
-@program lib-bolding.muf
+@program lib-bolding
 1 99999 d
 1 i
-$lib-version    1.04
-$def LIBDATE    "Jul 29 2002"
-$def LIBNAME    "lib-cmdtable"
-$author                 Vash@Anime/Sarusa@FM
 (
   -= SUMMARY =-
         This only works on FB6. You can check for it by:
@@ -102,7 +98,7 @@ $author                 Vash@Anime/Sarusa@FM
                                 pop do_help exit then
                         arg @ cmd @ BOLD-cmd-parse2 if 
                                 exit then <was handled>
-                        "Unrecognized command '%s'." cmd @ "%s" subst .tell
+                        "Unrecognized command '%s'." cmd @ "%s" subst tell
  
         BOLD-cmd-help[ -- ]
                 This will show the user #help for the BOLD-cmd-parse* commands. The
@@ -142,7 +138,7 @@ $author                 Vash@Anime/Sarusa@FM
                 done at all. You should use this only for test messages - do NOT
                 override people's settings normally. Like this:
                         "If you can see color at all, *this* should look different."
-                        BOLD-filter-test .tell
+                        BOLD-filter-test tell
  
   -= VERSIONS =- 
         V0.01   Jul 17 2002 First cut - won't compile under FB5 yet
@@ -154,8 +150,14 @@ $author                 Vash@Anime/Sarusa@FM
         V1.02   Jul 26 2002 Make 'C' flag? check on owner instead of puppet
         V1.03   Jul 26 2002 Convert 'active' flag to 'off' flag, default more sense
         V1.04   Jul 26 2002 Get rid of FB5 support. Not worth it.
-        
 )
+
+$lib-version    1.04
+$def LIBDATE    "Jul 29 2002"
+$def LIBNAME    "lib-cmdtable"
+$author         Vash@Anime/Sarusa@FM
+
+$doccmd @list __PROG__=!@1-150
  
 $define VERSION { "---- " LIBNAME " " prog "_lib-version" getpropstr " - "
                                         prog "_author" getpropstr " - " LIBDATE " ----" }join
@@ -265,57 +267,57 @@ $def colorend   "m"
  
  
 : do_help[ -- ]
-        "\r- This program uses the Global Bolding library ($lib/bolding, available" .tell
-        "  for any program to use, though not all do ). By default it's on if you" .tell
-        "  have color enabled ('@set me=c'). To turn it off:" .tell
-        "    #bold off    - turn it off" .tell
-        "    #bold on     - turn it back on" .tell
-(       "\r- If it is on, it will take any words bracketed by *, _, or /, and turn" .tell
-        "  them into bold, underline, and italic color codes respectively. If it is" .tell
-        "  off, you will just see the characters unchanged. It only affects YOU." .tell
-        "\r- If it is on, it will take any words bracketed by * or _, and turn" .tell
-        "  them into bold and underline color codes respectively. If it is off," .tell
-        "  you will just see the characters unchanged. It only affects YOU." .tell
-        "\r- It will try to avoid eating valid * _ or /'s with the following rules:" .tell )
-        "    * The */_ must be preceeded by a space (or be first on the line)." .tell
-        "    * The */_ must be followed by a letter or number." .tell
-        "    * There must be a matching */_ on the line to turn it off." .tell
-        "\r- See '#bold trebuchet' for Trebuchet specific help!" .tell
-        "- See '#bold help2' for information on changing the codes, or reasons" .tell
-        "  why it might not be working for you." .tell
+        "\r- This program uses the Global Bolding library ($lib/bolding, available" tell
+        "  for any program to use, though not all do ). By default it's on if you" tell
+        "  have color enabled ('@set me=c'). To turn it off:" tell
+        "    #bold off    - turn it off" tell
+        "    #bold on     - turn it back on" tell
+(       "\r- If it is on, it will take any words bracketed by *, _, or /, and turn" tell
+        "  them into bold, underline, and italic color codes respectively. If it is" tell
+        "  off, you will just see the characters unchanged. It only affects YOU." tell
+        "\r- If it is on, it will take any words bracketed by * or _, and turn" tell
+        "  them into bold and underline color codes respectively. If it is off," tell
+        "  you will just see the characters unchanged. It only affects YOU." tell
+        "\r- It will try to avoid eating valid * _ or /'s with the following rules:" tell )
+        "    * The */_ must be preceeded by a space (or be first on the line)." tell
+        "    * The */_ must be followed by a letter or number." tell
+        "    * There must be a matching */_ on the line to turn it off." tell
+        "\r- See '#bold trebuchet' for Trebuchet specific help!" tell
+        "- See '#bold help2' for information on changing the codes, or reasons" tell
+        "  why it might not be working for you." tell
 ;
  
 : do_help2[ -- ]
-        "\r- To have bolding work, your terminal program/client must support ANSI," .tell
-        "  you must be in MUCK Color mode ('@set me=c'), your client must not be" .tell
-        "  overriding the color settings completely, and you must have bolding" .tell
-        "  enabled ('#bold on')." .tell
+        "\r- To have bolding work, your terminal program/client must support ANSI," tell
+        "  you must be in MUCK Color mode ('@set me=c'), your client must not be" tell
+        "  overriding the color settings completely, and you must have bolding" tell
+        "  enabled ('#bold on')." tell
         "    If the first three are true, *this should look different*." 
-                do_filter_test .tell
-        "\r- If you wish to change the color codes, use the following:" .tell
-        "    #bold-code <attribute>" .tell
-(       "    #italic-code <attribute>" .tell)
-        "    #under-code <attribute>" .tell
-        "  See 'man textattr' or 'mpi attr' for a list of valid <attribute>s. You" .tell
-        "  can combine the codes with ',' like this:" .tell
-        "        #bold-code bold,green" .tell
-(       "\r- Keep in mind that many clients don't actually support italic or" .tell
-        "  underline, so just pick color combos that you like." .tell )
-        "\r- Keep in mind that many clients don't actually support underline so" .tell
-        "  just pick color combos that you like." .tell
-(       "- Trebuchet uses flash as italic on, so do '#italic-code flash'." .tell)
-        "\r- You can set the '#off-code', but it usually should be left as 'reset'." .tell
+                do_filter_test tell
+        "\r- If you wish to change the color codes, use the following:" tell
+        "    #bold-code <attribute>" tell
+(       "    #italic-code <attribute>" tell)
+        "    #under-code <attribute>" tell
+        "  See 'man textattr' or 'mpi attr' for a list of valid <attribute>s. You" tell
+        "  can combine the codes with ',' like this:" tell
+        "        #bold-code bold,green" tell
+(       "\r- Keep in mind that many clients don't actually support italic or" tell
+        "  underline, so just pick color combos that you like." tell )
+        "\r- Keep in mind that many clients don't actually support underline so" tell
+        "  just pick color combos that you like." tell
+(       "- Trebuchet uses flash as italic on, so do '#italic-code flash'." tell)
+        "\r- You can set the '#off-code', but it usually should be left as 'reset'." tell
 ;
  
 : do_help_trebuchet[ -- ]
-(       "\r- Trebuchet uses the ANSI 'flash' code to turn on italics. This is not" .tell
-        "  used by default, because that would look VERY bad for people whose" .tell
-        "  clients would actually start flashing text. Use this to make /italic/" .tell
-        "  actually show up as italic:" .tell
-        "     #italic-code flash" .tell )
-        "\r- If Trebuchet is overriding the MUCK color codes with its own, go to" .tell
-        "  Option->Preferences->Display and turn on " .tell
-        "    'ANSI colors override hilite colors'" .tell
+(       "\r- Trebuchet uses the ANSI 'flash' code to turn on italics. This is not" tell
+        "  used by default, because that would look VERY bad for people whose" tell
+        "  clients would actually start flashing text. Use this to make /italic/" tell
+        "  actually show up as italic:" tell
+        "     #italic-code flash" tell )
+        "\r- If Trebuchet is overriding the MUCK color codes with its own, go to" tell
+        "  Option->Preferences->Display and turn on " tell
+        "    'ANSI colors override hilite colors'" tell
 ;
  
 (- return settings string for 'me @' -)
@@ -332,13 +334,13 @@ $def colorend   "m"
  
 (- show bold settings -)
 : show_settings[ -- ]
-        "-- " get_settings_string strcat .tell
+        "-- " get_settings_string strcat tell
 ;
  
 (- Turn off bolding -)
 : do_unbold[ str:arg -- ]
         me @ uval_off 1 setprop
-        "-- #bold mode turned off." .tell
+        "-- #bold mode turned off." tell
         show_settings
 ;
  
@@ -350,18 +352,18 @@ $def colorend   "m"
         arg @ "help2" stringcmp not if do_help2 exit then
         arg @ "treb" stringpfx if do_help_trebuchet exit then
         arg @ "on" stringcmp if
-                "-- Unknown command: '#bold %s'" arg @ "%s" subst .tell
+                "-- Unknown command: '#bold %s'" arg @ "%s" subst tell
                 exit then
  
         me @ uval_off remove_prop
-        "-- #bold mode turned on." .tell show_settings
+        "-- #bold mode turned on." tell show_settings
 ;
  
 (- Set various bold related values -)
 : do_setcode[ str:sarg str:sprop -- ]
         me @ bold-possible? not if
-                "-- You are not set up to receive color from the MUCK." .tell
-                "   '@set me=c' to do so ('@set me=!c' to turn off again)" .tell
+                "-- You are not set up to receive color from the MUCK." tell
+                "   '@set me=c' to do so ('@set me=!c' to turn off again)" tell
                 exit then
         0 try ( try getting the attr )
                 sarg @ "@@@" swap textattr
@@ -374,9 +376,9 @@ $def colorend   "m"
                 show_settings
         catch
                 pop "-- Error trying to understand '%s' as an attribute." 
-                        sarg @ "%s" subst .tell
-                "   See 'mpi attr' or 'man textattr' for a list, and separate them" .tell
-                "   with a ',' if you want more than one (like 'bold,green')." .tell
+                        sarg @ "%s" subst tell
+                "   See 'mpi attr' or 'man textattr' for a list, and separate them" tell
+                "   with a ',' if you want more than one (like 'bold,green')." tell
         endcatch
 ;
  
@@ -476,12 +478,12 @@ $def colorend   "m"
 ( For testing purposes! )
 : main ( str:arg -- )
         pop 
-        VERSION .tell
-        "-- Testing the bolding library." .tell
-        BOLD-get-settings .tell
-        "-- Testing notify:" .tell
+        VERSION tell
+        "-- Testing the bolding library." tell
+        BOLD-get-settings tell
+        "-- Testing notify:" tell
         me @ "  I should see this once." BOLD-notify
-        "-- Testing notify-list:" .tell
+        "-- Testing notify-list:" tell
         { me @ me @ "realdog" match }LIST "  I should see this twice." BOLD-notify-list
 ;
  
@@ -501,17 +503,12 @@ PUBLIC BOLD-get-settings $libdef BOLD-get-settings
 PUBLIC BOLD-notify $libdef BOLD-notify
 PUBLIC BOLD-notify-list $libdef BOLD-notify-list
 PUBLIC BOLD-set-active $libdef BOLD-set-active 
- 
-(
-@set $lib/bolding=_docs:@list $lib/bolding=1-137
-)
- 
 .
 c
 q
-@register lib-bolding.muf=lib/bolding
-@register #me lib-bolding.muf=tmp/prog1
+@register lib-bolding=lib/bolding
+@register #me lib-bolding=tmp/prog1
 @set $tmp/prog1=L
 @set $tmp/prog1=V
 @set $tmp/prog1=3
-@propset $tmp/prog1=str:/_docs:@list $lib/bolding=1-137
+@register #me =tmp

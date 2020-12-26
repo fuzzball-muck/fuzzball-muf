@@ -45,14 +45,14 @@ $def BannedPropdirLoc #0
 ;
   
 : show-help ( -- )
-    "@bansite v1.0  Written 11/11/93 by Foxen" .tell
-    "----------------------------------------------------------------" .tell
-    "@bansite SITENAME    Prevents logins from the given site." .tell
-    "@bansite !SITENAME   Re-allows logins from the given site." .tell
-    "@bansite #list       Lists all the sites that are banned." .tell
-    "@bansite #help       Displays this screen." .tell
-    "----------------------------------------------------------------" .tell
-    "NOTE: Sitenames can be wildcard patterns.  ie: *.uloser.edu" .tell
+    "@bansite v1.0  Written 11/11/93 by Foxen" tell
+    "----------------------------------------------------------------" tell
+    "@bansite SITENAME    Prevents logins from the given site." tell
+    "@bansite !SITENAME   Re-allows logins from the given site." tell
+    "@bansite #list       Lists all the sites that are banned." tell
+    "@bansite #help       Displays this screen." tell
+    "----------------------------------------------------------------" tell
+    "NOTE: Sitenames can be wildcard patterns.  ie: *.uloser.edu" tell
 ;
   
 : main
@@ -94,9 +94,10 @@ $def BannedPropdirLoc #0
 c
 q
 @register #me cmd-@bansite=tmp/prog1
-@register #prop #0:_connect/ cmd-@bansite=bansite
+@register #prop #0:_connect $tmp/prog1=bansite
 @set $tmp/prog1=3
-@set $tmp/prog1=L
+@set $tmp/prog1=V
 @set $tmp/prog1=W
 @action @bansite=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #me =tmp

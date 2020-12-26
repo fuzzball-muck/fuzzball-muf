@@ -5,7 +5,6 @@ $version 1.4
  
 $include $lib/editor
 $include $lib/lmgr
-$include $lib/strings
  
 $def LMGRgetcount lmgr-getcount
 $def LMGRgetrange lmgr-getrange
@@ -52,7 +51,7 @@ $def LMGRdeleterange lmgr-deleterange
  
 : cmd-lsedit
     "me" match me !
-    "=" .split strip
+    "=" split strip
     dup not if
         "You must specify a listname.  Syntax: lsedit <obj>=<list>" tell
         pop pop exit
@@ -94,6 +93,9 @@ tell
 .
 c
 q
-@register cmd-lsedit=global/lsedit
 @register #me cmd-lsedit=tmp/prog1
-@set $tmp/prog1=L
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@action lsedit;lsedi;lsed;lse=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

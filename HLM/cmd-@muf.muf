@@ -7,7 +7,7 @@
   Copyright 2002 Natasha O'Brien. Copyright 2002 Here Lie Monsters.
   "@view $box/mit" for license information.
 )
-$author Natasha O'Brien <mufden@mufden.fuzzball.org>
+$author Natasha O'Brien
 $note Runs MUF code you enter. A MUF version of @mpi.
 $version 1.0
  
@@ -49,7 +49,7 @@ $version 1.0
  
     ( The user must be a player, and must have an Mlevel or be a Wizard {Quelled is OK}. )
     me @ player? me @ mlevel me @ "truewizard" flag? or and not if  ( str )
-        "@muf is only available to users with a MUCKer bit." .tellbad
+        "@muf is only available to users with a MUCKer bit." tell
         pop exit  (  )
     then  ( str )
  
@@ -75,23 +75,23 @@ $version 1.0
             0 try  ( dbProg )
                 dup call  ( dbProg ... )
             catch  ( dbProg strErr )
-                "Your program had an error: %s" fmtstring .tellbad  ( dbProg )
+                "Your program had an error: %s" fmtstring tell  ( dbProg )
                 1 error !  ( dbProg )
             endcatch  ( dbProg [...] )
  
             error @ not if  ( dbProg ... )
                 depth howDeep @ - array_make rtn-pretty  ( dbProg str )
                 "Result: " swap strcat  ( dbProg strMsg )
-                .tellgood  ( dbProg )
+                tell  ( dbProg )
             then  ( dbProg )
  
         else  ( dbProg )
             ( Boo, didn't compile. )
-            "There were compile errors, shown above." .tellbad
+            "There were compile errors, shown above." tell
         then  ( dbProg )
  
     catch  ( dbProg strExc )
-        "@muf encountered an error running your program: %s" fmtstring .tellbad
+        "@muf encountered an error running your program: %s" fmtstring tell
     endcatch  ( dbProg )
  
     recycle  (  )
@@ -99,8 +99,20 @@ $version 1.0
 .
 c
 q
-@set cmd-@muf=3
-@set cmd-@muf=W
+@register #me cmd-@muf=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+lsedit $tmp/prog1=_help
+.del 1 999
+.i 1
+@muf <MUF code>
+@muf #debug <MUF code>
+ 
+Runs the given MUF code. If #debug is given, the program is run with the 
+Debug flag set, showing line by line debug output. To start a program with a 
+dbref, include an empty comment before it, such as '@muf () #123 ...'.
+.end
 @action @muf=#0=tmp/exit1
-@link $tmp/exit1=cmd-@muf
-
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

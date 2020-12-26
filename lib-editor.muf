@@ -1,11 +1,11 @@
-@program lib-editor-base
+@program lib-editor
 1 99999 d
 i
 ( This code is hereby stated as public domain, for use in any program
   It might be needed for, under the condition that the original author's
   name is kept in the header, and full credit is given online in any
   programs written with it.
-                - 6/25/1991 by Foxen                 foxen@netcom.com    )
+                - 6/25/1991 by Foxen                 foxen@belfry.com    )
  
 ( To use these routines from a program of yours, just do a:
   $include $lib/editor
@@ -39,11 +39,16 @@ EDITORheader takes and returns no arguments, but prints out a standard
   message about you entering the editor.  EDITOR calls this automatically.
 )
  
-$doccmd @list $lib/editor=1-50
- 
+$version 6.002
+$lib-version 6.001
+$author foxen@belfry.com
+$doccmd @list __PROG__=!@2-57
+
 $include $lib/edit
+$iflib $lib/gui $include $lib/gui $endif
 $include $lib/stackrng
 $include $lib/strings
+ 
  
 ( ***** Stack based string range editor -- EDITOR *****
  1  EDITOR      [ {string_range} -- {string_range'} ]
@@ -71,8 +76,9 @@ $include $lib/strings
     then then then then then
     then then
     "< ** " swap strcat " ** >" strcat
-    me @ swap notify
+    tell
 ;
+ 
  
 : EDITORargument ( endline currentline string -- linenum )
     dup "$" 1 strncmp not if
@@ -84,15 +90,15 @@ $include $lib/strings
     else dup "." 1 strncmp not if
         1 strcut swap pop
     then then then
-  
+ 
     dup not if pop swap pop exit then
-  
+ 
     dup "+" 1 strncmp not if 1 strcut swap pop atoi +
     else dup "-" 1 strncmp not if 1 strcut swap pop atoi -
     else dup number? if atoi swap pop
     else pop pop pop 1 EDITORerror 0
     then then then
-  
+ 
     (max line)
     dup 1 < if pop 1
     else
@@ -101,21 +107,126 @@ $include $lib/strings
     then
 ;
  
+ 
 : EDITORmesg  (int1 int2 int3 string -- )
     swap intostr "%3" subst
     swap intostr "%2" subst
     swap intostr "%1" subst
-    me @ swap notify
+    tell
 ;
+ 
+ 
+lvar origlist
+lvar guilist
+lvar guisaved
+ 
+: setguiuse ( ref:player bool:usegui -- )
+    "_prefs/lsedit/usegui" swap setprop
+;
+ 
+: save-callback[ dict:ctx str:dlogid str:ctrlid str:event -- int:exit ]
+    ctx @ "values" [] var! guivalues
+    guivalues @ "body" []
+    array_vals over not over and if
+        -- swap pop
+    then
+    array_make
+    { }list swap
+    foreach swap pop
+        dup not if pop " " then
+        swap array_appenditem
+    repeat
+    guilist !
+    guivalues @ "usegui" [] 0 [] atoi me @ swap setguiuse
+    1 guisaved !
+$iflib $lib/gui
+    dlogid @ gui_dlog_deregister
+$endif
+    dlogid @ gui_dlog_close
+    1
+;
+ 
+: usegui? ( ref:player -- bool:usegui )
+    "_prefs/lsedit/usegui" getpropval
+    descr GUI_AVAILABLE 1.0 >= and
+;
+
+: gui-make-editor-dlog[ arr:strList -- dict:Handlers str:dlogid ]
+$iflib lib/gui
+    {SIMPLE_DLOG "Post Message"
+        "resizable" "xy"
+        {MULTIEDIT "body"
+            "value" strList @
+            "width" 80
+            "height" 20
+            "colspan" 1
+            "sticky" "nsew"
+            "hweight" 1
+            "vweight" 1
+            }CTRL
+        {FRAME "bfr"
+            "sticky" "ew"
+            "colspan" 1
+            {CHECKBOX "usegui"
+                "text" "Use &GUI editor instead of command line in future edits"
+                "value" me @ usegui?
+                "sticky" "w"
+                "hweight" 1
+                "newline" 0
+                }CTRL
+            {BUTTON "SaveBtn"
+                "text" "&Save"
+                "width" 8
+                "sticky" "e"
+                "newline" 0
+                "dismiss" 1
+                "|buttonpress" 'save-callback
+                }CTRL
+            {BUTTON "CancelBtn"
+                "text" "&Cancel"
+                "width" 8
+                "sticky" "e"
+                "dismiss" 1
+                }CTRL
+        }CTRL
+    }DLOG
+    DESCR swap GUI_GENERATE
+    dup GUI_DLOG_SHOW
+$endif
+;
+ 
+: do-gui-edit[ arr:text -- arr:text int:didsave int:supported ]
+$iflib $lib/gui
+    descr GUI_AVAILABLE 1.0 >= if
+        "\[[1m< Opening GUI editor >" tell
+        " " tell
+        caller name "*lsedit*" smatch if
+            background
+        then
+        0 guisaved !
+        text @ guilist !
+        text @ gui-make-editor-dlog swap gui_dlog_register
+        gui_event_process pop pop
+        guilist @
+        guisaved @
+        1
+    else
+        "\[[1m< GUI editing not supported by user's MUD client >" tell
+        0 0
+    then
+$endif
+;
+ 
  
 : EDITORparse ( {str_rng} mask currline cmdstr --
                 {str_rng'} mask currline arg1 arg2 exitcmd 1   or
                 {str_rng'} mask currline 0                        )
     dup not if pop read then
+    dup not if pop " " then
     dup "\"" 1 strncmp not if
         1 strcut swap pop
         "< In the editor > You say, \"" over strcat "\"" strcat
-        me @ swap notify me @ name " says, \"" strcat
+        tell me @ name " says, \"" strcat
         swap strcat "\"" strcat
         me @ location me @ rot notify_except
         1 exit
@@ -124,7 +235,7 @@ $include $lib/strings
         1 strcut swap pop
         me @ name " " strcat swap strcat
         "< In the editor > " over strcat
-        me @ swap notify
+        tell
         me @ location me @
         rot notify_except
         1 exit
@@ -158,13 +269,13 @@ $include $lib/strings
         then
     else pop 0 0
     then
-  
+ 
     ( {strrng} mask currline cmdstr arg3str args1int arg2int )
     4 rotate dup " " swap over strcat strcat
-    7 pick " " swap over strcat strcat STRsinglespace swap instr if
+    7 pick " " swap over strcat strcat sms swap instr if
         0 exit
     then
-  
+ 
     ( {strrng} mask currline arg3str args1int arg2int cmdstr )
     dup "i" stringcmp not if
         pop if 6 EDITORerror then
@@ -182,7 +293,7 @@ $include $lib/strings
         over over 0
         "< deleting %2 lines starting at line %1  (Now current line) >"
         EDITORmesg
-        2 swap rot SRNGdelete
+        2 swap rot sr-deleterng
         1 exit
     then
     dup "l" stringcmp not if
@@ -233,7 +344,7 @@ $include $lib/strings
         rot 6 pick 5 pick rot strip EDITORargument
         dup not if pop pop pop 1 exit then rot rot
         ( {strrng} mask currline arg3i arg1i arg2i )
-  
+ 
         over over swap - 1 + 3 pick 5 pick
         "< Moved %1 lines from line %2 to line %3.  (dest now curr line) >"
         EDITORmesg 3 pick 4 put
@@ -246,7 +357,7 @@ $include $lib/strings
         dup not if pop dup then
         rot 6 pick 5 pick rot strip EDITORargument
         dup not if pop pop pop 1 exit then rot rot
-  
+ 
         over over swap - 1 + 3 pick 5 pick
         "< Copied %1 lines from line %2 to line %3.  (now current line) >"
         EDITORmesg 3 pick 4 put
@@ -313,6 +424,22 @@ $include $lib/strings
             EDITORmesg pop pop
         then 1 exit
     then
+    dup "gui" stringcmp not if
+        ( {strrng} mask currline arg3str args1int arg2int cmdstr )
+        6 array_make var! tmp_store
+        array_make do-gui-edit if
+            var! tmp_didsave array_vals
+            tmp_store @ array_vals pop
+            0 0 0 "< Editor exited. >"
+            EDITORmesg
+            pop tmp_didsave @ if "end" else "abort" then
+            0 exit
+        else
+            pop array_vals
+            tmp_store @ array_vals pop
+            1 exit
+        then
+    then
     dup "edit" stringcmp not if
         ( {strrng} mask currline arg3str args1int arg2int cmdstr )
         pop if 6 EDITORerror then
@@ -323,7 +450,7 @@ $include $lib/strings
         ( {rng} mask currline arg1int rot str)
         rot dup 4 put 0 0 "< Editing line %1. >" EDITORmesg
         ( {rng} mask currline rot str)
-        "##edit> " swap strcat me @ swap notify
+        "##edit> " swap strcat tell
         read swap -1 * rotate 1 exit
     then
     dup "left" stringcmp not if
@@ -392,6 +519,33 @@ $include $lib/strings
         "< Indented %1 lines starting at line %2, %3 columns. >"
         EDITORmesg 2 -4 rotate EDITindent 1 exit
     then
+    dup "shuffle" stringcmp not over "sort" stringcmp not or if  ( Added Natasha@HLM 22 December 2002 )
+        "shuffle" stringcmp if SORTTYPE_CASEINSENS else SORTTYPE_SHUFFLE then var! sorthow  ( {strrng} mask currline arg3str args1int arg2int )
+        rot if 7 EDITORerror then  ( {strrng} mask currline args1int arg2int )
+ 
+        ( Square away the arguments. )
+        var! line2  ( {strrng} mask currline args1int )
+        dup not if pop 1    then var! line1  ( {strrng} mask currline )
+        var! currline var! mask  ( {strrng} )
+        array_make  ( arrStr )
+        line2 @ not if dup array_count line2 ! then  ( arrStr )
+ 
+        ( Extract a list of the lines to shuffle. )
+        { line1 @ -- begin dup line2 @ < while dup ++ repeat }list  ( arrStr arrLines }  -- and < because arrays are 0-based where lists are 1-based. )
+        over swap array_extract array_vals array_make  ( arrStr arrStrsToShuffle )
+        swap line1 @ -- line2 @ -- array_delrange swap  ( arrStr arrStrsShuffled )
+ 
+        sorthow @ array_sort  ( arrStr arrStrsShuffled )
+ 
+  ( Put the shuffled lines back. )
+        line1 @ -- swap array_insertrange  ( arrStr' )
+ 
+        ( Get ready to return. )
+        array_vals  ( {strrng'} )
+        line1 @ line2 @ 0  ( {strrng'} int int int )
+        sorthow @ SORTTYPE_SHUFFLE = if "shuffl" else "sort" then "< Lines %%1 through %%2 %sed. >" fmtstring EDITORmesg  ( {strrng'} )
+        mask @ currline @ 1 exit  ( {strrng'} mask currline 1 )
+    then
     dup "end" stringcmp not if
         ( {strrng} mask currline arg3str args1int arg2int cmdstr )
         0 0 0 "< Editor exited. >"
@@ -402,11 +556,11 @@ $include $lib/strings
         ( {strrng} mask currline arg3str args1int arg2int cmdstr )
         0 0 0 "< Edit aborted. >"
         EDITORmesg
-        pop pop pop pop pop pop SRNGpop
+        pop pop pop pop pop pop popn
         0 "" 1 "" 1 1 "abort" 0 exit
     then
     dup "h" stringcmp not if
-        {
+{
 "          MUFedit Help Screen.  Arguments in [] are optional."
 "    Any line not starting with a '.' is inserted at the current line."
 "Lines starting with '..', '.\"' , or '.:' are added with the '.' removed."
@@ -424,6 +578,8 @@ $include $lib/strings
 " .repl [st [en]]=/old/new  Replaces old text with new in the given lines."
 " .join [st [en]]         Joins together the lines given in the range."
 " .split [st]=text        Splits given line into 2 lines.  Splits after text"
+" .sort [st en]           Sorts the lines of the list case-insensitively."  ( Added Natasha@HLM 22 December 2002 )
+" .shuffle [st en]        Shuffles the lines of the list."  ( Added Natasha@HLM 22 December 2002 )
 " .left [st [en]]         Aligns all the text to the left side of the screen."
 " .center [st [en]]=cols  Centers the given lines for cols screenwidth."
 " .right [st [en]]=col    Right justifies to column col."
@@ -432,11 +588,13 @@ $include $lib/strings
 "---- Example line refs:  $ = last line, . = curr line, ^ = first line. ----"
 "12 15 (lines 12 to 15)    5 $ (line 5 to last line)    ^+3 6 (lines 4 to 6)"
 ".+2 $-3 (curr line + 2 to last line - 3)     5 +3 (line 5 to curr line + 3)"
-        }tell
+}
+        EDITdisplay
         pop pop pop pop 1 exit
     then
     pop pop pop pop 8 EDITORerror 1
 ;
+ 
  
 : EDITORloop ( {rng} mask currpos cmdstr --
               {rng'} mask currpos arg3str arg1int arg2int exitcmd )
@@ -444,30 +602,36 @@ $include $lib/strings
 ;
  
 : EDITORheader ( -- )
-    "< Entering editor.  Type '.h' on a line by itself for help. >"
-    me @ swap notify
-    "< '.end' will exit the editor.   '.abort' aborts the edit.  >"
-    me @ swap notify
-    "<  Poses and says will pose and say as usual.  To start a   >"
-    me @ swap notify
-    "<   line with : or \" just preceed it with a period  ('.')   >"
-    me @ swap notify
+    {
+        "\[[1m< Entering editor.  Type '.h' on a line by itself for help. >"
+        "\[[1m< '.end' will exit the editor.   '.abort' aborts the edit.  >"
+        "\[[1m< Poses and says will pose and say as usual.  To start a    >"
+        "\[[1m< line with : or \" just preceed it with a period  ('.')     >"
+        descr gui_available 1.0 >= if
+            "\[[1m< If your client supports MCP-GUI, '.gui' will launch a GUI >"
+            "\[[1m< text editor in another window.                            >"
+        then
+    }list { me @ }list array_notify
 ;
  
 : EDITOR ( {str_rng} -- {str_rnd'} exitcmdstr )
-    EDITORheader
-    "" 1 ".i $" EDITORloop -6 rotate pop pop pop pop pop
+    me @ usegui? not if
+        EDITORheader
+        "" 1 ".i $" EDITORloop -6 rotate pop pop pop pop pop
+    else
+        "" 1 ".gui" EDITORloop -6 rotate pop pop pop pop pop
+    then
 ;
  
-public EDITOR		$libdef EDITOR
-public EDITORloop	$libdef EDITORloop
-public EDITORparse	$libdef EDITORparse
-public EDITORheader	$libdef EDITORheader
+PUBLIC EDITOR $libdef EDITOR
+PUBLIC EDITORloop $libdef EDITORloop
+PUBLIC EDITORparse $libdef EDITORparse
+PUBLIC EDITORheader $libdef EDITORheader
 .
 c
 q
-@register lib-editor-base=lib/editor
-@register #me lib-editor-base=tmp/prog1
+@register lib-editor=lib/editor
+@register #me lib-editor=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=L
 @set $tmp/prog1=V

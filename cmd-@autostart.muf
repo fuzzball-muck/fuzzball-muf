@@ -25,7 +25,9 @@
 .
 c
 q
-@set cmd-@autostart=3
-@set cmd-@autostart=W
+@register #me cmd-@autostart=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=W
 @action @autostart=#0=tmp/exit1
-@link $tmp/exit1=cmd-@autostart
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

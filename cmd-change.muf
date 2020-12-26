@@ -142,6 +142,7 @@ $version 1.02
         dup 5 rotate
         dup "@" 1 strncmp not if 1 strcut swap pop then
         dup      "name" stringcmp not if
+            over player? if "Cannot change a player's name." tell pop pop pop pop exit then
             pop name 4 rotate 4 rotate
             3 pick 3 pick in-string? not if pop pop pop pop exit then
             replace-text setname

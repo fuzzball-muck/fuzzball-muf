@@ -311,7 +311,7 @@ lvar search     ( current place to search )
                 "** CAN'T READ " swap strcat
                 " ON #" strcat intostr swap strcat
                 " **" strcat
-                .tell
+                tell
         then
 ;
  
@@ -407,7 +407,7 @@ lvar search     ( current place to search )
                 pop exit
         then
         trigger @ swap pronoun_sub
-        "_screen_width" dup me @ swap .locate-prop dup ok? if
+        "_screen_width" dup me @ swap locate-prop dup ok? if
                 getpropstr atoi
         else
                 pop pop 78
@@ -487,7 +487,7 @@ lvar debug
                                 me @ trigger @ owner dbcmp
                                 me @ "W" flag? or if
                                         debug @ " = " strcat over strcat
-                                        .tell
+                                        tell
                                 then
                         then
                 else
@@ -528,7 +528,7 @@ lvar debug
                   of \char to %char[num] so that they can be handled without
                   errors or mixing with normal parameters. )
 : escape-chars ( s -- s' )
-        "%char[" "%" .asc intostr strcat "]" strcat      ( s "%char[num]" )
+        "%char[" "%" ctoi intostr strcat "]" strcat     ( s "%char[num]" )
         "%%" subst                                      ( s1 )
         begin dup "\\" instr dup while                  ( s1 pos )
               1 - strcut 1 strcut swap pop 1 strcut     ( sl c sr )
@@ -599,12 +599,12 @@ $include $desc
         pop .split-args                                 ( ... args n )
         dup 1 = if
                 pop .eval-loop                          ( ... name )
-                dup trigger @ swap .locate-prop         ( ... name obj )
+                dup trigger @ swap locate-prop         ( ... name obj )
                 do-sub1
         else
             dup 2 = if
                 pop .eval-loop swap .eval-loop          ( ... name source )
-                match over .locate-prop                 ( ... name obj )
+                match over locate-prop                 ( ... name obj )
                 do-sub1
             else
                 .wipe-list
@@ -616,9 +616,9 @@ public do-sub
  
 : do-rand1 ( list obj -- result )
         dup ok? if
-               over over .lmgr-getcount        ( list obj num )
+               over over lmgr-getcount        ( list obj num )
                random 1003 / swap % 1 + -3 rotate  ( pos list obj )
-               .lmgr-getelem                   ( result )
+               lmgr-getelem                   ( result )
         else
                pop pop ""
         then
@@ -628,13 +628,13 @@ public do-sub
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 do-rand1
         else
             2 = if
                 .eval-loop swap .eval-loop                 ( list name )
                 match swap dup "#" strcat               ( obj list list# )
-                rot swap .locate-prop                   ( list obj' )
+                rot swap locate-prop                   ( list obj' )
                 do-rand1
             else
                 .wipe-list
@@ -646,9 +646,9 @@ public do-rand
  
 : do-time1
         dup ok? if
-                over over .lmgr-getcount        ( list obj cnt )
+                over over lmgr-getcount        ( list obj cnt )
                 systime 14400 - 86400 % * 86400 / ( list obj pos )
-                -3 rotate .lmgr-getelem         ( result )
+                -3 rotate lmgr-getelem         ( result )
         else
                 pop pop ""
         then
@@ -658,13 +658,13 @@ public do-rand
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 do-time1
         else
             2 = if
                 .eval-loop swap .eval-loop                 ( list name )
                 match swap dup "#" strcat               ( obj list list# )
-                rot swap .locate-prop                   ( list obj' )
+                rot swap locate-prop                   ( list obj' )
                 do-time1
             else
                 .wipe-list
@@ -676,10 +676,10 @@ public do-time
  
 : do-date1
         dup ok? if
-                over over .lmgr-getcount        ( list obj cnt )
+                over over lmgr-getcount        ( list obj cnt )
                 systime 14400 - 86400 / 365 % *
                 365 / 1 +                       ( list obj pos )
-                -3 rotate .lmgr-getelem         ( result )
+                -3 rotate lmgr-getelem         ( result )
         else
                 pop pop ""
         then
@@ -689,13 +689,13 @@ public do-time
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 do-date1
         else
             2 = if
                 .eval-loop swap .eval-loop                 ( list name )
                 match swap dup "#" strcat               ( obj list list# )
-                rot swap .locate-prop                   ( list obj' )
+                rot swap locate-prop                   ( list obj' )
                 do-date1
             else
                 .wipe-list
@@ -707,7 +707,7 @@ public do-date
  
 : do-concat1 ( list obj -- result )
         dup ok? if
-                .lmgr-fullrange .lmgr-getrange          ( s1 ... sn n )
+                lmgr-fullrange lmgr-getrange          ( s1 ... sn n )
                 begin dup 1 > while
                     rot rot strcat swap 1 -             ( s1 ... sn-1 n-1 )
                 repeat
@@ -721,13 +721,13 @@ public do-date
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 do-concat1
         else
             2 = if
                 .eval-loop swap .eval-loop                 ( list name )
                 match swap dup "#" strcat               ( obj list list# )
-                rot swap .locate-prop                   ( list obj' )
+                rot swap locate-prop                   ( list obj' )
                 do-concat1
             else
                 .wipe-list
@@ -748,7 +748,7 @@ public do-concat
                           0
                       then or while
                         4 rotate 1 + -4 rotate   ( lst idx+1 pos list obj )
-                        4 pick 3 pick 3 pick .lmgr-getelem
+                        4 pick 3 pick 3 pick lmgr-getelem
                         dup if                   ( lst idx+1 pos list obj x )
                                 6 rotate pop     ( idx+1 pos list obj x )
                                 -5 rotate        ( x idx+1 pos list obj )
@@ -769,13 +769,13 @@ public do-concat
         else
             dup 2 = if
                 pop .eval-loop swap .eval-loop             ( pos list )
-                dup "#" strcat trigger @ swap .locate-prop ( pos list obj )
+                dup "#" strcat trigger @ swap locate-prop ( pos list obj )
                 do-select1
             else
                 3 = if
                     .eval-loop swap .eval-loop rot .eval-loop  ( pos list name )
                     match swap dup "#" strcat            ( pos obj list list# )
-                    rot swap .locate-prop                ( pos list obj' )
+                    rot swap locate-prop                ( pos list obj' )
                     do-select1
                 else
                     .wipe-list
@@ -960,7 +960,7 @@ public do-progmultargs
 : do-char ( s[left] s[right] args token -- s[left] s[right] result )
         pop .split-args
         1 = if
-            .eval-loop atoi .chr
+            .eval-loop atoi itoc dup not if pop "." then
         else
             .wipe-list
             "** TOO MANY ARGUMENTS FOR %CHAR **"
@@ -975,7 +975,7 @@ public do-char
             pop pop "" exit
         then
         4 rotate .format-print "" -4 rotate              ( "" sr list obj )
-        .lmgr-fullrange .lmgr-getrange                  ( "" sr s1 ... sn n )
+        lmgr-fullrange lmgr-getrange                  ( "" sr s1 ... sn n )
         begin dup while
                 dup 1 + rotate                          ( "" sr s2...sn n s1 )
                 .gen-desc                               ( "" sr s2...sn n )
@@ -988,13 +988,13 @@ public do-char
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 do-list1
         else
             2 = if
                 .eval-loop swap .eval-loop                 ( list name )
                 match swap dup "#" strcat               ( obj list list# )
-                rot swap .locate-prop                   ( list obj' )
+                rot swap locate-prop                   ( list obj' )
                 do-list1
             else
                 .wipe-list
@@ -1054,7 +1054,7 @@ public do-call
 : do-macro ( s[left] s[right] args token -- s[left] s[right] result )
     2 strcut dup strlen 1 - strcut pop
          swap pop "_macros/" swap strcat                ( ... args name )
-    dup trigger @ swap .locate-prop                     ( ... args name' obj )
+    dup trigger @ swap locate-prop                     ( ... args name' obj )
     dup ok? not if
         pop swap pop 8 strcut swap pop "** " swap strcat
         " NOT FOUND IN %MACRO **" strcat exit           ( ... error )
@@ -1076,7 +1076,7 @@ public do-macro
         then
         pop .split-args
         dup 1 = if
-            pop .eval-loop me @ name " " strcat swap strcat .otell ""
+            pop .eval-loop me @ name " " strcat swap strcat otell ""
         else
             2 = if
                 .eval-loop swap .eval-loop match      ( ... msg db )
@@ -1110,11 +1110,11 @@ public do-newline
  
 : do-prand1 ( dividend list obj -- result )
         dup ok? if
-               over over .lmgr-getcount        ( dividend list obj num )
+               over over lmgr-getcount        ( dividend list obj num )
                trigger @ int 10003 * 29 / systime 60 / + 5 rotate /
                                                ( list obj num rand )
                swap % 1 + -3 rotate            ( pos list obj )
-               .lmgr-getelem                   ( result )
+               lmgr-getelem                   ( result )
         else
                pop pop ""
         then
@@ -1124,13 +1124,13 @@ public do-newline
         pop .split-args
         dup 1 = if
                 pop .eval-loop                             ( list )
-                dup "#" strcat trigger @ swap .locate-prop ( list obj )
+                dup "#" strcat trigger @ swap locate-prop ( list obj )
                 1 -3 rotate                                ( dividend list obj )
                 do-prand1
         else
             2 = if
                 .eval-loop atoi swap                       ( dividend list )
-                dup "#" strcat trigger @ swap .locate-prop ( dividend list obj )
+                dup "#" strcat trigger @ swap locate-prop ( dividend list obj )
                 do-prand1
             else
                 .wipe-list

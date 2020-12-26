@@ -54,10 +54,10 @@
     it lets you add regular objects to it.
 )
  
-$doccmd @list __PROG__=1-52@
+$doccmd @list __PROG__=!@1-52
  
-$include $lib/look
 $include $lib/match
+$include $lib/stackrng
  
 : REF-next (obj reflist currref -- nextref)
   rot rot array_get_reflist
@@ -70,7 +70,7 @@ $include $lib/match
 : REF-list  (objref reflistname -- liststr)
   array_get_reflist
   array_vals
-  .short-list
+  sr-shortlist
 ;
  
 : REF-filter (a d s -- dx...d1 i)
@@ -93,35 +93,35 @@ $include $lib/match
     "on a line by itself.  To clear the list, enter '#clear'.  To finish"
     "editing and exit, enter '.' on a line by itself.  Enter '#help' to see"
     "these instructions again."
-    strcat strcat strcat strcat .tell
+    strcat strcat strcat strcat tell
   else
     "To add an object, enter its name or dbref.  To remove an object, enter"
     "its name or dbref with a ! in front of it.  ie: '!button'.  To display"
     "the list, enter '*' on a line by itself.  To clear the list, enter"
     "'#clear'.  To finish editing and exit, enter '.' on a line by itself."
     "Enter '#help' to see these instructions again."
-    strcat strcat strcat strcat .tell
+    strcat strcat strcat strcat tell
   then
 ;
  
 : REF-editlist  (players? objref reflistname -- )
   3 pick REF-editlist-help
-  "The object list currently contains:" .tell
-  over over REF-list .tell
+  "The object list currently contains:" tell
+  over over REF-list tell
   begin
     read
     dup "." strcmp not if
       pop pop pop
-      "Done." .tell break
+      "Done." tell break
     then
     dup "#list" stringcmp not
     over "*" strcmp not or if
-      pop "The object list currently contains:" .tell
-      over over REF-list .tell continue
+      pop "The object list currently contains:" tell
+      over over REF-list tell continue
     then
     dup "#clear" stringcmp not if
       pop over over remove_prop
-      "Object list cleared." .tell continue
+      "Object list cleared." tell continue
     then
     dup "#help" stringcmp not if
       pop 3 pick REF-editlist-help
@@ -131,17 +131,17 @@ $include $lib/match
       1 strcut swap pop 1
     else 0
     then
-    swap 5 pick if .noisy_pmatch else .noisy_match then
+    swap 5 pick if noisy_pmatch else noisy_match then
     dup ok? not if pop pop continue then
     4 pick 4 pick rot 4 rotate if
       3 pick 3 pick 3 pick reflist_find if
-        reflist_del "Removed." .tell
+        reflist_del "Removed." tell
       else
         pop pop pop
-        "Not in object list." .tell
+        "Not in object list." tell
       then
     else
-      reflist_add "Added." .tell
+      reflist_add "Added." tell
     then
   repeat
 ;

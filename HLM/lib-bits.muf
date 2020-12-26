@@ -1,5 +1,5 @@
-@program lib-bits.muf
-1 9999 d
+@program lib-bits
+1 99999 d
 i
 ( lib-bits.muf by Natasha@HLM
 
@@ -216,7 +216,7 @@ lvar v_loadprop
     begin over over >= while  ( intLines intCur )
         caller v_dir @ 3 pick intostr strcat  ( intLines intCur dbClr strLineProp )
         v_loadprop @ execute  ( intLines intCur strLine )
-        .tell  ( intLines intCur )
+        tell  ( intLines intCur )
     1 + repeat pop pop  (  )
 ;
 
@@ -332,7 +332,9 @@ $libdef rtn-rtimestr
 .
 c
 q
-@set lib-bits.muf=l
-@set lib-bits.muf=v
-@set lib-bits.muf=m3
-@register lib-bits.muf=lib/bits
+@register lib-bits=lib/bits
+@register #me lib-bits=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=L
+@set $tmp/prog1=V
+@register #me =tmp

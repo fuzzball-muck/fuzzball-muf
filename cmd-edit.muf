@@ -100,6 +100,7 @@ $version 1.02
             tell exit
         then
         swap dup "name" stringcmp not if
+            over player? if "Cannot change a player's name." tell pop exit then
             pop dup name replace-text setname
         else dup "desc" stringcmp not if
             pop dup desc replace-text setdesc

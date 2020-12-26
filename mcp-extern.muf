@@ -1,4 +1,4 @@
-@program mcp-extern.muf
+@program mcp-extern
 1 99999 d
 1 i
 ( mcp-extern v1.0  Copyright Nov.2001 by Revar.  Released under the LGPL.
@@ -88,7 +88,8 @@ $def ALLOWED_HOSTS "localhost" "127.0.0.1"
 .
 c
 q
-@register #me mcp-extern.muf=tmp/prog1
+@register #me mcp-extern=tmp/prog1
 @set $tmp/prog1=W
 @set $tmp/prog1=A
 @set $tmp/prog1=3
+@register #me =tmp

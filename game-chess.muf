@@ -336,14 +336,6 @@ $def CHESS_PKGNAME "org-fuzzball-chess"
     piecenames @ token @ toupper [] ( strcat )
 ;
  
-: abs ( int:val -- int:val' )
-    dup 0 < if -1 * then
-;
- 
-: sign ( int:val -- int:val' )
-    dup abs /
-;
- 
 : piece_move_nocheck[ str:board str:from str:to -- str:board' ]
     board @ from @ decode_pos
     board_getsquare var! piece
@@ -1864,5 +1856,8 @@ q
 @register #me game-chess.muf=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=A
-
-
+@set $tmp/prog1=V
+@set $tmp/prog1=W
+@action chess=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp
