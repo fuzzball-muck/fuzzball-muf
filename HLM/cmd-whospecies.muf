@@ -431,6 +431,7 @@ q
 @register #me cmd-whospecies=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
+@set $tmp/prog1=W
 lsedit $tmp/prog1=_help
 .del 1 999
 .i 1
@@ -459,13 +460,7 @@ specified; use 'ws #sort none' to list in the normal order of arrival.
 You can set your species with @set me=species:<species>
 For example: @set me=species:armadillo
 .end
-@propset $tmp/prog1=str:_stat2color/IC:\[[32m
-@propset $tmp/prog1=str:_stat2color/OOC:\[[33m
-@propset #0=str:_prefs/ws/color/hers:\[[35m
-@propset #0=str:_prefs/ws/color/his:\[[36m
-@propset #0=str:_prefs/ws/doing:\r        \[[1;37mDoing: \[[0;37m%[doing]s
-@propset #0=str:_prefs/ws/header:\[[1mStat  Name                      Sex          Species\[[0m  ('whospe #help' for help)
-@propset #0=str:_prefs/ws/line:%[awakecolor]s%[statcolor]s%-4.4[status]s\[[0m%[awakecolor]s  \[[37m%-24.24[n]s  %[awakecolor]s%[sexcolor]s%-11.11[sex]s  \[[37m%[species]s%[doing]s
-@action whospecies;whospe;ws=#0=tmp/exit1
+@action whospecies;whospec;ws=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+ws #setup
 @register #me =tmp
