@@ -21,7 +21,7 @@ $version 1.2
         else
             intostr strcat " character" strcat
         then
-        " lost." strcat .tell
+        " lost." strcat tell
     then
     me @ "_/do" rot 0 addprop
     me @ "Set." notify
@@ -77,10 +77,11 @@ $version 1.2
 c
 q
 @register #me cmd-@doing=tmp/prog1
-@register #prop #0:_connect cmd-@doing=nukedoingclear
-@register #prop #0:_disconnect cmd-@doing=doingclear
 @set $tmp/prog1=3
-@set $tmp/prog1=L
+@set $tmp/prog1=V
 @set $tmp/prog1=W
+@propset #0=dbref:_connect/nukedoingclear:$tmp/prog1
+@propset #0=dbref:_disconnect/doingclear:$tmp/prog1
 @action @doing;@doin;@doi;@do=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #me =tmp

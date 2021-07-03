@@ -1,4 +1,4 @@
-@program cmd-who
+@program cmd-roomwho
 1 99999 d
 1 i
 $def MIN_IDLE 3 (minutes)
@@ -115,4 +115,9 @@ $def MIN_IDLE 3 (minutes)
 .
 c
 q
-@register #me cmd-who=tmp/prog1
+@register #me cmd-roomwho=tmp/prog1
+@set $tmp/prog1=3
+@set $tmp/prog1=V
+@action roomwho;who=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

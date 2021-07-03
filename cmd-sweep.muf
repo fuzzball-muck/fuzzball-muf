@@ -267,7 +267,6 @@ q
 @register #me cmd-sweep=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
-@set $tmp/prog1=W
 @action sweep;swee=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 @register #me =tmp

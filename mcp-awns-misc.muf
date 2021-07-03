@@ -229,21 +229,21 @@ $libdef ping-client
     server_init_if_needed
     command @ "ping" stringcmp not if
         args @ pmatch dup not if
-            "I don't know who you mean!" .tell exit
+            "I don't know who you mean!" tell exit
         then
         dup awake? not if
-            name " is not awake." strcat .tell exit
+            name " is not awake." strcat tell exit
         then
         dup descrleastidle
         ping-client
         dup inf = if
-            pop "%D did not respond to the ping." fmtstring .tell
+            pop "%D did not respond to the ping." fmtstring tell
         else
             dup -1 = if
-                pop "%D does not have a client that supports pinging." fmtstring .tell
+                pop "%D does not have a client that supports pinging." fmtstring tell
             else
                 1000 *
-                swap "%D has a %.0f ms ping time." fmtstring .tell
+                swap "%D has a %.0f ms ping time." fmtstring tell
             then
         then
         descr descrflush
@@ -255,8 +255,7 @@ $libdef ping-client
 c
 q
 @register #me mcp-awns-misc=tmp/prog1
-@register #me mcp-awns-misc=tmp/prog1
 @set $tmp/prog1=W
 @set $tmp/prog1=A
 @set $tmp/prog1=3
-
+@register #me =tmp

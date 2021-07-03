@@ -23,8 +23,6 @@ lvar runsecs
     11 * runsecs @ /
 ;
   
-: tell me @ swap notify ;
-  
 : main
     preempt
     5 begin
@@ -40,3 +38,6 @@ q
 @register #me cmd-benchmark=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=W
+@action benchmark=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

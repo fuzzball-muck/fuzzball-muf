@@ -2,7 +2,6 @@
 1 99999 d
 1 i
 $include $lib/match
-$include $lib/strings
   
 $def IMAGE_PACKAGE "dns-org-fuzzball-image"
   
@@ -20,9 +19,9 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
             dup room? if next continue then
             count @ 1 + dup count ! 150 <= while
             dup "_/image" getpropstr dup if
-                urls @ array_append urls !
-                dup targrefs @ array_append targrefs !
-                dup name names @ array_append names !
+                urls @ array_appenditem urls !
+                dup targrefs @ array_appenditem targrefs !
+                dup name names @ array_appenditem names !
             else
                 pop
             then
@@ -36,21 +35,21 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
         }dict
         mcp_send
     else
-        "(@imaged objects)" .tell
+        "(@imaged objects)" tell
         me @ location contents
         begin
             dup while
             dup room? if next continue then
             count @ 1 + dup count ! 50 > if
                 "(Too many objects in this room.  Skipping the remainder.)"
-                .tell break
+                tell break
             then
             dup "_/image" getpropstr if
-                dup name .tell
+                dup name tell
             then
             next
         repeat pop
-        "(Done.)" .tell
+        "(Done.)" tell
     then
 ;
   
@@ -87,10 +86,10 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
   
     strip
     dup not if
-        "Usage: @image <object>    or    @image <object>=<URL>" .tell
+        "Usage: @image <object>    or    @image <object>=<URL>" tell
         pop exit
     then
-    .noisy_match
+    noisy_match
     var! targref
   
     targref @ not if
@@ -101,12 +100,12 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
         cmdline @ "=" instr if
             ( @image <object>= )
             "me" match targref @ controls not if
-                "Permission denied." .tell
+                "Permission denied." tell
                 exit
             then
   
             targref @ "_/image" "" 0 addprop
-            "Image unset." .tell
+            "Image unset." tell
             exit
         then
   
@@ -116,7 +115,7 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
         var! currurl
   
         currurl @ not if
-            "No image available." .tell
+            "No image available." tell
             exit
         then
   
@@ -130,12 +129,12 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
             }dict
             mcp_send
         else
-            "(@image) " currurl @ strcat .tell
+            "(@image) " currurl @ strcat tell
         then
     else
         ( @image <object>=<URL> )
         "me" match targref @ controls not if
-            "Permission denied." .tell
+            "Permission denied." tell
             exit
         then
   
@@ -145,20 +144,20 @@ $def IMAGE_PACKAGE "dns-org-fuzzball-image"
         over "ftp" stringcmp and
         over "https" stringcmp and if
             pop pop
-            "Unknown URL service type.  The acceptable types are ftp, http, https, and file." .tell
-            "Example:  https://www.belfry.com/pics/revar-cw3.jpg" .tell
+            "Unknown URL service type.  The acceptable types are ftp, http, https, and file." tell
+            "Example:  https://www.belfry.com/pics/revar-cw3.jpg" tell
             exit
         then
         "://" strcat swap
         "/" split swap
         dup "*[^-:%.a-z0-9_]*" smatch if
-            "Invalid character in machine name.  Valid chars are a-z, 0-9, _, period, colon, and -." .tell
+            "Invalid character in machine name.  Valid chars are a-z, 0-9, _, period, colon, and -." tell
             pop pop pop exit
         then
         "/" strcat swap
         strcat strcat
         targref @ "_/image" rot 0 addprop
-        "Image set." .tell
+        "Image set." tell
     then
 ;
 .
@@ -166,6 +165,7 @@ c
 q
 @register #me cmd-@image=tmp/prog1
 @set $tmp/prog1=3
-@set $tmp/prog1=L
+@set $tmp/prog1=V
 @action @image;@imag;@ima;@im=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
+@register #me =tmp

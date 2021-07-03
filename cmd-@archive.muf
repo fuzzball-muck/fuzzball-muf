@@ -48,6 +48,7 @@ lvar progcnt
 : get-refname (d -- s)
   me @ over dbcmp if pop "me" exit then
   #0 over dbcmp if pop "#0" exit then
+  #-4 over dbcmp if pop "nil" exit then
   me @ "_tempreg/" rot int intostr strcat getpropstr
   dup if "$" swap strcat then
 ;
@@ -433,7 +434,7 @@ lvar progcnt
   clear-refnames
   "=" split strip swap strip
   dup not if pop pop show-help exit then
-  .match_controlled
+  match_controlled
   dup not if pop pop exit then
   swap tolower
   me @ "wizard" flag? not if "" "a" subst then

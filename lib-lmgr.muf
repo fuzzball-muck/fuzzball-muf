@@ -366,42 +366,6 @@ public lmgr-putbrange		$libdef lmgr-putbrange
 public lmgr-putelem		$libdef lmgr-putelem
 public lmgr-putrange		$libdef lmgr-putrange
 public lmgr-setcount		$libdef lmgr-setcount
- 
-$pubdef .lmgr-clearelem		__PROG__ "lmgr-clearelem" call
-$pubdef .lmgr-clearrange	__PROG__ "lmgr-clearrange" call
-$pubdef .lmgr-deletelist	__PROG__ "lmgr-deletelist" call
-$pubdef .lmgr-deleterange	__PROG__ "lmgr-deleterange" call
-$pubdef .lmgr-extractrange	__PROG__ "lmgr-extractrange" call
-$pubdef .lmgr-fullrange		__PROG__ "lmgr-fullrange" call
-$pubdef .lmgr-getbrange		__PROG__ "lmgr-getbrange" call
-$pubdef .lmgr-getcount		__PROG__ "lmgr-getcount" call
-$pubdef .lmgr-getelem		__PROG__ "lmgr-getelem" call
-$pubdef .lmgr-getlist		__PROG__ "lmgr-getlist" call
-$pubdef .lmgr-getrange		__PROG__ "lmgr-getrange" call
-$pubdef .lmgr-insertrange	__PROG__ "lmgr-insertrange" call
-$pubdef .lmgr-moverange		__PROG__ "lmgr-moverange" call
-$pubdef .lmgr-putbrange		__PROG__ "lmgr-putbrange" call
-$pubdef .lmgr-putelem		__PROG__ "lmgr-putelem" call
-$pubdef .lmgr-putrange		__PROG__ "lmgr-putrange" call
-$pubdef .lmgr-setcount		__PROG__ "lmgr-setcount" call
- 
-$pubdef LMGR-clearelem		__PROG__ "lmgr-clearelem" call
-$pubdef LMGRclearrange		__PROG__ "lmgr-clearrange" call
-$pubdef LMGRdeletelist		__PROG__ "lmgr-deletelist" call
-$pubdef LMGRdeleterange		__PROG__ "lmgr-deleterange" call
-$pubdef LMGRextractrange	__PROG__ "lmgr-extractrange" call
-$pubdef LMGRfullrange		__PROG__ "lmgr-fullrange" call
-$pubdef LMGRgetbrange		__PROG__ "lmgr-getbrange" call
-$pubdef LMGRgetcount		__PROG__ "lmgr-getcount" call
-$pubdef LMGRgetelem		__PROG__ "lmgr-getelem" call
-$pubdef LMGRgetlist		__PROG__ "lmgr-getlist" call
-$pubdef LMGRgetrange		__PROG__ "lmgr-getrange" call
-$pubdef LMGRinsertrange		__PROG__ "lmgr-insertrange" call
-$pubdef LMGRmoverange		__PROG__ "lmgr-moverange" call
-$pubdef LMGRputbrange		__PROG__ "lmgr-putbrange" call
-$pubdef LMGRputelem		__PROG__ "lmgr-putelem" call
-$pubdef LMGRputrange		__PROG__ "lmgr-putrange" call
-$pubdef LMGRsetcount		__PROG__ "lmgr-setcount" call
 .
 c
 q

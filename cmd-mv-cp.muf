@@ -124,7 +124,7 @@ lvar copy?
   "," split strip swap strip
   "=" split strip swap strip
   dup if
-    .noisy_match
+    noisy_match
     dup not if pop exit then
   else
     over not if
@@ -132,7 +132,7 @@ lvar copy?
       tell pop read strip
     then
     dup if
-      .noisy_match
+      noisy_match
       dup not if pop exit then
     else pop me @
     then
@@ -156,7 +156,7 @@ lvar copy?
     strip-slashes swap
   repeat
   dup if
-    .noisy_match
+    noisy_match
     dup not if pop exit then
   else
     pop 3 pick

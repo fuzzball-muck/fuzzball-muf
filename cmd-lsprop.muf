@@ -5,7 +5,6 @@
   an object, that match the given wildcard expression.
 )
 $include $lib/match
-$include $lib/strings
   
 lvar propcount
   
@@ -57,8 +56,8 @@ lvar propcount
   
 : plist (s -- )
   0 propcount !
-  "=" .split strip swap strip
-  .match_controlled dup not if pop exit then
+  "=" split strip swap strip
+  match_controlled dup not if pop exit then
   swap "*" strcat
   dup "/" 1 strncmp if "/" swap strcat then
   swap "/" listprops

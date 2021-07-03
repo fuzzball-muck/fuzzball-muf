@@ -23,7 +23,9 @@
  Trebuchet. )
   
 $def VERSION "MessageBoard v3.0"
-$def GUI 1
+$iflib $lib/gui
+ $def GUI 1
+$endif
 $include $lib/edit
 $include $lib/editor
 $include $lib/lmgr
@@ -33,7 +35,6 @@ $include $lib/mesgbox
 $include $lib/props
 $include $lib/strings
   
-$def .sedit_std EDITOR
 $def DAYOFFSET 7800
  
 $ifdef GUI
@@ -68,12 +69,12 @@ $endif
     MBOX-msginfo
     dup "$" 1 strncmp not if
       1 strcut swap pop
-      " " STRsplit " " STRsplit swap atoi swap
+      " " split " " split swap atoi swap
     else
       "" 0 rot
     then
-    " " STRsplit swap atoi dbref swap
-    " " STRsplit swap atoi swap
+    " " split swap atoi dbref swap
+    " " split swap atoi swap
 ;
   
 : MBRDreparseinfo (keywords protect? poster day subject -- infostr)
@@ -178,7 +179,7 @@ lvar tmp
         then
     then
     " -- " strcat strcat swap
-    strcat me @ swap notify
+    strcat tell
     pop pop pop
 ;
   
@@ -198,9 +199,9 @@ lvar tmp
     repeat
   
     "Use 'read <mesgnum>'to list a message.  Use 'read <keyword>' to list"
-    me @ swap notify
+    tell
     "messages with a keyword.  Use 'read -' to read the next message."
-    me @ swap notify
+    tell
 ;
   
   
@@ -298,25 +299,21 @@ lvar tmp
 ;
   
   
-: MBRDreadlines ( -- {str_rng})
-    0 .sedit_std pop
-;
-  
 : MBRDadd (parmstr base dbref -- err)
-    rot "=" STRsplit STRstrip swap STRstrip
+    rot "=" split strip swap strip
     dup not if
         "What is the subject of this post?"
-        me @ swap notify pop read STRstrip
+        tell pop read strip
     then
     swap
     dup not if
         "What keywords fit this post? (ie: art, building, place, personal)"
-        me @ swap notify pop read STRstrip
+        tell pop read strip
     then
     0 me @ owner get-day 5 rotate MBRDreparseinfo rot rot
   
     ( infostr base dbref )
-    MBRDreadlines
+    0 EDITOR pop
   
     dup if
         (Stamp the name and time onto the message)
@@ -396,7 +393,7 @@ lvar fromline
         break
     repeat
   
-    .sedit_std pop dup not if
+    EDITOR pop dup not if
         pop pop pop pop 5 (no error) exit
     then
   
@@ -422,14 +419,14 @@ lvar fromline
   
     me @ "Current subject: \"" 3 pick strcat "\"" strcat notify
     "Enter new subject, or press space and return to keep old one."
-    me @ swap notify
-    read STRstrip dup if swap then pop
+    tell
+    read strip dup if swap then pop
   
     5 rotate
     me @ "Current keywords: \"" 3 pick strcat "\"" strcat notify
     "Enter new keywords, or press space and return to keep old ones."
-    me @ swap notify
-    read STRstrip dup if swap then pop
+    tell
+    read strip dup if swap then pop
     -5 rotate
   
     swap pop get-day swap MBRDreparseinfo
@@ -454,7 +451,7 @@ $def basename "msgs"
     dup number? not if pop exit then
     atoi dbref
     dup ok? not if pop exit then
-    over owner over .controls
+    over owner over controls
     if swap then pop
 ;
  
@@ -687,7 +684,7 @@ $def get_gui_val [] array_vals pop
         else
             preempt
             refNum @ basename bbsobj @ MBOX-badref? if
-                "Bad objref" refNum intostr strcat DESCR .tell
+                "Bad objref" refNum intostr strcat DESCR tell
             else
                 refnum @ basename bbsobj @ 3 pick 3 pick 3 pick MBRDparseinfo
                 4 rotate not -4 rotate MBRDsetinfo
@@ -716,7 +713,7 @@ $def get_gui_val [] array_vals pop
     "Yes" strcmp not if
         preempt
         refNum @ basename bbsobj @ MBOX-badref? if
-            "Bad objref" refNum intostr strcat DESCR .tell
+            "Bad objref" refNum intostr strcat DESCR tell
         else
             refNum @ basename bbsobj @ MBRDperms? not if
                 (not owner of mesgboard or poster)
@@ -747,7 +744,7 @@ $def get_gui_val [] array_vals pop
         mItem @ "refnum" [] var! refNum
         preempt
         refNum @ basename bbsobj @ MBOX-badref? if
-            "Bad objref" mItem intostr strcat DESCR .tell
+            "Bad objref" mItem intostr strcat DESCR tell
         else
             messDlog @ "subj" mItem @ "subject" [] GUI_VALUE_SET
             messDlog @ "date" mItem @ "date" [] GUI_VALUE_SET
@@ -766,7 +763,7 @@ $def get_gui_val [] array_vals pop
 : gui_listchange_cb[ dict:context str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ "msgs" GUI_VALUE_GET "" array_join atoi curMess !
     messData @ array_count curMess @ < if
-        "How did we get to an item that doesn't exist?" DESCR .tell
+        "How did we get to an item that doesn't exist?" DESCR tell
     else
         gui_listchange
     then
@@ -775,7 +772,7 @@ $def get_gui_val [] array_vals pop
  
 : gui_keywdchange_cb[ dict:context str:dlogid str:ctrlid str:event -- int:exit ]
     dlogid @ "keylst" GUI_VALUE_GET "" array_join messKeys !
-    "New keywords : " messKeys @ strcat DESCR .tell
+    "New keywords : " messKeys @ strcat DESCR tell
     1 msg_index_gen
     0
 ;
@@ -884,7 +881,7 @@ $def get_gui_val [] array_vals pop
  
 : gui-update[ dict:context str:event -- int:exitReq ]
     1 msg_index_gen
-    "Message list updated." DESCR .tell
+    "Message list updated." DESCR tell
     120 "update" timer_start    
     0
 ;
@@ -895,14 +892,14 @@ $def get_gui_val [] array_vals pop
     read
     dup "\"" stringpfx if
       1 strcut swap pop
-      dup "You say, \"%s\"" fmtstring .tell
-      me @ name "%s says, \"%s\"" fmtstring .otell
+      dup "You say, \"%s\"" fmtstring tell
+      me @ name "%s says, \"%s\"" fmtstring otell
       0 exit
     then
     dup "say " stringpfx if
       4 strcut swap pop
-      dup "You say, \"%s\"" fmtstring .tell
-      me @ name "%s says, \"%s\"" fmtstring .otell
+      dup "You say, \"%s\"" fmtstring tell
+      me @ name "%s says, \"%s\"" fmtstring otell
       0 exit
     then
     dup ":" stringpfx if
@@ -1018,9 +1015,9 @@ $ifdef GUI
                 gui_event_process
                 pop pop
                 me @ location me @ me @ name " finishes browsing the bulletin board." strcat notify_except
-                "Done." DESCR .tell exit
+                "Done." DESCR tell exit
             else
-                "GUI not available with this client." DESCR .tell exit
+                "GUI not available with this client." DESCR tell exit
             then
         then
 $endif
@@ -1035,12 +1032,10 @@ $endif
 .
 c
 q
-@register gen-mesgboard=mesgboard
-@register #me gen-mesgboard=tmp/prog1
+@register gen-mesgboard=gen/mesgboard
 @register #me gen-mesgboard=tmp/prog1
 @set $tmp/prog1=3
-@set $tmp/prog1=L
 @set $tmp/prog1=V
-@set $tmp/prog1=W
-
-
+@action read;write;protect;editmsg;editmesg;protect;erase=#0=tmp/exit1
+@link $tmp/exit1=$tmp/prog1
+@register #me =tmp

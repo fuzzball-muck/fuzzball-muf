@@ -51,7 +51,7 @@ $doccmd @list __PROG__=!@1-20
     over intostr "search/" swap strcat me @ swap getpropstr if
       me @ "search" remove_prop
       pop pop intostr
-      "Error: loop in proploc found at #" swap strcat .tell
+      "Error: loop in proploc found at #" swap strcat tell
       #-1 exit
     then
     over intostr "search/" swap strcat me @ swap "yes" 0 addprop
@@ -79,12 +79,6 @@ public envprop		$libdef envprop
 public envsearch	$libdef envsearch
 public locate-prop	$libdef locate-prop
 public setpropstr	$libdef setpropstr
- 
-$pubdef .addpropstr	__PROG__ "setpropstr" call
-$pubdef .envprop	__PROG__ "envprop" call
-$pubdef .envsearch	__PROG__ "envsearch" call
-$pubdef .locate-prop	__PROG__ "locate-prop" call
-$pubdef .setpropstr	__PROG__ "setpropstr" call
 .
 c
 q
