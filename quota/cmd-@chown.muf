@@ -34,7 +34,8 @@ $include $lib/quota
   
   "=" rsplit
   
-  dup strlen not if (* Chown to me -- no wizard check needed. *)
+  dup dup strlen not swap "me" strcmp not or if
+    (* Chown to me -- no wizard check needed. *)
     pop me @
   else
     me @ "WIZARD" flag? not if
