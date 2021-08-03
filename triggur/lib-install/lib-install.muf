@@ -8,7 +8,7 @@ i
 ( V1.1  : {01/21/02} Wizbit check fix - Nightwind )
 ( V1.2  : {06/03/04} Wizbit check REAL fix, and bootstrap fix - Winged )
 ( V1.21 : {06/18/04} Make the program compile again - Schneelocke )
-
+( V1.22 : {08/03/21} Fixed setting _lib-name on the wrong obj - rook )
 
 $define THISVERSION "1.3" $enddef 
 $ifndef __version<Muck2.2fb6.01
@@ -166,7 +166,7 @@ lvar ltint1
   me @ "Registering library '" tstr1 @ strcat "'..." strcat notify
   #0 "_reg/lib/" tstr1 @ strcat tdb1 @ setprop
 
-  caller "_lib-name" tstr1 @ 0 addprop
+  tdb1 @ "_lib-name" tstr1 @ 0 addprop
 ;
 
 ( ------------------------------------------------------------------- )

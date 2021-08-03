@@ -28,6 +28,9 @@ i
            - removed all dependence on $defines, all installation now
              done with the @install command.
    V1.50:  Nightwind pointed out an oddity with the MORPHCMD define.
+   V1.51:  - made FB7 compatible
+           - fixed install error that mixed up the scent and flight
+             props
 )
 
 $include $lib/lmgr
@@ -79,7 +82,7 @@ $define TIMEOUT prog PTIMEPROP getpropstr atoi $enddef
 $define DEFAULT_TIMEOUT 7200 $enddef
 
 ( program revision number )
-$define REVISION "1.50" $enddef 
+$define REVISION "1.51" $enddef 
 ( local storage prop for revision number )
 $define REVPROP "@/revision" $enddef
 ( the global command for morph )
@@ -137,7 +140,7 @@ lvar valcurr
   prog MORPHREG add-global-registry
 
 ( set default config params if unset )
-  prog PSCENTPROP getpropstr "" stringcmp not if  (flight )
+  prog PSCENTPROP getpropstr "" stringcmp not if  (scent )
      prog PSCENTPROP DEFAULT_SCENTPROP 0 addprop
   then
   prog PSAYPROP getpropstr "" stringcmp not if  (say )
@@ -155,7 +158,7 @@ lvar valcurr
 
 ( get new config params )
   prog PSCENTPROP DEFAULT_SCENTPROP
-      "What is the name of the player prop that determines if they can fly?"
+      "What is the name of the player prop that determines the player's scent?"
       SCENTPROP get-config-val 0 addprop
   prog PSAYPROP DEFAULT_SAYPROP
       "What is the name of the prop used by the SAY global that determines the speaker's FIRST PERSON say verb?"
@@ -226,7 +229,7 @@ lvar copy?
       pop 4 pick 4 pick propdir? not if
         "I don't see what property to "
         copy? @ if "copy." else "move." then
-        strcat .tell pop pop pop pop 0 exit
+        strcat tell pop pop pop pop 0 exit
       then
     then
   then
@@ -270,7 +273,7 @@ public mv-prop
   
 : parse-command ( s -- )
   command @ tolower
-  "command @ = \"" over strcat "\"" strcat .tell
+  "command @ = \"" over strcat "\"" strcat tell
   "c" instr copy? !
   
   dup "#help" stringcmp not if
@@ -292,18 +295,18 @@ public mv-prop
     depth EDITdisplay exit
   then
   
-  "," .split .strip swap .strip
-  "=" .split .strip swap .strip
+  "," split strip swap strip
+  "=" split strip swap strip
   dup if
-    .noisy_match
+    noisy_match
     dup not if pop exit then
   else
     over not if
       "Please enter the name of the original object."
-      .tell pop read .strip
+      tell pop read strip
     then
     dup if
-      .noisy_match
+      noisy_match
       dup not if pop exit then
     else pop me @
     then
@@ -312,22 +315,22 @@ public mv-prop
   begin
     strip-slashes
     dup not while
-    "Please enter the name of the original property." .tell
-    pop read .strip
+    "Please enter the name of the original property." tell
+    pop read strip
   repeat
   swap
-  "=" .split .strip strip-slashes swap .strip
+  "=" split strip strip-slashes swap strip
   begin
     over over or not while
     pop pop
-    "Please enter the name of the destination object." .tell
-    read .strip
-    "Please enter the name of the destination property." .tell
-    read .strip
+    "Please enter the name of the destination object." tell
+    read strip
+    "Please enter the name of the destination property." tell
+    read strip
     strip-slashes swap
   repeat
   dup if
-    .noisy_match
+    noisy_match
     dup not if pop exit then
   else
     pop 3 pick
@@ -339,7 +342,7 @@ public mv-prop
   cp-mv-prop if
     copy? @ if "Property copied."
     else "Property moved."
-    then .tell
+    then tell
   then
 ;
 ( -----------------end cmd-mv-cp code--------------------------- )
@@ -590,7 +593,7 @@ lvar camint2
     else
       pop "" morphcmd !
     then
-    .pmatch dup #-1 dbcmp 0 = not if
+    pmatch dup #-1 dbcmp 0 = not if
       me @ "Sorry, I don't know who that player is." notify 
       exit
     then
@@ -666,7 +669,7 @@ lvar camint2
 
   else dup "#allow" 6 strncmp not if (user about to get help)
     header
-    6 strcut swap pop strip .pmatch dup #-1 dbcmp 0 = not if
+    6 strcut swap pop strip pmatch dup #-1 dbcmp 0 = not if
       me @ "Sorry, I don't know who that player is." notify
       exit
     then

@@ -225,7 +225,7 @@
   0
   begin
     dup counter @ < while
-    dup tab @ swap [] .tell
+    dup tab @ swap [] tell
     1 +
   repeat
   pop
