@@ -41,16 +41,15 @@ $def USE_QUOTA  1
  * MUCKs, the off value is an empty string,
  *)
 $def OBVEXITS_PROP  "_/sc"
-$def OBVEXITS_ON    "@$exits"
+$def OBVEXITS_ON    "@$obvexits"
 $def OBVEXITS_OFF   ""
  
 (* END CONFIGURATION *)
  
 $include $lib/editor
 $include $lib/lmgr
-$include $lib/findparent
 $include $lib/tabtoolkit
- 
+
 $ifdef USE_QUOTA
 $include $lib/quota
 $else
@@ -318,7 +317,7 @@ $endif
     pop #-1 exit
   then
   
-  me @ location findparent swap newroom
+  me @ location location swap newroom
   
   (* Make sure it worked -- this should never fail *)
   dup room? not if
@@ -778,7 +777,7 @@ $endif
         "You do not have enough "
         "pennies" sysparm strcat " to build a new room." strcat tell
       else
-        me @ location findparent swap newroom
+        me @ location location swap newroom
         ToEdit @ swap moveto
         
         me @ Exempt? not if

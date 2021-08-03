@@ -24,6 +24,9 @@ i
           - Changed all $defines into configurable parameters
              {now installing this is easy as upload/@install, done.}
           - Fixed snapshot code to not create so many cameras
+  1.43    - compatibility with FB7
+          - Made scent prop configurable (e.g. use _prefs/smell for
+            FB7 starterdb)
 )
 
 $include $lib/lmgr
@@ -52,6 +55,9 @@ $define SAYPROP prog PSAYPROP getpropstr $enddef
 $define DEFAULT_OSAYPROP "_say/def/osay" $enddef
 $define POSAYPROP "@/osayprop" $enddef
 $define OSAYPROP prog POSAYPROP getpropstr $enddef
+$define DEFAULT_SCENTPROP "_scent" $enddef
+$define PSCENTPROP "@/scentprop" $enddef
+$define SCENTPROP prog PSCENTPROP getpropstr $enddef
 $define DEFAULT_DESCPROP "{look-notify:{eval:{list:redesc}}}" $enddef
 $define PDESCPROP "@/descprop" $enddef
 $define DESCPROP prog PDESCPROP getpropstr $enddef
@@ -65,7 +71,7 @@ $define TIMEOUT prog PTIMEPROP getpropstr atoi $enddef
 ( where we store our own revision )
 $define REVPROP "@/revision" $enddef
 ( current revision number of the program )
-$define REVISION "1.42" $enddef
+$define REVISION "1.43" $enddef
 ( editplayer command global )
 $define EPCMD "editplayer;ep" $enddef
 ( editplayer registry name )
@@ -130,6 +136,9 @@ lvar valcurr
   prog POSAYPROP getpropstr "" stringcmp not if  (osay )
      prog POSAYPROP DEFAULT_OSAYPROP 0 addprop
   then
+  prog PSCENTPROP getpropstr "" stringcmp not if (scent )
+     prog PSCENTPROP DEFAULT_SCENTPROP 0 addprop
+  then
   prog PDESCPROP getpropstr "" stringcmp not if  (desc )
      prog PDESCPROP DEFAULT_DESCPROP 0 addprop
   then
@@ -147,6 +156,9 @@ lvar valcurr
   prog POSAYPROP DEFAULT_OSAYPROP
       "What is the name of the prop used by the SAY global that determines the speaker's SECOND PERSON (osay) verb?"
       OSAYPROP get-config-val 0 addprop
+  prog PSCENTPROP DEFAULT_SCENTPROP
+      "What is the name of the prop used by the SMELL command that determines a player's scent?"
+      SCENTPROP get-config-val 0 addprop
   prog PDESCPROP DEFAULT_DESCPROP
       "What should I use for an MPI command to set as the player's description (the 'redesc' part is mandatory)?"
       DESCPROP get-config-val 0 addprop
@@ -321,7 +333,7 @@ lvar camint2
 
   me @ "8. You can " target @ FLYSTRING getpropstr "yes" stringcmp if "NOT " strcat then  "fly." strcat notify
 
-  me @ "9. Your smell message is '" target @ "_scent" getpropstr strcat "'." strcat notify
+  me @ "9. Your smell message is '" target @ SCENTPROP getpropstr strcat "'." strcat notify
 
   me @ "10. When you speak you see 'You " target @ "_say/def/say" getpropstr strcat " [...]'." strcat notify
 
@@ -532,7 +544,7 @@ exit
     me @ "Done.  Helpstaff request has been cleared." notify
     exit 
   else dup "#allow" 6 strncmp not if (user about to get help)
-    6 strcut swap pop strip .pmatch dup #-1 dbcmp 0 = not if
+    6 strcut swap pop strip pmatch dup #-1 dbcmp 0 = not if
       me @ "Sorry, I don't know who that player is." notify
       exit
     then
@@ -550,7 +562,7 @@ exit
     me @ "_helpstaff_assist_time" systime intostr 0 addprop
     exit
   else dup "#assist" 7 strncmp not if (user giving help)
-    7 strcut swap pop strip .pmatch dup #-1 dbcmp 0 = not if
+    7 strcut swap pop strip pmatch dup #-1 dbcmp 0 = not if
       me @ "Sorry, I don't know who that player is." notify 
       exit
     then
@@ -706,7 +718,7 @@ me @ "Sorry... the ability to change your name has been removed.  To do this, ex
         dup in-program-tell not if break then pop
       repeat
       dup "." stringcmp if
-        target @ swap "_scent" swap 0 addprop
+        target @ swap SCENTPROP swap 0 addprop
         target @ "_smell_notify" getpropstr not if  ( add default notify )
           target @ "_smell_notify" "+++++%N just smelled you!" 0 addprop
         then
