@@ -9,6 +9,7 @@ i
 ( V1.2  : {06/03/04} Wizbit check REAL fix, and bootstrap fix - Winged )
 ( V1.21 : {06/18/04} Make the program compile again - Schneelocke )
 ( V1.22 : {08/03/21} Fixed setting _lib-name on the wrong obj - rook )
+( V1.23 : {08/04/21} Allow fresh install by name - rook )
 
 $define THISVERSION "1.3" $enddef 
 $ifndef __version<Muck2.2fb6.01
@@ -301,7 +302,7 @@ lvar ltint1
   then
 
   ( if it's NOTHING, we still need to find the program... ) 
-  ltdb1 @ NOTHING dbcmp not if ( -- )
+  ltdb1 @ NOTHING dbcmp if ( -- )
     GLOBALENV ( -- d )
     "_ver/" ltstr1 @ "/prog" strcat strcat ( -- d s )
     dup ltstr4 ! ( -- d s )   ( ...save propname for later use... )
