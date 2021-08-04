@@ -25,8 +25,8 @@ i
              {now installing this is easy as upload/@install, done.}
           - Fixed snapshot code to not create so many cameras
   1.43    - compatibility with FB7
-          - Made scent prop configurable (e.g. use _prefs/smell for
-            FB7 starterdb)
+          - Made scent prop configurable e.g. use _prefs/smell for
+            FB7 starterdb
 )
 
 $include $lib/lmgr
