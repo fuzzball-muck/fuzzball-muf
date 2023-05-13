@@ -17,10 +17,21 @@
  * By HopeIslandCoder
  * 2023
  * Public Domain
+ *
+ **************************************************************************
+ * VERSION HISTORY
+ *
+ * v1.01 - 5/13/2023 - Bug fixes
+ *                     When you edit global looktraps, it will now re-apply
+ *                     your description [re-run morph].
+ *                     Looktrap editor is now also friendly to people who
+ *                     aren't using the morph program but want to use it to
+ *                     set looktraps [it preserves their _/de prop and does
+ *                     not do a 'full' morph]
  *)
  
-$def VERSION "Hope Morph v1.00 by HopeIslandCoder"
-$version 1.00
+$def VERSION "Hope Morph v1.01 by HopeIslandCoder"
+$version 1.01
 $author HopeIslandCoder
  
 (*
@@ -198,13 +209,15 @@ $def GLOBAL_ROOT "/_descs/prefs/global/"
   (* This lil regex is down below in the editor as well, so if you change
    * it here, change it there too.
    *)
-  "[:/@~]" 0 regexp array_count swap array_count or if
+  strip dup strlen not if
+    pop "Property name can't be empty." tell 0
+  else "[:/@~]" 0 regexp array_count swap array_count or if
     "You can use most characters, but you can't use reserved property " tell
     "characters, such as : / @ or ~" tell
     0
   else
     1
-  then
+  then then
 ;
  
 : cb-pick-ride-mode ( s -- i ) (* Callback for picking a ride mode *)
@@ -425,7 +438,7 @@ $def GLOBAL_ROOT "/_descs/prefs/global/"
           "y"  (* No need to ask if already set *)
         then
         
-        "y" strcmp not if
+        "y" 1 strncmp not if
           me @ LooktrapPath @ getpropstr determine-list-name ListName !
           
           (* Load the description for the editor *)
@@ -482,7 +495,7 @@ $def GLOBAL_ROOT "/_descs/prefs/global/"
         then then then then
       repeat
     else
-      "Try again?" tell
+      pop "Try again?" tell
     then then then then
   repeat
 ;
@@ -880,10 +893,14 @@ $def GLOBAL_ROOT "/_descs/prefs/global/"
   (* Set up description -- only if we need to.  The old morpher 's MPI
    * will work with the new morpher, and if we preserve the old morpher's
    * MPI, both morphers will continue to work.
+   *
+   * Don't do this when setting up globals
    *)
-  me @ "_/de" getpropstr "{my-desc}" strcmp if
-    me @ "_/de" "{null:{tell:>>> {name:me} looked at you!,#" me @ intostr
-    strcat "}}{list:" strcat base @ "/" rsplit pop strcat "}" strcat setprop
+  base @ GLOBAL_ROOT strcmp if
+    me @ "_/de" getpropstr "{my-desc}" strcmp if
+      me @ "_/de" "{null:{tell:>>> {name:me} looked at you!,#" me @ intostr
+      strcat "}}{list:" strcat base @ "/" rsplit pop strcat "}" strcat setprop
+    then
   then
 ;
  
@@ -1289,6 +1306,14 @@ $def GLOBAL_ROOT "/_descs/prefs/global/"
       then
     else dup 13 = if
       pop GLOBAL_ROOT "_details/" strcat modify-looktraps
+      me @ "_descs/prefs/current" getpropstr dup strlen if
+        "Applying your looktrap changes!" tell
+        0 morph
+      else
+        pop
+        (* This should just set looktraps *)
+        GLOBAL_ROOT setup-description
+      then
     else
       pop "Invalid option.  Try again!" tell
     then then then then then then then then then then then then then then
