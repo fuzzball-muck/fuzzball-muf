@@ -33,8 +33,8 @@
 ;
  
 : collate-entry (i -- s)
-    dup condbref name
-    over contime mtimestr
+    dup descrdbref name
+    over descrtime mtimestr
     over strlen over strlen +
     dup 19 < if
         "                   " (19 spaces)
@@ -44,16 +44,16 @@
         strcut pop swap ""
     then
     swap strcat strcat
-    swap conidle stimestr strcat
+    swap descridle stimestr strcat
 ;
  
 : get-namelist  ( -- {s})
-    0 concount
+    0 #-1 firstdescr
     begin
-        dup 0 > while
+        dup while
         dup collate-entry
         rot 1 + rot
-        1 -
+        nextdescr
     repeat
     pop
 ;
@@ -89,7 +89,7 @@ lvar col
     "Name         Ontime Idle" strcat tell
     get-namelist
     show-namelist
-    concount intostr
+    descrcount intostr
     " players are connected."
     strcat tell
 ;
