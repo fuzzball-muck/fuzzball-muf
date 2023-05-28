@@ -1,6 +1,27 @@
 @program cmd-3who
 1 99999 d
 1 i
+(*
+ * Compatibility is an issue -- with FB 7.1, we got rid of a separate
+ * notion of connections vs. descriptors.  This block of code will
+ * [hopefully] retain backward compatibility
+ *)
+$ifdef __version>Muck2.2fb7.0
+$def CD_GET_DBREF descrdbref
+$def CD_GET_TIME descrtime
+$def CD_GET_IDLE descridle
+$def CD_GET_FIRST #-1 firstdescr
+$def CD_GET_NEXT nextdescr
+$def CD_GET_COUNT descrcount
+$else
+$def CD_GET_DBREF condbref
+$def CD_GET_TIME contime
+$def CD_GET_IDLE conidle
+$def CD_GET_FIRST concount
+$def CD_GET_NEXT 1 -
+$def CD_GET_COUNT concount
+$endif
+
 : stimestr (i -- s)
     dup 86400 > if
         86400 / intostr "d" strcat 
@@ -33,8 +54,8 @@
 ;
  
 : collate-entry (i -- s)
-    dup condbref name
-    over contime mtimestr
+    dup CD_GET_DBREF name
+    over CD_GET_TIME mtimestr
     over strlen over strlen +
     dup 19 < if
         "                   " (19 spaces)
@@ -44,16 +65,16 @@
         strcut pop swap ""
     then
     swap strcat strcat
-    swap conidle stimestr strcat
+    swap CD_GET_IDLE stimestr strcat
 ;
  
 : get-namelist  ( -- {s})
-    0 concount
+    0 CD_GET_FIRST
     begin
-        dup 0 > while
+        dup while
         dup collate-entry
         rot 1 + rot
-        1 -
+        CD_GET_NEXT
     repeat
     pop
 ;
@@ -89,7 +110,7 @@ lvar col
     "Name         Ontime Idle" strcat tell
     get-namelist
     show-namelist
-    concount intostr
+    CD_GET_COUNT intostr
     " players are connected."
     strcat tell
 ;
