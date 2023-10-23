@@ -765,7 +765,7 @@ q
 @propset $tmp/prog1=str:/_help/1#/1:SayHelp screen 1: Basic information
 @propset $tmp/prog1=str:/_help/1#/10:                                      or "Yeeargh!!,,noisily %n shouts,,
 @propset $tmp/prog1=str:/_help/1#/11:To enable [disable] ad-hoc verbs:        sayset adhoc   [sayset !adhoc]
-@propset $tmp/prog1=str:/_help/1#/12:To make spilt says look unsplit:         sayset normal  [sayset !normal]
+@propset $tmp/prog1=str:/_help/1#/12:To make split says look unsplit:         sayset normal  [sayset !normal]
 @propset $tmp/prog1=str:/_help/1#/13:`
 @propset $tmp/prog1=str:/_help/1#/14:To see if someone is awake and present:  "?player   [or "?player,,?player  etc]
 @propset $tmp/prog1=str:/_help/1#/15:To speak iff someone is awake:           "?player,,what to say [to player]
