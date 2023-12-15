@@ -3102,6 +3102,7 @@ q
 @register #me cmd-page=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
+@set $tmp/prog1=W
 @action page;pag;pa;p=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 @propset $tmp/exit1=str:_page/formats/f-page:You page, "%m" to %n.
