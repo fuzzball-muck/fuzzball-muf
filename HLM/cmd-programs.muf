@@ -18,10 +18,17 @@ $include $lib/strings
     "FV" var! vflags  ( strX )
  
     dup if  ( strX )
-        "mine" stringcmp if
-            me @ vowner !
-            "F" vflags !
-        then  (  )
+        case
+            "help" stringcmp not when .showhelp exit end
+            "mine" stringcmp not when
+                me @ vowner !
+                "F" vflags !
+            end
+            default
+              "I don't know what you mean by '#%s'. 'programs #help' for help." fmtstring tell  (  )
+              exit
+            end
+        endcase
     else pop then  (  )
  
     " Dbref Name                     Author               Owner      Modified @view" "bold" textattr tell
@@ -57,6 +64,22 @@ q
 @register #me cmd-programs=tmp/prog1
 @set $tmp/prog1=3
 @set $tmp/prog1=V
+lsedit $tmp/prog1=_help
+.del 1 $
+programs
+programs <search>
+programs #mine <search>
+
+Lists @listable MUF programs on the MUCK (that is, programs set Viewable).
+The 'Author' and 'Description' fields are taken from the programs' $author
+and $note directives (that is, the _author and _note properties). If running
+@view on the program would show documentation (its _docs property is set),
+the @view field reads 'yes'. If <search> is given, only programs containing
+<search> in their names or descriptions ($note) will be listed.
+
+If '#mine' is given, programs lists programs you own, @listable or not,
+instead of the MUCK's Viewable programs.
+.end
 @action programs;plib;proglib=#0=tmp/exit1
 @link $tmp/exit1=$tmp/prog1
 @register #me =tmp
