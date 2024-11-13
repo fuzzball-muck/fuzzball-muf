@@ -488,7 +488,7 @@ q
 i
 (RIDE ENGINE 3.7FB By Riss)
 $include $lib/reflist
-$def globalprop prog "~prog" getprop
+$def globalprop prog "~/prog" getprop
 var target
 var mess
 var mode
